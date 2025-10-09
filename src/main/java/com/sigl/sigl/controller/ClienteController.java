@@ -1,0 +1,57 @@
+package com.sigl.sigl.controller;
+
+import com.sigl.sigl.model.Cliente;
+import com.sigl.sigl.repository.ClienteRepository;
+import com.sigl.sigl.service.ClienteService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+
+@RestController
+@RequestMapping("/api/clientes")
+@CrossOrigin(origins = "*")
+public class ClienteController {
+
+    @Autowired
+    private ClienteService clienteService;
+
+    @Autowired
+    private ClienteRepository clienteRepository;
+
+    @PostMapping
+    public ResponseEntity<String> criarCliente(@RequestBody Cliente cliente) {
+        try {
+            clienteService.salvar(cliente);
+            return new ResponseEntity<>("Cliente cadastrado com sucesso!", HttpStatus.CREATED);
+        } catch (IllegalArgumentException e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        } catch (Exception e) {
+            return new ResponseEntity<>("Erro interno no servidor.", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @GetMapping
+    public List<Cliente> listarClientes(@RequestParam(value = "cpf", required = false) String cpf) {
+        if (cpf != null && !cpf.isEmpty()) {
+            return clienteRepository.findAll()
+                    .stream()
+                    .filter(c -> c.getCpf().contains(cpf))
+                    .toList();
+        }
+        return clienteRepository.findAll();
+    }
+
+    @DeleteMapping("/{id}")
+    public String excluirCliente(@PathVariable Integer id) {
+        try {
+            clienteRepository.deleteById(id);
+            return "Cliente excluído com sucesso!";
+        } catch (Exception e) {
+            return "Erro ao excluir cliente: " + e.getMessage();
+        }
+    }
+
+}

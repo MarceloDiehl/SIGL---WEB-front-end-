@@ -1,0 +1,45 @@
+<div class="container" xmlns:th="http://www.w3.org/1999/xhtml">
+    <div class="row justify-content-center align-items-center">
+        <div class="mb-3">
+            <h3 class="titulo-paginas display-6">Pesquisar produtos</h3>
+        </div>
+    </div>
+    <form action="#" method="get" class="formulario-pesquisa-fixa" id="formulario-pesquisa-fixa">
+        <div class="row">
+            <div class="my-2 col-sm-12">
+                <label for="titulo-produto" class="form-label">Título do Produto</label>
+                <input type="text" name="titulo-produto" id="titulo-produto" class="form-control" readonly>
+            </div>
+
+            <div class="my-2 col-sm-12">
+                <label for="observacoes" class="form-label">Descrição</label>
+                <textarea id="observacoes" name="observacoes" class="form-control" rows="8" readonly></textarea>
+            </div>
+            <div class="my-2 col-sm-12 align-items-end">
+                <div class="row align-items-end my-4">
+                    <div class="col-sm-2">
+                        <label for="estoque-produto" class="form-label">Quantidade</label>
+                        <input type="number" name="estoque-produto" id="estoque-produto" readonly class="form-control">
+                    </div>
+                    <div class="col-sm-3">
+                        <label for="codigo-produto" class="form-label">Código do Produto</label>
+                        <input type="text" name="codigo-produto" id="codigo-produto" class="form-control"
+                            placeholder="Busque pelo Código do Produto">
+                    </div>
+                    <div class="col-sm-7 text-end">
+                        <p class="valor-produto" style="font-size: 30px; margin-bottom: 0px;" id="valor-unitario">
+                            <strong>Valor do Produto: R$0,00</strong>
+                        </p>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </form>
+    <div class="row">
+        <div class="col-sm-12 text-end ali">
+            <a th:href="@{/pesquisa-avancada}" href="pages/pesquisa-avancada.html" id="btn-pesquisa-avancada" class="btn btn-secondary px-4">Pesquisa
+                Avançada</a>
+        </div>
+    </div>
+</div>

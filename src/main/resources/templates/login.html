@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-LN+7fdVzj6u52u30Kp6M/trliBMCMKTyK833zpbD+pXdCLuTusPj697FH4R/5mcr" crossorigin="anonymous">
+    <link rel="stylesheet" th:href="@{/style/style.css}">
+    <title>SIGL - Loja Orion</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.19.5/dist/jquery.validate.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.16/jquery.mask.min.js"></script>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet">
+</head>
+
+<body>
+<header class="cabecalho">
+    <div class="container py-2">
+        <div class="row justify-content-center">
+            <div class="col-sm-12 text-center">
+                <div class="mb-3">
+                    <a href="#">
+                        <img th:src="@{/img/logo.png}" alt="Logo" class="img-fluid" style="max-height: 150px;">
+                    </a>
+                </div>
+                <div class="mb-3">
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+<main>
+    <div class="container login">
+        <form th:action="@{/api/auth/login}" method="post" class="formulario-login" id="formulario-login">
+            <div class="row justify-content-center align-items-start">
+                <div class="my-5 col-sm-4 campo-login">
+                    <div class="mb-3">
+                        <h2>LOGIN</h2>
+                        <div th:if="${loginError}" class="alert alert-danger" role="alert">
+                            <p th:text="${loginError}"></p>
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="login_email" class="form-label">E-mail</label>
+                        <input type="email" id="login_email" name="login-email" class="form-control">
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="login_senha" class="form-label">Senha</label>
+                        <input type="password" id="login_senha" name="login-senha" class="form-control">
+                    </div>
+                    <div class="py-3 mb-3 col-auto">
+                        <div class="d-grid">
+                            <button type="submit" id="btn-login" class="btn btn-primary">Entrar</button>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </form>
+    </div>
+
+</main>
+
+<footer class="rodape">
+    <div class="container py-2 rodape">
+        <div class="my-0 row align-items-center">
+            <div class="col-sm-12 text-center">
+                <p class="mb-0 texto-rodape">&copy; 2025 - Todos os direitos reservados.</p>
+            </div>
+        </div>
+    </div>
+</footer>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+        crossorigin="anonymous"></script>
+<script th:src="@{/script/login.js}"> </script>
+
+</body>
+
+</html>
