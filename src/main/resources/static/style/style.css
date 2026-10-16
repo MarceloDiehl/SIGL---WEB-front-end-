@@ -1991,3 +1991,10 @@ body:not([data-tela="inicio"]) .sidebar .nav-link.active { animation-play-state:
 /* Disco do card de boas-vindas: selo mais contido e foil dos sulcos mais fraco */
 /* selo do card: cor viva (o volume vem do degradê do próprio SVG) */
 .inicio-hero .vinil::after { opacity: .55; }
+
+/* Ação ainda indisponível (ex.: Modo Totem antes de existir /api/totem): esmaecida e sem efeito de hover */
+.atalho:disabled, .sidebar .nav-link:disabled { opacity: .45; cursor: not-allowed; }
+.atalho:disabled:hover { border-color: var(--line); transform: none; box-shadow: none; }
+.atalho:disabled:hover::before { opacity: 0; animation: none; }
+.sidebar .nav-link:disabled:hover { background: none; color: inherit; }
+.sidebar .nav-link:disabled:hover::after { transform: none; transition: none; }
