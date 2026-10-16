@@ -73,6 +73,13 @@ function confirmarAcao(opcoes) {
     });
 }
 
+// Texto vindo do servidor que entra em HTML montado com template string: os caracteres especiais
+// viram entidades (&lt; etc.) para o navegador mostrar o texto em vez de interpretá-lo como marcação.
+function escaparHtml(valor) {
+    const entidades = { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' };
+    return String(valor ?? '').replace(/[&<>"']/g, c => entidades[c]);
+}
+
 $(document).ready(function () {
     const conteudoDinamico = $('#conteudo-dinamico');
 
