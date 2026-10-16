@@ -1,17 +1,11 @@
 package com.sigl.sigl.model;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-
 import java.time.LocalDate;
 
 @Entity
 @Table(name = "cadastrocliente")
-@Data
-@NoArgsConstructor
-@AllArgsConstructor
+
 public class Cliente {
 
     @Id
@@ -56,4 +50,138 @@ public class Cliente {
 
     @Column(nullable = false)
     private LocalDate clienteDesde;
+
+    //Getters e setters:
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    public String getNome() {
+        return nome;
+    }
+
+    public void setNome(String nome) {
+        this.nome = nome;
+    }
+
+    public String getSobrenome() {
+        return sobrenome;
+    }
+
+    public void setSobrenome(String sobrenome) {
+        this.sobrenome = sobrenome;
+    }
+
+    public LocalDate getDataNascimento() {
+        return dataNascimento;
+    }
+
+    public void setDataNascimento(LocalDate dataNascimento) {
+        this.dataNascimento = dataNascimento;
+    }
+
+    public String getCpf() {
+        return cpf;
+    }
+
+    public void setCpf(String cpf) {
+        this.cpf = cpf;
+    }
+
+    public String getRg() {
+        return rg;
+    }
+
+    public void setRg(String rg) {
+        this.rg = rg;
+    }
+
+    public String getEndereco() {
+        return endereco;
+    }
+
+    public void setEndereco(String endereco) {
+        this.endereco = endereco;
+    }
+
+    public Integer getNumeroPredial() {
+        return numeroPredial;
+    }
+
+    public void setNumeroPredial(Integer numeroPredial) {
+        this.numeroPredial = numeroPredial;
+    }
+
+    public String getBairro() {
+        return bairro;
+    }
+
+    public void setBairro(String bairro) {
+        this.bairro = bairro;
+    }
+
+    public String getCidade() {
+        return cidade;
+    }
+
+    public void setCidade(String cidade) {
+        this.cidade = cidade;
+    }
+
+    public String getEstado() {
+        return estado;
+    }
+
+    public void setEstado(String estado) {
+        this.estado = estado;
+    }
+
+    public String getCep() {
+        return cep;
+    }
+
+    public void setCep(String cep) {
+        this.cep = cep;
+    }
+
+    public String getTelefone() {
+        return telefone;
+    }
+
+    public void setTelefone(String telefone) {
+        this.telefone = telefone;
+    }
+
+    public LocalDate getClienteDesde() {
+        return clienteDesde;
+    }
+
+    public void setClienteDesde(LocalDate clienteDesde) {
+        this.clienteDesde = clienteDesde;
+    }
+    //Construtor simples:
+    public Cliente() {
+    }
+    //Construtor completo:
+    public Cliente(Integer id, String nome, String sobrenome, LocalDate dataNascimento, String cpf, String rg, String endereco, Integer numeroPredial, String bairro, String cidade, String estado, String cep, String telefone, LocalDate clienteDesde) {
+        this.id = id;
+        this.nome = nome;
+        this.sobrenome = sobrenome;
+        this.dataNascimento = dataNascimento;
+        this.cpf = cpf;
+        this.rg = rg;
+        this.endereco = endereco;
+        this.numeroPredial = numeroPredial;
+        this.bairro = bairro;
+        this.cidade = cidade;
+        this.estado = estado;
+        this.cep = cep;
+        this.telefone = telefone;
+        this.clienteDesde = clienteDesde;
+    }
 }
