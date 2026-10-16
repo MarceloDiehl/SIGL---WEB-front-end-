@@ -47,7 +47,7 @@
                     <a class="nav-link" href="/pesquisa-produto"><i class="bi bi-upc-scan"></i>Consultar Produto</a>
                 </li>
                 <li class="nav-item">
-                    <button type="button" class="nav-link abrir-totem" disabled title="Disponível em breve"><i class="bi bi-display"></i>Modo Totem</button>
+                    <button type="button" class="nav-link abrir-totem"><i class="bi bi-display"></i>Modo Totem</button>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="/pesquisa-avancada"><i class="bi bi-boxes"></i>Estoque</a>
@@ -77,7 +77,7 @@
     </aside>
 
     <!-- ===== Modo totem: Consulta de preço travada (só fecha com a senha do funcionário) ===== -->
-    <div class="modal totem" id="modal-totem" tabindex="-1" aria-label="Consulta de preço" aria-hidden="true"
+    <div class="modal totem" id="modal-totem" th:data-ativo="${totemAtivo}" tabindex="-1" aria-label="Consulta de preço" aria-hidden="true"
          data-bs-backdrop="static" data-bs-keyboard="false">
         <div class="modal-dialog modal-fullscreen">
             <div class="modal-content">
@@ -199,7 +199,7 @@
                     <span>Preço, estoque e descrição pelo código de 6 dígitos.</span>
                 </span>
             </a>
-            <button type="button" class="atalho atalho-mini atalho-totem" id="abrir-totem" disabled title="Disponível em breve">
+            <button type="button" class="atalho atalho-mini atalho-totem" id="abrir-totem">
                 <span class="atalho-imagem"><img th:src="@{/img/atalho-totem.svg}" alt=""></span>
                 <span class="atalho-corpo">
                     <strong>Modo Totem</strong>

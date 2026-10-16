@@ -1,7 +1,9 @@
 package com.sigl.sigl.controller;
 
 
+import jakarta.servlet.http.HttpSession;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
 @Controller
@@ -9,7 +11,9 @@ public class ViewController {
 
 
     @GetMapping("/")
-    public String showHomePage() {
+    public String showHomePage(HttpSession sessao, Model model) {
+        // com o totem ativo na sessão, a página já abre travada nele (F5 não sai do totem)
+        model.addAttribute("totemAtivo", TotemController.ativo(sessao));
         return "index";
     }
 
