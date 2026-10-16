@@ -1,18 +1,13 @@
 package com.sigl.sigl.model;
 
 import jakarta.persistence.*;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.AllArgsConstructor;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
 @Entity
 @Table(name = "cadastrovendas")
-@Data
-@NoArgsConstructor
-@AllArgsConstructor
+
 public class Venda {
 
     @Id
@@ -45,4 +40,102 @@ public class Venda {
 
     @Column(name = "idMetodoPagamento", nullable = false)
     private Integer idMetodoPagamento;
+    //Construtores:
+
+    public Venda() {
+    }
+
+    public Venda(Integer id, String codProduto, String tituloProduto, BigDecimal valorUnitario, Integer quantidade, BigDecimal valorTotal, LocalDate dataVenda, Integer idVendedor, String cpfNota, Integer idMetodoPagamento) {
+        this.id = id;
+        this.codProduto = codProduto;
+        this.tituloProduto = tituloProduto;
+        this.valorUnitario = valorUnitario;
+        this.quantidade = quantidade;
+        this.valorTotal = valorTotal;
+        this.dataVenda = dataVenda;
+        this.idVendedor = idVendedor;
+        this.cpfNota = cpfNota;
+        this.idMetodoPagamento = idMetodoPagamento;
+    }
+    //Getters e setters:
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    public String getCodProduto() {
+        return codProduto;
+    }
+
+    public void setCodProduto(String codProduto) {
+        this.codProduto = codProduto;
+    }
+
+    public String getTituloProduto() {
+        return tituloProduto;
+    }
+
+    public void setTituloProduto(String tituloProduto) {
+        this.tituloProduto = tituloProduto;
+    }
+
+    public BigDecimal getValorUnitario() {
+        return valorUnitario;
+    }
+
+    public void setValorUnitario(BigDecimal valorUnitario) {
+        this.valorUnitario = valorUnitario;
+    }
+
+    public Integer getQuantidade() {
+        return quantidade;
+    }
+
+    public void setQuantidade(Integer quantidade) {
+        this.quantidade = quantidade;
+    }
+
+    public BigDecimal getValorTotal() {
+        return valorTotal;
+    }
+
+    public void setValorTotal(BigDecimal valorTotal) {
+        this.valorTotal = valorTotal;
+    }
+
+    public LocalDate getDataVenda() {
+        return dataVenda;
+    }
+
+    public void setDataVenda(LocalDate dataVenda) {
+        this.dataVenda = dataVenda;
+    }
+
+    public Integer getIdVendedor() {
+        return idVendedor;
+    }
+
+    public void setIdVendedor(Integer idVendedor) {
+        this.idVendedor = idVendedor;
+    }
+
+    public String getCpfNota() {
+        return cpfNota;
+    }
+
+    public void setCpfNota(String cpfNota) {
+        this.cpfNota = cpfNota;
+    }
+
+    public Integer getIdMetodoPagamento() {
+        return idMetodoPagamento;
+    }
+
+    public void setIdMetodoPagamento(Integer idMetodoPagamento) {
+        this.idMetodoPagamento = idMetodoPagamento;
+    }
 }

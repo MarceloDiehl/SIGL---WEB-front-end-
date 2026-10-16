@@ -2,18 +2,11 @@ package com.sigl.sigl.model;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
 @Entity
 @Table(name = "cadastroproduto")
-@Data
-@NoArgsConstructor
-@AllArgsConstructor
 public class Produto {
 
     @Id
@@ -23,22 +16,22 @@ public class Produto {
 
     @NotBlank(message = "O título é obrigatório")
     @Size(max = 70, message = "O título não pode exceder 70 caracteres")
-    @Column(name = "titulo", nullable = false, length = 70)
+    @Column(nullable = false, length = 70)
     private String titulo;
 
     @NotBlank(message = "A descrição é obrigatória")
     @Size(max = 255, message = "A descrição não pode exceder 255 caracteres")
-    @Column(name = "descricao", nullable = false)
+    @Column(nullable = false)
     private String descricao;
 
     @NotNull(message = "O valor é obrigatório")
     @DecimalMin(value = "0.01", message = "O valor unitário deve ser maior que zero")
-    @Column(name = "valor", nullable = false, precision = 9, scale = 2)
+    @Column(nullable = false, precision = 9, scale = 2)
     private BigDecimal valor;
 
     @NotNull(message = "A quantidade é obrigatória")
     @Min(value = 0, message = "A quantidade não pode ser negativa")
-    @Column(name = "quantidade", nullable = false)
+    @Column(nullable = false)
     private Integer quantidade;
 
     @NotNull(message = "O tipo do produto é obrigatório")
@@ -53,9 +46,49 @@ public class Produto {
 
     @NotNull(message = "A data de entrada é obrigatória")
     @PastOrPresent(message = "A data de entrada não pode ser futura")
-    @Column(name = "entrada", nullable = false)
+    @Column(nullable = false)
     private LocalDate entrada;
 
+    // Construtores
+    public Produto() {}
+
+    public Produto(String codProduto, String titulo, String descricao, BigDecimal valor, Integer quantidade, Integer idTipo, Integer idCondicao, LocalDate entrada) {
+        this.codProduto = codProduto;
+        this.titulo = titulo;
+        this.descricao = descricao;
+        this.valor = valor;
+        this.quantidade = quantidade;
+        this.idTipo = idTipo;
+        this.idCondicao = idCondicao;
+        this.entrada = entrada;
+    }
+
+    // Getters e Setters
+    public String getCodProduto() { return codProduto; }
+    public void setCodProduto(String codProduto) { this.codProduto = codProduto; }
+
+    public String getTitulo() { return titulo; }
+    public void setTitulo(String titulo) { this.titulo = titulo; }
+
+    public String getDescricao() { return descricao; }
+    public void setDescricao(String descricao) { this.descricao = descricao; }
+
+    public BigDecimal getValor() { return valor; }
+    public void setValor(BigDecimal valor) { this.valor = valor; }
+
+    public Integer getQuantidade() { return quantidade; }
+    public void setQuantidade(Integer quantidade) { this.quantidade = quantidade; }
+
+    public Integer getIdTipo() { return idTipo; }
+    public void setIdTipo(Integer idTipo) { this.idTipo = idTipo; }
+
+    public Integer getIdCondicao() { return idCondicao; }
+    public void setIdCondicao(Integer idCondicao) { this.idCondicao = idCondicao; }
+
+    public LocalDate getEntrada() { return entrada; }
+    public void setEntrada(LocalDate entrada) { this.entrada = entrada; }
+
+    // Métodos para remover quantidade vendida:
     public void removerQuantidade(int qtdVendida) {
         if (this.quantidade < qtdVendida) {
             throw new IllegalArgumentException("Quantidade em estoque insuficiente para o produto " + this.codProduto);
