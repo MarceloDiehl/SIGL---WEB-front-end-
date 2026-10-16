@@ -21,7 +21,14 @@ function formularioProduto() {
         $form.find('.invalid-feedback').remove();
         $form.validate().resetForm();
         $('#codigo-produto').prop('disabled', false);
+        $('#data-produto').val(new Date().toLocaleDateString('sv-SE'));
+        atualizarContadorDescricao();
     }
+
+    function atualizarContadorDescricao() {
+        $('#descricao-contador').text($('#descricao-produto').val().length);
+    }
+    $('#descricao-produto').off('input.contador').on('input.contador', atualizarContadorDescricao);
 
     $('#limpar-cadastro-produto').off('click').on('click', function() {
         limparFormulario();
@@ -48,7 +55,7 @@ function formularioProduto() {
             }
         })
         .fail(function() {
-            alert("Erro ao carregar produto para atualização.");
+            avisar("Erro ao carregar produto para atualização.", "erro");
         });
     }
 
@@ -109,7 +116,7 @@ function formularioProduto() {
             $.ajax(ajaxOptions)
             .done(function(response) {
                 let msg = codigoParam ? "Produto atualizado com sucesso!" : "Produto cadastrado com sucesso!";
-                alert(msg);
+                avisar(msg, "sucesso");
                 $mensagemFeedback.addClass('alert alert-success').text(msg + (response.id ? ' ID: ' + response.id : ''));
                 if (!codigoParam) limparFormulario(); // Limpa apenas se for cadastro
             })

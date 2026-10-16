@@ -1,82 +1,124 @@
-<div class="container busca-avancada" xmlns:th="http://www.w3.org/1999/xhtml">
-    <div class="row justify-content-center align-items-center">
-        <div class="mb-3">
-            <h3 class="titulo-paginas display-6">Pesquisa avançada de produtos</h3>
+<div class="busca-avancada">
+
+    <header class="pagina-cabecalho">
+        <div>
+            <p class="pagina-sobretitulo">Catálogo</p>
+            <h1 class="pagina-titulo">Estoque</h1>
+            <p class="pagina-descricao">Selecione um produto para atualizar preço e quantidade ou excluí-lo.</p>
         </div>
-    </div>
+        <div class="pagina-acoes">
+            <a class="btn btn-primary" href="/cadastro-produto" id="cadastrar_membro">
+                <i class="bi bi-plus-lg"></i>Cadastrar produto
+            </a>
+        </div>
+    </header>
 
-    <form action="#" method="post" class="formulario-produto mt-4">
-        <div class="row">
-            <div class="col-sm-4 mb-3">
+    <section class="painel painel-lista">
+        <form action="#" method="post" class="barra-ferramentas formulario-produto" onsubmit="return false;">
+            <div class="busca">
+                <i class="bi bi-search"></i>
+                <label for="cod_pesquisa" class="visually-hidden">Filtrar pelo código do produto</label>
                 <input type="text" id="cod_pesquisa" name="cod_pesquisa" class="form-control"
-                       placeholder="Filtre pelo Código do Produto"/>
+                       placeholder="Filtrar pelo código do produto" autocomplete="off" />
             </div>
-            <div class="col-12 mb-3">
-                <div class="table-responsive overflow-y-auto" style="max-height: 400px;">
-                    <table class="table table-striped">
-                        <thead>
-                        <tr>
-                            <th scope="col">Cód.</th>
-                            <th scope="col">Descrição</th>
-                            <th scope="col">Qtd</th>
-                            <th scope="col">Valor Unitário</th>
-                            <th scope="col">Tipo</th>
-                            <th scope="col">Condição</th>
-                            <th scope="col">Observação</th>
-                            <th scope="col">Data de Entrada</th>
-                        </tr>
-                        </thead>
-                        <tbody id="tabela-produtos-body">
-                        <tr>
-                            <td colspan="8" class="text-center">Carregando produtos...</td>
-                        </tr>
-                        </tbody>
-                    </table>
-                </div>
+            <div class="acoes">
+                <span class="contador num align-self-center me-2" id="resumo-produtos"></span>
+                <button type="button" id="atualizar_produto" class="btn btn-light" disabled>
+                    <i class="bi bi-pencil"></i>Atualizar
+                </button>
+                <button type="button" id="excluir_produto" class="btn btn-perigo" disabled>
+                    <i class="bi bi-trash3"></i>Excluir
+                </button>
             </div>
+        </form>
 
-            <div class="col-12">
-                <div class="row justify-content-between align-items-center">
-                    <div class="col-auto">
-                        <div class="d-flex gap-2">
-                            <button type="button" id="excluir_produto" class="btn btn-danger px-4" disabled>Excluir</button>
-                            <button type="button" id="atualizar_produto" class="btn btn-secondary px-4" disabled>Atualizar</button>
+        <div class="tabela-wrap">
+            <table class="table tabela">
+                <thead>
+                <tr>
+                    <th scope="col">Código</th>
+                    <th scope="col">Produto</th>
+                    <th scope="col">Tipo</th>
+                    <th scope="col">Condição</th>
+                    <th scope="col" class="text-end">Qtd</th>
+                    <th scope="col" class="text-end">Valor unit.</th>
+                    <th scope="col">Entrada</th>
+                </tr>
+                </thead>
+                <tbody id="tabela-produtos-body" class="num">
+                <tr><td colspan="7">Carregando produtos...</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+</div>
+
+<!-- Modal Confirmar Exclusão -->
+<div class="modal fade confirmar-exclusao" id="modalExcluirProduto" tabindex="-1" aria-labelledby="modalExcluirProdutoLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <form id="formExcluirProduto" novalidate>
+                <div class="modal-body">
+                    <div class="d-flex gap-3 align-items-start">
+                        <span class="icone-alerta"><i class="bi bi-exclamation-triangle"></i></span>
+                        <div>
+                            <h5 class="modal-title mb-1" id="modalExcluirProdutoLabel">Excluir produto?</h5>
+                            <p class="texto-suave mb-0">O produto sai do estoque e do catálogo. Esta ação não pode ser desfeita.</p>
                         </div>
                     </div>
-                    <div class="col-auto">
-                        <a class="btn btn-primary px-4" th:href="@{/cadastro-produto}" id="cadastrar_membro">Cadastrar</a>
+
+                    <div class="produto-resumo">
+                        <strong id="excluir-produto-titulo"></strong>
+                        <span class="contador">Código <span class="codigo" id="excluir-produto-codigo"></span>
+                            · <span id="excluir-produto-qtd"></span> em estoque</span>
                     </div>
+
+                    <label for="excluir-confirmacao" class="form-label">Para confirmar, digite o código do produto</label>
+                    <input type="text" id="excluir-confirmacao" class="form-control codigo-confirmacao"
+                           maxlength="6" inputmode="numeric" autocomplete="off" placeholder="Código do produto">
                 </div>
-            </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-light" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="submit" class="btn btn-danger" id="btn-confirmar-exclusao" disabled>
+                        <i class="bi bi-trash3"></i>Excluir produto
+                    </button>
+                </div>
+            </form>
         </div>
-    </form>
+    </div>
 </div>
 
 <!-- Modal Atualizar Produto -->
 <div class="modal fade" id="modalAtualizarProduto" tabindex="-1" aria-labelledby="modalAtualizarProdutoLabel" aria-hidden="true">
-    <div class="modal-dialog">
+    <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
             <form id="formAtualizarProduto">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="modalAtualizarProdutoLabel">Atualizar Produto</h5>
+                    <div>
+                        <h5 class="modal-title" id="modalAtualizarProdutoLabel">Atualizar produto</h5>
+                        <span class="contador">Código <span class="codigo" id="codigo-produto-modal-rotulo"></span></span>
+                    </div>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
                 </div>
                 <div class="modal-body">
-                    <!-- Input escondido para código -->
                     <input type="hidden" id="codigo-produto-modal">
-
-                    <div class="mb-3">
-                        <label for="quantidade-modal" class="form-label">Quantidade</label>
-                        <input type="number" class="form-control" id="quantidade-modal" required>
-                    </div>
-                    <div class="mb-3">
-                        <label for="valor-modal" class="form-label">Valor Unitário (R$)</label>
-                        <input type="text" class="form-control" id="valor-modal" required>
+                    <div class="row g-3">
+                        <div class="col-sm-6">
+                            <label for="quantidade-modal" class="form-label">Quantidade em estoque</label>
+                            <input type="number" class="form-control" id="quantidade-modal" min="0" required>
+                        </div>
+                        <div class="col-sm-6">
+                            <label for="valor-modal" class="form-label">Valor unitário</label>
+                            <div class="input-group">
+                                <span class="input-group-text">R$</span>
+                                <input type="text" class="form-control" id="valor-modal" inputmode="decimal" required>
+                            </div>
+                        </div>
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                    <button type="submit" class="btn btn-primary">Atualizar</button>
+                    <button type="button" class="btn btn-light" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="submit" class="btn btn-primary">Salvar alterações</button>
                 </div>
             </form>
         </div>

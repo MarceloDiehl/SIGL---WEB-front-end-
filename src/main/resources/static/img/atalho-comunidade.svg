@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 240">
+  <!-- pessoas (clientes e funcionários) -->
+  <ellipse cx="120" cy="208" rx="84" ry="10" fill="#000" opacity=".08"/>
+  <g>
+    <circle cx="70" cy="104" r="22" fill="#c9b8ff"/>
+    <path d="M30 196 C30 156 48 136 70 136 C92 136 110 156 110 196 Z" fill="#a993f5"/>
+  </g>
+  <g>
+    <circle cx="170" cy="104" r="22" fill="#8fe6c4"/>
+    <path d="M130 196 C130 156 148 136 170 136 C192 136 210 156 210 196 Z" fill="#62cfa6"/>
+  </g>
+  <g>
+    <circle cx="120" cy="88" r="28" fill="#ffbf8f"/>
+    <path d="M70 200 C70 150 92 126 120 126 C148 126 170 150 170 200 Z" fill="#f2915a"/>
+  </g>
+</svg>

@@ -7,14 +7,55 @@ function inicializarPesquisarProduto() {
     const $quantidadeInput = $('#estoque-produto');
     const $valorSpan = $('#valor-unitario');
 
+    const tipos = {
+        1: ['Disco de vinil', 'bi-vinyl'], 2: ['CD', 'bi-disc'], 3: ['Papelaria', 'bi-pencil'],
+        4: ['Livros', 'bi-book'], 5: ['Moda e vestuário', 'bi-bag'], 6: ['Equipamentos eletrônicos', 'bi-speaker'],
+        7: ['Instrumentos musicais', 'bi-music-note-beamed'], 8: ['Raridades', 'bi-gem']
+    };
+    const condicoes = { 1: 'Novo', 2: 'Usado (ótimo)', 3: 'Usado (bom)', 4: 'Usado (com marcas)' };
+    const $tipo = $('#tipo-produto-consulta');
+    const $condicao = $('#condicao-produto-consulta');
+
+    function mostrarTipo(idTipo, idCondicao) {
+        const tipo = tipos[idTipo];
+        $tipo.text(tipo ? tipo[0] : '—').toggleClass('sem-valor', !tipo);
+        $condicao.text(condicoes[idCondicao] ?? '—').toggleClass('sem-valor', !condicoes[idCondicao]);
+        $('.consulta-linha').toggleClass('com-produto', !!tipo);
+
+        // Grafismo de fundo: lupa sem produto, ícone do tipo com produto (com animação ao trocar)
+        const classe = tipo ? tipo[1] : 'bi-search';
+        const $marca = $('#consulta-marca-dagua');
+        if (!$marca.find('i').hasClass(classe)) {
+            $marca.removeClass('surgir').html(`<i class="bi ${classe}"></i>`);
+            void $marca[0].offsetWidth;   // reinicia a animação
+            $marca.addClass('surgir');
+        }
+    }
+
+    function mostrarEstoque(qtd) {
+        const $ficha = $('#ficha-estoque').removeClass('estoque-ok estoque-baixo estoque-zerado');
+        const $status = $('#estoque-status').attr('class', 'ficha-status').text('');
+        if (qtd === null || qtd === undefined || qtd === '') return;
+        if (qtd === 0) { $ficha.addClass('estoque-zerado'); $status.addClass('selo selo-perigo').text('Esgotado'); }
+        else if (qtd <= 3) { $ficha.addClass('estoque-baixo'); $status.addClass('selo selo-alerta').text('Estoque baixo'); }
+        else { $ficha.addClass('estoque-ok'); $status.addClass('selo selo-ok').text('Disponível'); }
+    }
+
     function limparCampos() {
+        mostrarEstoque(null);
+        mostrarTipo(null, null);
         $tituloInput.val('');
         $descricaoTextarea.val('');
         $quantidadeInput.val('');
-        $valorSpan.html('<strong>Valor do Produto: R$0,00</strong>');
+        $valorSpan.html('<strong>—</strong>');
     }
 
     limparCampos();
+
+    $('#limpar-pesquisa-produto').off('click').on('click', function () {
+        $codigoInput.val('').trigger('focus');
+        limparCampos();
+    });
 
     $codigoInput.off('input').on('input', function () {
         const codProduto = $(this).val().trim();
@@ -34,12 +75,14 @@ function inicializarPesquisarProduto() {
             if (produto) {
                 console.log("Produto encontrado:", produto);
                 $tituloInput.val(produto.titulo ?? '');
+                mostrarTipo(produto.idTipo, produto.idCondicao);
                 $descricaoTextarea.val(produto.descricao ?? '');
                 $quantidadeInput.val(produto.quantidade ?? '');
+                mostrarEstoque(produto.quantidade);
                 const valorFormatado = (produto.valor !== null && produto.valor !== undefined)
                     ? parseFloat(produto.valor).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })
                     : 'R$ 0,00';
-                $valorSpan.html(`<strong>Valor do Produto: ${valorFormatado}</strong>`);
+                $valorSpan.html(`<strong>${valorFormatado}</strong>`);
             } else {
                 console.log("Nenhum produto encontrado para o código:", codProduto);
                 limparCampos();

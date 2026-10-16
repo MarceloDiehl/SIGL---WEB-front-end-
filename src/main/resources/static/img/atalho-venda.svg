@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 240">
+  <!-- sacola de compras com um disco de vinil saindo -->
+  <ellipse cx="120" cy="212" rx="78" ry="10" fill="#000" opacity=".08"/>
+  <g transform="rotate(-14 150 70)">
+    <circle cx="150" cy="78" r="58" fill="#1d1b21"/>
+    <circle cx="150" cy="78" r="54" fill="none" stroke="#2c2a31" stroke-width="2"/>
+    <circle cx="150" cy="78" r="46" fill="none" stroke="#2c2a31" stroke-width="2"/>
+    <circle cx="150" cy="78" r="38" fill="none" stroke="#2c2a31" stroke-width="2"/>
+    <path d="M110 50 A50 50 0 0 1 140 30" stroke="#fff" stroke-opacity=".25" stroke-width="4" fill="none" stroke-linecap="round"/>
+    <circle cx="150" cy="78" r="20" fill="#e9773f"/>
+    <circle cx="150" cy="78" r="3.5" fill="#1d1b21"/>
+  </g>
+  <path d="M84 92 C84 62 104 52 112 52 C120 52 140 62 140 92" fill="none" stroke="#b9592b" stroke-width="7" stroke-linecap="round"/>
+  <path d="M52 96 H172 L162 206 H62 Z" fill="#f6a56f"/>
+  <path d="M52 96 H172 L170 116 H54 Z" fill="#ea8a4f"/>
+  <path d="M150 96 H172 L162 206 H146 Z" fill="#e98e55"/>
+  <circle cx="86" cy="106" r="5" fill="#8f3f17"/>
+  <circle cx="138" cy="106" r="5" fill="#8f3f17"/>
+  <path d="M84 106 C84 80 96 72 112 72 C128 72 140 80 140 106" fill="none" stroke="#8f3f17" stroke-width="7" stroke-linecap="round"/>
+</svg>
