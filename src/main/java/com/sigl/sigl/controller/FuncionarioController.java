@@ -1,5 +1,6 @@
 package com.sigl.sigl.controller;
 
+import com.sigl.sigl.dto.FuncionarioResposta;
 import com.sigl.sigl.model.Funcionario;
 import com.sigl.sigl.repository.FuncionarioRepository;
 import com.sigl.sigl.service.FuncionarioService;
@@ -34,14 +35,14 @@ public class FuncionarioController {
     }
 
     @GetMapping
-    public List<Funcionario> listarFuncionarios(@RequestParam(value = "cpf", required = false) String cpf) {
+    public List<FuncionarioResposta> listarFuncionarios(@RequestParam(value = "cpf", required = false) String cpf) {
+        List<Funcionario> funcionarios = funcionarioRepository.findAll();
         if (cpf != null && !cpf.isEmpty()) {
-            return funcionarioRepository.findAll()
-                    .stream()
+            funcionarios = funcionarios.stream()
                     .filter(f -> f.getCpf().contains(cpf))
                     .toList();
         }
-        return funcionarioRepository.findAll();
+        return funcionarios.stream().map(FuncionarioResposta::de).toList();
     }
 
     @DeleteMapping("/{id}")
