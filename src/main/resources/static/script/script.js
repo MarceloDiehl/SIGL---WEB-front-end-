@@ -131,6 +131,9 @@ $(document).ready(function () {
                     xhr.status + " " + xhr.statusText + "</p>"
                 );
             } else {
+                // autofocus só vale no carregamento da página; nas telas trazidas por AJAX o foco é dado aqui
+                $(this).find('[autofocus]').first().trigger('focus');
+
                 if (url.includes('/cadastro-membro')) {
                     formularioParceiros();
                 }
