@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 240">
+  <!-- totem de autoatendimento com leitor de código de barras e cadeado -->
+  <ellipse cx="112" cy="214" rx="64" ry="9" fill="#000" opacity=".08"/>
+  <rect x="96" y="150" width="32" height="58" rx="6" fill="#2c2a31"/>
+  <rect x="74" y="200" width="76" height="12" rx="6" fill="#1d1b21"/>
+  <rect x="60" y="34" width="104" height="124" rx="14" fill="#1d1b21"/>
+  <rect x="68" y="42" width="88" height="96" rx="8" fill="#f4f1ec"/>
+  <rect x="78" y="54" width="44" height="7" rx="3.5" fill="#c9c2b8"/>
+  <rect x="78" y="68" width="68" height="12" rx="6" fill="#1d1b21"/>
+  <rect x="78" y="88" width="52" height="16" rx="5" fill="#1d1b21" opacity=".85"/>
+  <rect x="80" y="112" width="40" height="12" rx="6" fill="#8fe6c4"/>
+  <circle cx="112" cy="148" r="3" fill="#4a4750"/>
+  <!-- feixe do leitor -->
+  <path d="M164 104 L196 92 L196 132 Z" fill="#ff7a7a" opacity=".35"/>
+  <rect x="190" y="88" width="10" height="48" rx="2" fill="#e04848" opacity=".8"/>
+  <!-- cadeado -->
+  <g transform="translate(150 150)">
+    <path d="M12 18 V10 a14 14 0 0 1 28 0 V18" fill="none" stroke="#5a3fd1" stroke-width="6" stroke-linecap="round"/>
+    <rect x="4" y="18" width="44" height="34" rx="8" fill="#c9b8ff"/>
+    <circle cx="26" cy="33" r="5" fill="#5a3fd1"/>
+    <rect x="24" y="35" width="4" height="9" rx="2" fill="#5a3fd1"/>
+  </g>
+</svg>

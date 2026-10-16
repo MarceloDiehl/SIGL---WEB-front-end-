@@ -1,173 +1,1993 @@
-html {
-  background-color: white;
+/* =========================================================
+   SIGL · Orion Record Store — folha de estilo
+   Estrutura: tokens → base → layout (sidebar/conteúdo) →
+   componentes (cabeçalho de página, cards, formulários,
+   tabelas, botões, modais) → telas específicas → login
+   ========================================================= */
+
+/* ---------- Tokens ---------- */
+:root {
+    --ink: #17161a;            /* sidebar / “vinil” */
+    --ink-2: #222127;
+    --ink-line: rgba(255, 255, 255, .08);
+    --paper: #f5f3ef;          /* fundo do app */
+    --surface: #ffffff;
+    --surface-2: #faf9f7;
+    --line: #e7e3dc;
+    --text: #1d1b18;
+    --muted: #6d675f;
+    --accent: #c2410c;         /* laranja “selo de disco” */
+    --accent-hover: #a63a0b;
+    --accent-soft: #fdf0e8;
+    --ok: #2f7d4f;
+    --ok-soft: #e9f5ee;
+    --warn: #a15c00;
+    --warn-soft: #fdf3e1;
+    --danger: #b42318;
+    --danger-soft: #fdecea;
+    --radius: 12px;
+    --radius-sm: 8px;
+    --shadow: 0 1px 2px rgba(23, 22, 26, .04), 0 4px 16px rgba(23, 22, 26, .05);
+    --sidebar-w: 248px;
+    --gutter: 20px;            /* recuo horizontal único de painéis, barras e tabelas */
+    --controle-h: 40px;        /* altura comum de campos e botões */
+
+    /* Integração com o Bootstrap */
+    --bs-body-font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif;
+    --bs-body-color: var(--text);
+    --bs-body-bg: var(--paper);
+    --bs-border-color: var(--line);
+    --bs-primary: var(--accent);
+    --bs-primary-rgb: 194, 65, 12;
+    --bs-link-color: var(--accent);
+    --bs-link-hover-color: var(--accent-hover);
 }
+
+/* ---------- Base ---------- */
+html, body { height: 100%; }
+
 body {
-  background-color: rgb(212, 212, 212);
-
-  max-width: 1280px;
-  margin: 0 auto;
-  min-height: 100vh;
-
-  display: flex;
-  flex-direction: column;
-
-  font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
-    sans-serif;
-  line-height: 1.6;
-  font-weight: 400;
+    font-family: var(--bs-body-font-family);
+    background: var(--paper);
+    color: var(--text);
+    font-size: 15px;
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
 }
 
+h1, h2, h3, h4, h5 { font-weight: 700; letter-spacing: -.01em; color: var(--text); }
 
-h1,
-h2,
-h3 {
-    font-family: "Inter", sans-serif;
-    font-weight: 700;
-    letter-spacing: 1px;
+.text-muted, .texto-suave { color: var(--muted) !important; }
+.num { font-variant-numeric: tabular-nums; }
+
+/* ---------- Layout do app ---------- */
+.app {
+    display: grid;
+    grid-template-columns: var(--sidebar-w) 1fr;
+    min-height: 100vh;
 }
 
-h1 {
-    font-size: 32px;
+.sidebar {
+    background: var(--ink);
+    color: #fff;
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    padding: 20px 14px;
+    overflow-y: auto;
 }
 
-h2 {
-    font-size: 24px;
-}
-
-h3 {
-    font-size: 18px;
-}
-
-p {
-    font-size: 16px;
-}
-
-.titulo {
-    font-size: 32px;
-}
-
-.cabecalho {
-    background-color: #2b2b2b;
-    min-height: 120px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.205); 
-}
-
-
-
-.rodape {
-    background-color: rgb(0, 0, 0);
-    box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.205);    
-}
-
-.boas-vindas {
-    margin-top: 80px;
-}
-
-.conteudo-principal {
-    flex: 1;
+.sidebar-topo {
     display: flex;
     align-items: center;
-    justify-content: start;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 0 6px 18px;
+    border-bottom: 1px solid var(--ink-line);
 }
 
-.texto-rodape {
-    color: white;
+.marca { display: flex; align-items: center; gap: 12px; text-decoration: none; color: #fff; }
+.marca img { width: 44px; height: 44px; object-fit: contain; }
+.marca-nome { font-weight: 700; letter-spacing: .14em; font-size: 14px; line-height: 1.1; }
+.marca-sub { display: block; font-size: 11px; letter-spacing: .08em; color: rgba(255,255,255,.55); font-weight: 500; }
+
+.sidebar-toggler {
+    border: 1px solid var(--ink-line);
+    background: transparent;
+    color: #fff;
+    border-radius: var(--radius-sm);
+    padding: 6px 10px;
+    font-size: 20px;
+    line-height: 1;
 }
 
+.sidebar-menu { padding-top: 14px; flex: 1; }
 
-/*navbar*/
-.navbar {
-    min-height: 120px;
-    background-color: #2b2b2b;
-    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.205);
-}
-
-.navbar-nav {
-    gap: 20px;
-}
-
-.navbar .nav-link {
-    font-family: "Inter", sans-serif;
+.menu-grupo {
+    font-size: 11px;
     font-weight: 600;
     text-transform: uppercase;
-    letter-spacing: 1px;
-    font-size: 20px;
-    color: #FFFFFF;
-
+    letter-spacing: .1em;
+    color: rgba(255, 255, 255, .4);
+    padding: 16px 12px 6px;
 }
 
-.navbar .nav-link:hover {
-    color: rgba(255, 255, 255, 0.85);
+.sidebar .navbar-nav { gap: 2px; flex-direction: column; }
+
+.sidebar .nav-link {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 9px 12px;
+    border-radius: var(--radius-sm);
+    color: rgba(255, 255, 255, .72);
+    font-weight: 500;
+    font-size: 14px;
+    transition: background .15s, color .15s;
+}
+.sidebar .nav-link i { font-size: 17px; opacity: .85; }
+.sidebar .nav-link:hover { background: var(--ink-2); color: #fff; }
+.sidebar .nav-link.active {
+    background: var(--ink-2);
+    color: #fff;
+    box-shadow: inset 3px 0 0 var(--accent);
+}
+.sidebar .nav-link.active i { color: #f28a4b; opacity: 1; }
+
+@media (min-width: 992px) {
+    .sidebar-menu { display: flex !important; flex-direction: column; }
 }
 
-.navbar .nav-link.active {
-    text-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+.sidebar-rodape {
+    border-top: 1px solid var(--ink-line);
+    padding-top: 14px;
+    margin-top: auto;
 }
+.sidebar-rodape .nav-link { color: rgba(255, 255, 255, .6); }
+.usuario { display: flex; align-items: center; gap: 10px; padding: 2px 4px 2px 12px; }
+.usuario-sair { margin: 0 0 0 auto; }
+.btn-sair {
+    width: 36px; height: 36px; border-radius: 50%;
+    display: grid; place-items: center;
+    background: none; border: 1px solid var(--ink-line);
+    color: rgba(255, 255, 255, .65); font-size: 16px;
+    transition: background .15s, color .15s, border-color .15s;
+}
+.btn-sair:hover { background: var(--ink-2); color: #fff; border-color: rgba(255,255,255,.18); }
+.btn-sair:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.usuario-avatar {
+    width: 34px; height: 34px; border-radius: 50%;
+    display: grid; place-items: center; flex-shrink: 0;
+    background: var(--accent); color: #fff;
+    font-size: 13px; font-weight: 700; letter-spacing: .02em;
+}
+.usuario-dados { display: flex; flex-direction: column; min-width: 0; line-height: 1.25; }
+.usuario-dados strong { font-size: 13px; color: #fff; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.usuario-dados span { font-size: 12px; color: rgba(255, 255, 255, .55); }
+.sidebar-rodape small { display: block; padding: 10px 12px 0; color: rgba(255,255,255,.35); font-size: 11px; }
 
-@media(min-width: 992px) {
-    .navbar-collapse {
-        align-self: flex-end;
-    }
+.conteudo-principal {
+    padding: 36px clamp(16px, 3vw, 48px) 56px;
+    min-width: 0;
+    width: 100%;
+    max-width: 1600px;
+    margin-inline: auto;       /* centraliza no espaço à direita do menu (ex.: 1920×1080) */
 }
 
 @media (max-width: 991.98px) {
-    .navbar-collapse {
-        background-color: #2b2b2b;
-        padding: 1rem;
-        border-top: 1px solid rgba(255, 255, 255, 0.1);
-        
-    }
-
-    .navbar-nav {
-        gap: 0;
-    }
-
-    .navbar .nav-link {
-        padding: 0.75rem 0;
-    }
+    .app { grid-template-columns: 1fr; }
+    .sidebar { position: sticky; height: auto; padding: 12px 16px; z-index: 1020; }
+    .sidebar-topo { border-bottom: 0; padding: 0; }
+    .sidebar-menu { padding-top: 8px; }
+    .sidebar-rodape { margin-top: 8px; }
+    .conteudo-principal { padding-top: 24px; }
 }
 
-main {
-    flex: 1;
+/* Carregamento entre telas (gerado pelo script.js) */
+#conteudo-dinamico > .text-center.my-5 { color: var(--muted); }
+.spinner-border.text-primary { color: var(--accent) !important; }
+
+/* ---------- Cabeçalho de página ---------- */
+.pagina-cabecalho {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    flex-wrap: wrap;
+    margin-bottom: 24px;
+}
+.pagina-sobretitulo {
+    font-size: 11.5px;
+    font-weight: 600;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin: 0 0 4px;
+}
+.pagina-titulo { font-size: 28px; line-height: 1.2; margin: 0; }
+.pagina-descricao { color: var(--muted); margin: 8px 0 0; font-size: 14.5px; }   /* frases curtas: cabem numa linha */
+.pagina-acoes { display: flex; gap: 8px; flex-wrap: wrap; }
+
+/* ---------- Cards / painéis ---------- */
+.painel {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+}
+.painel + .painel { margin-top: 16px; }
+.pdv > .painel { margin-top: 0; }
+
+/* Carrinho com altura fixa: a área não cresce ao inserir itens; a lista rola por dentro */
+.painel-carrinho {
     display: flex;
     flex-direction: column;
-    justify-content: center;
+    height: clamp(460px, calc(100vh - 230px), 680px);
+}
+.painel-carrinho .tabela-wrap { flex: 1 1 auto; min-height: 0; max-height: none; }
+.painel-carrinho .painel-rodape { margin-top: auto; }
+/* Carrinho vazio: a única linha ocupa toda a área, deixando ícone e texto no centro */
+.painel-carrinho .tabela.vazia { height: 100%; }
+.painel-carrinho .tabela.vazia tbody td { vertical-align: middle; }
+
+.painel-corpo { padding: 20px var(--gutter) 22px; }
+.painel-cabecalho {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    min-height: 56px;
+    padding: 12px var(--gutter);
+    border-bottom: 1px solid var(--line);
+}
+.painel-titulo { font-size: 15px; margin: 0; display: flex; align-items: center; gap: 10px; }
+.painel-titulo .passo {
+    width: 24px; height: 24px; border-radius: 50%;
+    display: inline-grid; place-items: center;
+    background: var(--accent-soft); color: var(--accent);
+    font-size: 12px; font-weight: 700;
+}
+.painel-rodape {
+    padding: 14px var(--gutter);
+    border-top: 1px solid var(--line);
+    background: var(--surface-2);
+    border-radius: 0 0 var(--radius) var(--radius);
 }
 
-/*Alertas de erros*/
+/* ---------- Formulários ---------- */
+.form-label { font-size: 13px; font-weight: 600; color: var(--text); margin-bottom: 6px; }
+.form-label .opcional { font-weight: 400; color: var(--muted); }
 
+.form-control, .form-select {
+    border-color: var(--line);
+    border-radius: var(--radius-sm);
+    min-height: var(--controle-h);
+    padding: 8px 12px;
+    font-size: 14px;
+    background-color: var(--surface);
+}
+.form-control:focus, .form-select:focus {
+    background-color: var(--surface);
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px rgba(194, 65, 12, .15);
+}
+.form-control[readonly] { background: var(--surface-2); }
+.form-text { font-size: 12px; color: var(--muted); }
 
-label.error {
-    color: red;
-    font-size: 16px;
-    font-weight: bold;
-    
+.input-group-text {
+    background: var(--surface-2);
+    border-color: var(--line);
+    color: var(--muted);
+    font-size: 14px;
 }
 
+/* Campo de busca com ícone */
+.busca {
+    position: relative;
+    flex: 1 1 280px;
+    max-width: 420px;
+}
+.busca i {
+    position: absolute; left: 12px; top: 50%;
+    transform: translateY(-50%);
+    color: var(--muted); pointer-events: none;
+}
+.busca .form-control { padding-left: 38px; }
 
-/*botões!!! Preciso revisar*/
+/* Mensagens de validação (jQuery Validate) */
+div.invalid-feedback { display: block; font-size: 12px; font-weight: 500; }
+label.error { color: var(--danger); font-size: 12px; font-weight: 500; }
+.form-control.is-valid, .form-select.is-valid { border-color: var(--line); background-image: none; padding-right: 12px; }
+.form-control.is-valid:focus, .form-select.is-valid:focus { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(194, 65, 12, .15); }
+
+/* Seletor segmentado (rádios) */
+.segmentado {
+    display: inline-flex;
+    padding: 4px;
+    background: var(--surface-2);
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    gap: 4px;
+}
+.segmentado input { position: absolute; opacity: 0; pointer-events: none; }
+.segmentado label {
+    display: flex; align-items: center; gap: 8px;
+    padding: 7px 16px;
+    border-radius: 999px;
+    font-size: 14px; font-weight: 600;
+    color: var(--muted);
+    cursor: pointer;
+    transition: background .15s, color .15s;
+}
+.segmentado input:checked + label { background: var(--ink); color: #fff; }
+.segmentado input:focus-visible + label { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+/* Opções em “cartão” (forma de pagamento) */
+.opcoes-cartao { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; }
+.opcoes-cartao input { position: absolute; opacity: 0; pointer-events: none; }
+.opcoes-cartao label {
+    display: flex; align-items: center; gap: 10px;
+    border: 1px solid var(--line);
+    border-radius: var(--radius-sm);
+    padding: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: border-color .15s, background .15s;
+}
+.opcoes-cartao label i { font-size: 20px; color: var(--muted); }
+.opcoes-cartao input:checked + label { border-color: var(--accent); background: var(--accent-soft); }
+.opcoes-cartao input:checked + label i { color: var(--accent); }
+.opcoes-cartao input:focus-visible + label { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+/* ---------- Botões ---------- */
 .btn {
-    margin-top: 20px;
-    margin-bottom: 20px;
+    border-radius: var(--radius-sm);
+    font-weight: 600;
+    font-size: 14px;
+    min-height: var(--controle-h);
+    padding: 8px 16px;
+    line-height: 1.2;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
 }
-
-
-.titulo-paginas {
-    margin-top: 30px;
+.btn-lg { min-height: 48px; padding: 12px 22px; font-size: 15px; }
+textarea.form-control { min-height: auto; }
+.form-control::placeholder { color: #a39c92; opacity: 1; }
+.btn-primary {
+    --bs-btn-bg: var(--accent);
+    --bs-btn-border-color: var(--accent);
+    --bs-btn-hover-bg: var(--accent-hover);
+    --bs-btn-hover-border-color: var(--accent-hover);
+    --bs-btn-active-bg: var(--accent-hover);
+    --bs-btn-active-border-color: var(--accent-hover);
+    --bs-btn-disabled-bg: var(--accent);
+    --bs-btn-disabled-border-color: var(--accent);
+    --bs-btn-focus-shadow-rgb: 194, 65, 12;
 }
-
-.table{
-    margin-top: 8px;
-    margin-top:8px
+.btn-light, .btn-secundario {
+    --bs-btn-bg: var(--surface);
+    --bs-btn-color: var(--text);
+    --bs-btn-border-color: var(--line);
+    --bs-btn-hover-bg: var(--surface-2);
+    --bs-btn-hover-border-color: #d6d0c6;
+    --bs-btn-hover-color: var(--text);
+    --bs-btn-active-bg: #efece7;
+    --bs-btn-active-border-color: #d6d0c6;
+    --bs-btn-disabled-bg: var(--surface);
+    --bs-btn-disabled-border-color: var(--line);
+    --bs-btn-disabled-color: var(--muted);
 }
-.table th,
-.table td {    
+.btn-perigo {
+    --bs-btn-bg: var(--surface);
+    --bs-btn-color: var(--danger);
+    --bs-btn-border-color: #f1c7c2;
+    --bs-btn-hover-bg: var(--danger-soft);
+    --bs-btn-hover-color: var(--danger);
+    --bs-btn-hover-border-color: #e9a9a1;
+    --bs-btn-active-bg: var(--danger-soft);
+    --bs-btn-active-color: var(--danger);
+    --bs-btn-disabled-bg: var(--surface);
+    --bs-btn-disabled-color: #c9a29d;
+    --bs-btn-disabled-border-color: var(--line);
+}
+.btn-texto { --bs-btn-color: var(--muted); --bs-btn-hover-color: var(--text); --bs-btn-hover-bg: rgba(0,0,0,.04); --bs-btn-border-color: transparent; }
+
+/* ---------- Barra de ferramentas (busca + ações) ---------- */
+.barra-ferramentas {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    flex-wrap: wrap;
+    margin: 0;
+    padding: 14px var(--gutter);
+    border-bottom: 1px solid var(--line);
+}
+.barra-ferramentas .acoes { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.contador { font-size: 13px; color: var(--muted); }
+
+/* ---------- Tabelas ---------- */
+.tabela-wrap { overflow: auto; max-height: 560px; }
+
+.tabela {
+    --bs-table-bg: transparent;
+    --bs-table-striped-bg: transparent;
+    --bs-table-active-bg: var(--accent-soft);
+    --bs-table-hover-bg: var(--surface-2);
+    margin: 0;
+    font-size: 14px;
+}
+.tabela thead th {
+    position: sticky; top: 0; z-index: 1;
+    background: var(--surface-2);
     font-size: 12px;
+    font-weight: 600;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: .05em;
+    white-space: nowrap;
+    border-bottom: 1px solid var(--line);
+    padding: 11px 14px;
+}
+.tabela td {
+    padding: 13px 14px;
     vertical-align: middle;
+    border-bottom: 1px solid var(--line);
+    color: var(--text);
+}
+.tabela tbody tr:last-child td { border-bottom: 0; }
+.tabela th:first-child, .tabela td:first-child { padding-left: var(--gutter); }
+.tabela th:last-child, .tabela td:last-child { padding-right: var(--gutter); }
+.tabela tbody tr[data-codigo],
+.tabela tbody tr[data-id],
+.tabela tbody tr[data-index] { cursor: pointer; }
+.tabela tbody tr.table-active td { box-shadow: none; background: var(--accent-soft); }
+.tabela tbody tr.table-active td:first-child { box-shadow: inset 3px 0 0 var(--accent); }
+.tabela .text-end { text-align: right; }
+.tabela td[colspan] { color: var(--muted); padding: 40px 14px; text-align: center; }
+.tabela .titulo-celula { font-weight: 600; }
+.tabela .sub-celula { display: block; font-size: 12px; color: var(--muted); }
+.tabela .codigo { font-variant-numeric: tabular-nums; }
+
+/* ---------- Selos / badges ---------- */
+.selo {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 3px 9px;
+    border-radius: 999px;
+    font-size: 12px; font-weight: 600;
+    background: #efece7; color: var(--muted);
+    white-space: nowrap;
+}
+.selo-ok { background: var(--ok-soft); color: var(--ok); }
+.selo-alerta { background: var(--warn-soft); color: var(--warn); }
+.selo-perigo { background: var(--danger-soft); color: var(--danger); }
+.selo-destaque { background: var(--accent-soft); color: var(--accent); }
+.selo-escuro { background: var(--ink); color: #fff; }
+
+/* ---------- Modais ---------- */
+.modal-content { border: 0; border-radius: var(--radius); box-shadow: 0 20px 60px rgba(0,0,0,.2); }
+.modal-header { border-bottom: 1px solid var(--line); padding: 18px 22px; }
+.modal-title { font-size: 17px; }
+.modal-body { padding: 22px; }
+.modal-footer { border-top: 1px solid var(--line); background: var(--surface-2); padding: 14px 22px; border-radius: 0 0 var(--radius) var(--radius); }
+
+.etapas { display: flex; gap: 6px; font-size: 12px; color: var(--muted); margin-bottom: 4px; }
+.etapas span { display: flex; align-items: center; gap: 6px; }
+.etapas span::before { content: ''; width: 8px; height: 8px; border-radius: 50%; background: var(--line); }
+.etapas span.atual { color: var(--text); font-weight: 600; }
+.etapas span.atual::before, .etapas span.feita::before { background: var(--accent); }
+.etapas span + span::after { display: none; }
+
+.total-destaque {
+    background: var(--accent-soft);
+    border: 1px solid rgba(194, 65, 12, .22);
+    border-radius: var(--radius-sm);
+    padding: 14px 18px;
+    margin: 0;
+    display: flex; align-items: center; justify-content: space-between; gap: 12px;
+}
+.total-destaque span {
+    font-size: 11.5px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase;
+    color: var(--accent); white-space: nowrap;
+}
+.total-destaque input {
+    background: transparent; border: 0; color: var(--ink);
+    font-family: var(--fonte-titulo);
+    font-size: 26px; font-weight: 700; text-align: right;
+    flex: 1 1 auto; min-width: 0; padding: 0;
+}
+.total-destaque input:focus { outline: none; box-shadow: none; }
+
+.confirmar-exclusao .icone-alerta {
+    width: 44px; height: 44px; border-radius: 50%;
+    display: grid; place-items: center; flex-shrink: 0;
+    background: var(--danger-soft); color: var(--danger); font-size: 20px;
+}
+.confirmar-exclusao .produto-resumo {
+    border: 1px solid var(--line); border-radius: var(--radius-sm);
+    background: var(--surface-2); padding: 12px 14px; margin: 16px 0;
+}
+.confirmar-exclusao .produto-resumo strong { display: block; }
+.confirmar-exclusao .codigo-confirmacao { font-family: ui-monospace, 'SF Mono', Menlo, monospace; letter-spacing: .15em; }
+.btn-danger {
+    --bs-btn-bg: var(--danger); --bs-btn-border-color: var(--danger);
+    --bs-btn-hover-bg: #93190f; --bs-btn-hover-border-color: #93190f;
+    --bs-btn-disabled-bg: var(--danger); --bs-btn-disabled-border-color: var(--danger);
 }
 
-.boas-vindas img {
-    width: 400px;    
-    height: auto;    
-    opacity: 0.7;
+.sucesso { text-align: center; padding: 18px 0 8px; }
+.sucesso .icone {
+    width: 64px; height: 64px; border-radius: 50%;
+    display: inline-grid; place-items: center;
+    background: var(--ok-soft); color: var(--ok);
+    font-size: 32px; margin-bottom: 14px;
 }
+.sucesso h3 { font-size: 20px; margin-bottom: 4px; }
+
+/* ---------- Tela: Início ---------- */
+.inicio-hero {
+    background: var(--ink);
+    color: #fff;
+    border-radius: var(--radius);
+    padding: 32px;
+    display: flex; align-items: center; justify-content: space-between; gap: 24px;
+    overflow: hidden;
+    position: relative;
+}
+.inicio-hero h1 { color: #fff; font-size: 28px; margin: 0 0 8px; }
+.inicio-hero p { color: rgba(255,255,255,.7); margin: 0; }
+.inicio-hero .pagina-sobretitulo { color: #f28a4b; }
+.inicio-hero img { width: 150px; opacity: .9; flex-shrink: 0; }
+@media (max-width: 575.98px) { .inicio-hero img { display: none; } .inicio-hero { padding: 24px; } }
+
+.atalhos { display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 16px; margin-top: 24px; }
+.atalho {
+    display: block;
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    padding: 20px;
+    text-decoration: none;
+    color: var(--text);
+    box-shadow: var(--shadow);
+    transition: border-color .15s, transform .15s;
+}
+.atalho:hover { border-color: var(--accent); color: var(--text); transform: translateY(-2px); }
+.atalho .icone {
+    width: 40px; height: 40px; border-radius: 10px;
+    display: grid; place-items: center;
+    background: var(--accent-soft); color: var(--accent);
+    font-size: 20px; margin-bottom: 14px;
+}
+.atalho strong { display: block; font-size: 15px; margin-bottom: 4px; }
+.atalho span { font-size: 13px; color: var(--muted); }
+
+/* ---------- Tela: Consulta rápida de produto ---------- */
+.consulta-busca .form-control {
+    font-size: 22px;
+    font-weight: 600;
+    letter-spacing: .2em;
+    min-height: 56px;
+    padding: 12px 16px 12px 50px;
+    font-family: ui-monospace, 'SF Mono', Menlo, monospace;
+}
+.consulta-busca .form-control::placeholder {
+    font-family: var(--bs-body-font-family);
+    font-size: 17px;
+    font-weight: 400;
+    letter-spacing: 0;
+}
+.consulta-busca.busca { max-width: none; }
+.consulta-busca.busca i { left: 16px; font-size: 20px; }
+
+.campo-leitura {
+    min-height: 0 !important;
+    border: 0 !important;
+    background: transparent !important;
+    padding: 0 !important;
+    box-shadow: none !important;
+    color: var(--text);
+    resize: none;
+}
+.campo-leitura:focus { outline: none; }
+#titulo-produto.campo-leitura { font-size: 22px; font-weight: 700; }
+#observacoes.campo-leitura { color: var(--muted); }
+
+/* Consulta: mesmo desenho do carrinho da venda.
+   Altura fixa; título e descrição em cima (descrição longa rola por dentro);
+   barra inferior com Limpar pesquisa, estoque e preço — sempre visíveis, com "—" quando vazios */
+.painel-consulta {
+    display: flex;
+    flex-direction: column;
+    height: clamp(420px, calc(100vh - 340px), 610px);
+}
+.consulta-texto { flex: 1 1 auto; min-height: 0; display: flex; flex-direction: column; position: relative; overflow: hidden; }
+.consulta-texto > :not(.consulta-marca-dagua) { position: relative; z-index: 1; }
+
+/* Grafismo grande, cinza esmaecido, parcialmente fora do bloco */
+.consulta-marca-dagua {
+    position: absolute;
+    right: 24px;
+    bottom: 14px;
+    font-size: 340px;
+    line-height: 1;
+    color: #e9e3da;
+    pointer-events: none;
+    z-index: 0;
+}
+.consulta-marca-dagua.surgir i { animation: marca-surgir .45s ease-out; }
+@keyframes marca-surgir {
+    from { opacity: 0; transform: translateY(24px) rotate(-8deg) scale(.92); }
+    to   { opacity: 1; transform: none; }
+}
+@media (prefers-reduced-motion: reduce) { .consulta-marca-dagua.surgir i { animation: none; } }
+@media (max-width: 991.98px) { .consulta-marca-dagua { font-size: 220px; } }
+.consulta-texto #observacoes.campo-leitura {
+    flex: 1 1 auto;
+    min-height: 0;
+    overflow-y: auto;
+    padding-right: 8px !important;
+    scrollbar-width: thin;
+    line-height: 1.6;
+}
+.campo-leitura::placeholder { color: #b9b2a7; opacity: 1; }
+.consulta-rodape {
+    display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap;
+}
+.consulta-preco { display: flex; align-items: baseline; gap: 10px; margin: 0 0 0 auto; }
+.consulta-preco span { font-size: 13px; }
+
+/* Linha da consulta: campo do código + fichas de tipo, estado e estoque, separadas */
+.consulta-linha {
+    display: grid;
+    grid-template-columns: minmax(360px, 1fr) 232px 214px 222px;   /* código ocupa o espaço; fichas compactas na medida do conteúdo */
+    gap: 12px;
+    margin-bottom: 24px;
+}
+.consulta-linha .consulta-busca { margin: 0 !important; }
+.consulta-linha .consulta-busca .form-control { height: 100%; min-height: 64px; }
+@media (max-width: 1599.98px) { .consulta-linha { grid-template-columns: repeat(3, minmax(0, 1fr)); } .consulta-linha .consulta-busca { grid-column: 1 / -1; } }
+@media (max-width: 767.98px) { .consulta-linha { grid-template-columns: 1fr; } }
+.ficha {
+    display: flex; align-items: center; gap: 12px;
+    padding: 12px 14px;
+    border: 1px solid var(--line);
+    border-radius: var(--radius-sm);
+    background: var(--surface);
+    box-shadow: var(--shadow);
+    min-height: 64px;
+    min-width: 0;
+}
+.ficha-icone {
+    width: 38px; height: 38px; border-radius: 50%; flex-shrink: 0;
+    display: grid; place-items: center;
+    background: var(--accent-soft); color: var(--accent); font-size: 17px;
+}
+.ficha-texto { display: flex; flex-direction: column; min-width: 0; }
+.ficha-rotulo { font-size: 11.5px; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: .06em; margin: 0; }
+.ficha strong { font-size: 15.5px; font-weight: 600; color: var(--text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.ficha strong.sem-valor { color: #b9b2a7; }
+.ficha-valor { display: flex; align-items: center; gap: 8px; }
+.ficha-estoque input {
+    width: 4ch; field-sizing: content; min-width: 1ch;
+    font-size: 15.5px; font-weight: 600; color: var(--text);
+    -moz-appearance: textfield;
+}
+.ficha-estoque input::-webkit-outer-spin-button,
+.ficha-estoque input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+.ficha-status:empty { display: none; }
+/* Estoque: o ícone muda de cor conforme a quantidade */
+.ficha-estoque.estoque-ok .ficha-icone { background: var(--ok-soft); color: var(--ok); }
+.ficha-estoque.estoque-baixo .ficha-icone { background: var(--warn-soft); color: var(--warn); }
+.ficha-estoque.estoque-zerado .ficha-icone { background: var(--danger-soft); color: var(--danger); }
+.consulta-linha:not(.com-produto) .ficha-icone { background: var(--surface-2); color: #c9c2b8; }
+.consulta-preco .valor-produto { font-size: 26px; }
+
+@media (max-width: 991.98px) {
+    .painel-consulta { height: auto; }
+    .consulta-texto #observacoes.campo-leitura { height: 220px !important; flex: none; }
+}
+
+.metrica {
+    border: 1px solid var(--line);
+    border-radius: var(--radius-sm);
+    padding: 14px 16px;
+    background: var(--surface-2);
+    height: 100%;
+}
+.metrica-rotulo { font-size: 12px; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: .06em; }
+.valor-produto { margin: 0; font-size: 22px; }
+.valor-produto strong { font-weight: 700; }
+
+/* ---------- Tela: Venda (PDV) ---------- */
+.pdv { display: grid; grid-template-columns: 340px 1fr; gap: 20px; align-items: start; }
+@media (max-width: 1099.98px) { .pdv { grid-template-columns: 1fr; } }
+
+.itens-contador {
+    display: inline-flex; align-items: center; gap: 8px;
+}
+.itens-contador input {
+    width: 3.5ch; border: 0; background: var(--accent-soft); color: var(--accent);
+    font-weight: 700; text-align: center; border-radius: 999px; padding: 2px 0;
+}
+.itens-contador input:focus { outline: none; }
+
+#valor-total-display { margin: 0; font-size: 26px; }
+#valor-total-display strong { font-weight: 700; }
+
+.ultimo-item {                    /* mesmo estilo dos blocos "Preço" e "Em estoque" da Consulta */
+    border: 1px solid var(--line);
+    border-radius: var(--radius-sm);
+    padding: 14px 16px;
+    background: var(--surface-2);
+}
+.ultimo-item input { font-size: 16px; font-weight: 600; }
+.ultimo-item #codigo-produto-display { font-size: 13px; font-weight: 400; color: var(--muted); }
+
+/* ---------- Listas com altura fixa (Estoque, Histórico, Comunidade) ----------
+   O box não cresce com a quantidade de linhas: a tabela rola por dentro
+   (inclusive na horizontal, se tiver muitas colunas), nunca a página. */
+.painel-lista {
+    display: flex;
+    flex-direction: column;
+    height: clamp(460px, calc(100vh - 210px), 760px);
+    min-width: 0;
+}
+.painel-lista .tabela-wrap { flex: 1 1 auto; min-height: 0; max-height: none; }
+.painel-lista-curta { height: clamp(280px, calc(100vh - 500px), 500px); }
+.painel-lista .tabela td[colspan] { padding: 60px 14px; }
+
+/* ---------- Tela: Comunidade (detalhes do membro) ---------- */
+.detalhes-membro { min-height: 300px; display: flex; flex-direction: column; }   /* nunca rola: a altura acomoda todos os campos */
+.detalhes-membro .vazio { flex: 1 1 auto; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+.detalhes-membro dl { display: grid; grid-template-columns: repeat(auto-fill, minmax(170px, 1fr)); gap: 12px 20px; margin: 0; }
+.detalhes-membro dt { font-size: 12px; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: .05em; }
+.detalhes-membro dd { margin: 2px 0 0; font-size: 14px; }
+.vazio { text-align: center; color: var(--muted); padding: 28px 16px; }
+.vazio i { font-size: 28px; display: block; margin-bottom: 6px; opacity: .6; }
+
+/* ---------- Formulários longos (cadastros) ---------- */
+.secao-form + .secao-form { margin-top: 16px; }
+.contador-caracteres { font-size: 12px; color: var(--muted); text-align: right; margin-top: 4px; }
+.acoes-form {
+    display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap;
+    margin-top: 20px;
+}
+.acoes-form .grupo { display: flex; gap: 8px; }
+
+/* ---------- Login ---------- */
+.login-pagina {
+    min-height: 100vh;
+    display: grid;
+    grid-template-columns: minmax(320px, 5fr) 7fr;
+}
+.login-marca {
+    background: var(--ink);
+    color: #fff;
+    display: flex; flex-direction: column; justify-content: space-between;
+    padding: 40px;
+}
+.login-marca img { width: min(260px, 70%); margin: auto; display: block; }
+.login-marca p { color: rgba(255,255,255,.55); font-size: 13px; margin: 0; }
+.login-marca .titulo-sistema { color: #fff; font-size: 12.5px; letter-spacing: .12em; text-transform: uppercase; font-weight: 600; margin: 0; }
+.login-form-area { display: grid; place-items: center; padding: 40px 20px; }
+.formulario-login {
+    width: 100%; max-width: 400px;
+    padding: 0;
+}
+.formulario-login h1 { font-size: 26px; margin-bottom: 6px; }
+.formulario-login .form-control { padding: 11px 14px; }
+
+@media (max-width: 767.98px) {
+    .login-pagina { grid-template-columns: 1fr; grid-template-rows: auto 1fr; }
+    .login-marca { padding: 24px; flex-direction: row; align-items: center; }
+    .login-marca img { width: 64px; margin: 0; }
+    .login-marca .rodape-login { display: none; }
+}
+
+/* =========================================================
+   Identidade "loja de discos"
+   Grafismos feitos só com CSS (sem imagens): sulcos de vinil,
+   granulado de papel de capa, disco girando no topo da Início
+   e no login. Tudo respeita prefers-reduced-motion.
+   ========================================================= */
+:root {
+    --fonte-titulo: 'Bricolage Grotesque', 'Inter', system-ui, sans-serif;
+    --sulco-escuro: rgba(23, 22, 26, .045);
+    --sulco-claro: rgba(255, 255, 255, .05);
+}
+
+h1, h2, .pagina-titulo, .inicio-hero h1, .formulario-login h1 {
+    font-family: var(--fonte-titulo);
+    letter-spacing: -.02em;
+}
+.pagina-titulo { font-size: 30px; font-weight: 700; }
+
+/* Granulado de papel (capa de disco) sobre o fundo do app */
+body {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 .05 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23g)'/%3E%3C/svg%3E");
+}
+
+/* Disco de vinil no canto inferior direito da área de conteúdo (static/img/disco-fundo.svg):
+   sulcos com intervalos entre faixas, reflexo de luz e selo com o nome da loja */
+.app::after {
+    content: '';
+    position: fixed;
+    right: -300px;
+    bottom: -300px;
+    width: 900px;
+    height: 900px;
+    background: url("../img/disco-fundo.svg") center / contain no-repeat;
+    transform: rotate(-18deg);
+    opacity: .5;   /* intensidade geral do grafismo: suba ou desça só este valor */
+    pointer-events: none;
+    z-index: -1;   /* atrás do conteúdo; sem criar contexto de empilhamento que prenda os modais */
+}
+@media (max-width: 991.98px) {
+    .app::after { width: 600px; height: 600px; right: -260px; bottom: -260px; }
+}
+
+/* Menu lateral: meio disco aparecendo no rodapé */
+.sidebar { position: sticky; overflow: hidden; z-index: 2; }
+/* Sem barra de rolagem no menu; em telas muito baixas ele ainda rola (roda do mouse/toque), só sem a barra */
+.sidebar-menu { min-height: 0; overflow-y: auto; scrollbar-width: none; }
+.sidebar-menu::-webkit-scrollbar { display: none; }
+.sidebar::before {
+    content: '';
+    position: absolute;
+    left: -170px;
+    bottom: -230px;
+    width: 400px;
+    height: 400px;
+    border-radius: 50%;
+    background:
+        radial-gradient(circle, transparent 0 14%, rgba(255, 255, 255, .07) 14% 14.6%, transparent 14.6%),
+        repeating-radial-gradient(circle, rgba(255, 255, 255, .06) 0 1px, transparent 1px 6px);
+    -webkit-mask: radial-gradient(circle, #000 50%, transparent 71%);
+            mask: radial-gradient(circle, #000 50%, transparent 71%);
+    pointer-events: none;
+}
+.sidebar > * { position: relative; z-index: 1; }
+
+/* ---------- Disco de vinil (Início e login) ---------- */
+.vinil {
+    --tam: 190px;
+    width: var(--tam);
+    height: var(--tam);
+    border-radius: 50%;
+    flex-shrink: 0;
+    position: relative;
+    background:
+        conic-gradient(from 30deg, transparent 0 8%, rgba(255,255,255,.08) 12%, transparent 18% 50%, rgba(255,255,255,.06) 62%, transparent 68%),
+        repeating-radial-gradient(circle, #121114 0 1.5px, #1e1d22 1.5px 3px);
+    box-shadow: 0 0 0 1px rgba(255,255,255,.06), 0 18px 40px rgba(0,0,0,.45);
+    animation: girar 6s linear infinite;
+}
+.vinil-selo {
+    position: absolute;
+    inset: 30%;
+    width: 40%;
+    height: 40%;
+}
+@keyframes girar { to { transform: rotate(360deg); } }
+
+.inicio-hero { overflow: hidden; min-height: 200px; }
+.inicio-hero::after {
+    content: '';
+    position: absolute;
+    right: -120px;
+    top: 50%;
+    width: 520px;
+    height: 520px;
+    transform: translateY(-50%);
+    border-radius: 50%;
+    background: repeating-radial-gradient(circle, var(--sulco-claro) 0 1px, transparent 1px 7px);
+    pointer-events: none;
+}
+.inicio-hero > * { position: relative; z-index: 1; }
+.inicio-hero .vinil { margin-right: 24px; }
+@media (max-width: 575.98px) { .inicio-hero .vinil { display: none; } }
+
+/* Login: disco grande parcialmente fora do painel escuro */
+.login-marca { position: relative; overflow: hidden; }
+.login-marca > * { position: relative; z-index: 1; }
+.login-marca .vinil {
+    --tam: 560px;
+    position: absolute;
+    right: -230px;
+    bottom: -200px;
+    z-index: 0;
+    opacity: .9;
+    animation-duration: 12s;
+}
+.login-marca .slogan {
+    font-family: var(--fonte-titulo);
+    font-size: 33px;
+    line-height: 1.15;
+    color: #fff;
+    max-width: 14ch;
+    margin: 0;
+}
+.login-marca .slogan em { font-style: normal; color: #f28a4b; }
+@media (max-width: 767.98px) { .login-marca .vinil, .login-marca .slogan { display: none; } }
+
+/* Atalhos da Início com ícone em forma de selo de disco */
+.atalho .icone { border-radius: 50%; }
+.atalho:hover .icone { background: var(--accent); color: #fff; }
+
+/* Tipo de produto com ícone */
+.tipo-produto { display: inline-flex; align-items: center; gap: 8px; white-space: nowrap; }
+.tipo-produto i { color: var(--accent); font-size: 16px; }
+
+/* Estados vazios com disco parado */
+.vazio-disco { display: inline-flex; flex-direction: column; align-items: center; gap: 8px; }
+.vazio-disco i { font-size: 30px; color: #c9c2b8; }
+
+@media (prefers-reduced-motion: reduce) {
+    .vinil { animation: none; }
+}
+@media (min-width: 768px) {
+    .login-marca img { width: 176px; margin: auto 0 22px; }
+    .login-marca .slogan { margin-bottom: auto; }
+}
+
+
+/* ---------- Topo do menu lateral: marca da loja ---------- */
+.sidebar-topo { position: relative; padding: 8px 6px 22px; }
+.sidebar-topo::before {                     /* sulcos de disco irradiando do logo */
+    content: '';
+    position: absolute;
+    left: -110px; top: -120px;
+    width: 300px; height: 300px;
+    border-radius: 50%;
+    background: repeating-radial-gradient(circle, rgba(255,255,255,.05) 0 1px, transparent 1px 6px);
+    -webkit-mask: radial-gradient(circle, #000 45%, transparent 70%);
+            mask: radial-gradient(circle, #000 45%, transparent 70%);
+    pointer-events: none;
+}
+.sidebar-topo > * { position: relative; }
+.marca { gap: 14px; }
+.marca img { width: 64px; height: 64px; }
+.marca-nome {
+    font-family: var(--fonte-titulo);
+    font-size: 23px;
+    font-weight: 700;
+    letter-spacing: .16em;
+    line-height: 1;
+}
+.marca-sub {
+    margin-top: 6px;
+    font-family: 'Inter', sans-serif;
+    font-size: 10.5px;
+    font-weight: 600;
+    letter-spacing: .26em;
+    text-transform: uppercase;
+    color: #f28a4b;
+}
+@media (max-width: 991.98px) {
+    .sidebar-topo { padding: 0; }
+    .marca img { width: 44px; height: 44px; }
+    .marca-nome { font-size: 18px; }
+}
+
+
+/* Marca: só o logo, maior, alinhado à esquerda com os ícones do menu (sem animação no hover) */
+.sidebar-topo { padding: 4px 6px 20px 12px; }
+.marca img { width: 128px; height: 128px; transition: none; }
+.marca:hover img { transform: none; }
+@media (max-width: 991.98px) {
+    .sidebar-topo { padding: 0; }
+    .marca img { width: 48px; height: 48px; }
+}
+
+/* Disco do fundo girando devagar em todas as telas */
+@keyframes girar-fundo { from { transform: rotate(-18deg); } to { transform: rotate(342deg); } }
+.app::after { animation: girar-fundo 120s linear infinite; }
+@media (prefers-reduced-motion: reduce) { .app::after { animation: none; } }
+
+/* Fundo dos modais: véu claro e desfocado em vez de preto */
+.modal-backdrop { background: rgba(60, 50, 40, .16); -webkit-backdrop-filter: blur(2px); backdrop-filter: blur(2px); }
+.modal-backdrop.show { opacity: 1; }
+.modal-content { box-shadow: 0 24px 70px rgba(60, 40, 20, .22), 0 0 0 1px var(--line); }
+
+/* Grafismos do menu centrados nos elementos:
+   - disco de cima: centro no centro do logo
+   - disco de baixo: centro no centro do círculo com as iniciais do usuário */
+.sidebar::before, .sidebar-topo::before { display: none; }
+.sidebar-rodape { z-index: 0; }
+.marca { position: relative; display: inline-flex; }
+.marca::before, .usuario-avatar::before {
+    content: '';
+    position: absolute;
+    left: 50%; top: 50%;
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+    z-index: -1;
+    pointer-events: none;
+}
+.marca::before {
+    width: 340px; height: 340px;
+    background: repeating-radial-gradient(circle, rgba(255,255,255,.05) 0 1px, transparent 1px 6px);
+    -webkit-mask: radial-gradient(circle, #000 45%, transparent 70%);
+            mask: radial-gradient(circle, #000 45%, transparent 70%);
+}
+.usuario-avatar { position: relative; }
+.usuario-avatar::before {
+    width: 400px; height: 400px;
+    background:
+        radial-gradient(circle, transparent 0 14%, rgba(255, 255, 255, .07) 14% 14.6%, transparent 14.6%),
+        repeating-radial-gradient(circle, rgba(255, 255, 255, .06) 0 1px, transparent 1px 6px);
+    -webkit-mask: radial-gradient(circle, #000 50%, transparent 71%);
+            mask: radial-gradient(circle, #000 50%, transparent 71%);
+}
+@media (max-width: 991.98px) { .marca::before { width: 160px; height: 160px; } }
+
+/* Login: ruído trêmulo (granulado de filme/vinil) no lado escuro, atrás do disco */
+.login-marca::before, .totem-marca::before {
+    content: '';
+    position: absolute;
+    inset: -60%;
+    z-index: 0;
+    pointer-events: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='r'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  0 0 0 .55 -.12'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23r)'/%3E%3C/svg%3E");
+    opacity: .16;
+    animation: ruido-tremulo .9s steps(1) infinite, ruido-pulso 7s ease-in-out infinite;
+}
+.login-marca::after, .totem-marca::after {   /* brilho quente suave pulsando atrás do disco */
+    content: '';
+    position: absolute;
+    right: -260px; bottom: -300px;
+    width: 900px; height: 900px;
+    border-radius: 50%;
+    z-index: 0;
+    pointer-events: none;
+    background: radial-gradient(circle, rgba(194, 65, 12, .16), transparent 62%);
+    animation: ruido-brilho 7s ease-in-out infinite;
+}
+@keyframes ruido-tremulo {
+    0%   { transform: translate(0, 0); }
+    12%  { transform: translate(-4%, 3%); }
+    25%  { transform: translate(3%, -5%); }
+    37%  { transform: translate(-6%, -2%); }
+    50%  { transform: translate(5%, 4%); }
+    62%  { transform: translate(-2%, 6%); }
+    75%  { transform: translate(6%, -3%); }
+    87%  { transform: translate(-5%, -6%); }
+}
+@keyframes ruido-pulso { 0%, 100% { opacity: .17; } 50% { opacity: .27; } }
+@keyframes ruido-brilho { 0%, 100% { opacity: .7; } 50% { opacity: 1; } }
+@media (prefers-reduced-motion: reduce) {
+    .login-marca::before, .login-marca::after, .totem-marca::before, .totem-marca::after { animation: none; }
+}
+
+/* Logo centralizado no menu, maior; grafismo centrado no furo do disco desenhado no logo
+   (no arquivo logo.png o centro do disco fica em 48,9% da largura e 66,7% da altura) */
+@media (min-width: 992px) {
+    .sidebar-topo { justify-content: center; padding: 6px 0 22px; }
+    .marca img { width: 150px; height: auto; }
+}
+.marca::before { left: 48.9%; top: 66.7%; }
+
+/* Logo do menu ocupando toda a largura útil do menu */
+@media (min-width: 992px) {
+    .sidebar-topo { padding: 4px 0 20px; }
+    .marca { width: 100%; }
+    .marca img { width: 100%; height: auto; }
+    .marca::before { width: 440px; height: 440px; }
+}
+
+/* Mesmo ruído trêmulo + brilho laranja do login: menu lateral e faixa de boas-vindas da Início */
+.sidebar::before, .inicio-hero::before {
+    content: '';
+    display: block;
+    position: absolute;
+    inset: -60%;
+    left: -60%; bottom: -60%;
+    width: auto; height: auto;
+    border-radius: 0;
+    -webkit-mask: none; mask: none;
+    z-index: 0;
+    pointer-events: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='r'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  0 0 0 .55 -.12'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23r)'/%3E%3C/svg%3E");
+    opacity: .2;
+    animation: ruido-tremulo .9s steps(1) infinite, ruido-pulso 7s ease-in-out infinite;
+}
+.sidebar::after {                           /* brilho atrás do logo */
+    content: '';
+    position: absolute;
+    left: 50%; top: 95px;
+    width: 560px; height: 560px;
+    transform: translate(-50%, -50%);
+    border-radius: 50%;
+    z-index: 0;
+    pointer-events: none;
+    background: radial-gradient(circle, rgba(194, 65, 12, .16), transparent 62%);
+    animation: ruido-brilho 7s ease-in-out infinite;
+}
+.inicio-hero::after {                       /* sulcos + brilho atrás do disco girando */
+    background:
+        radial-gradient(circle, rgba(194, 65, 12, .2), transparent 62%),
+        repeating-radial-gradient(circle, var(--sulco-claro) 0 1px, transparent 1px 7px);
+    animation: ruido-brilho 7s ease-in-out infinite;
+}
+@media (prefers-reduced-motion: reduce) {
+    .sidebar::before, .sidebar::after, .inicio-hero::before, .inicio-hero::after { animation: none; }
+}
+
+/* Sem grafismo na parte de baixo do menu */
+.usuario-avatar::before { display: none; }
+
+/* Sulcos + brilho da faixa de boas-vindas centrados no disco que gira
+   (padding 32px + margem 24px + metade do disco de 190px = 151px da borda direita) */
+.inicio-hero::after { right: 151px; transform: translate(50%, -50%); }
+@media (max-width: 575.98px) { .inicio-hero::after { right: -120px; transform: translateY(-50%); } }
+
+/* Topo do logo na mesma linha do topo do conteúdo das páginas (36px) */
+@media (min-width: 992px) { .sidebar-topo { padding-top: 16px; } }
+
+/* Fichas da consulta mais compactas (ícone e respiros menores) */
+.consulta-linha .ficha { gap: 9px; padding: 10px 12px; }
+.consulta-linha .ficha-icone { width: 32px; height: 32px; font-size: 15px; }
+.consulta-linha .ficha strong { font-size: 14.5px; }
+.consulta-linha .ficha-rotulo { font-size: 10.5px; letter-spacing: .05em; white-space: nowrap; }
+/* nomes longos (ex.: "Equipamentos eletrônicos") quebram em 2 linhas em vez de cortar */
+.consulta-linha .ficha strong {
+    white-space: normal; line-height: 1.15;
+    display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical;
+}
+/* altura fixa na linha da consulta: não “pula” quando um nome quebra em 2 linhas */
+.consulta-linha .ficha { height: 72px; min-height: 72px; }
+.consulta-linha .consulta-busca .form-control { min-height: 72px; }
+
+/* Código na Consultar produto: mesma fonte do preço (Inter, negrito, números tabulares), tamanho mantido */
+.consulta-busca .form-control {
+    font-family: var(--bs-body-font-family);
+    font-weight: 700;
+    font-variant-numeric: tabular-nums;
+    letter-spacing: .06em;
+}
+
+/* Campos numéricos: setas próprias no lugar das setas pretas do navegador */
+input[type=number].form-control { -moz-appearance: textfield; appearance: textfield; }
+input[type=number].form-control::-webkit-inner-spin-button,
+input[type=number].form-control::-webkit-outer-spin-button { -webkit-appearance: none; margin: 0; }
+.campo-numero { position: relative; display: block; }
+.campo-numero > .form-control { padding-right: 42px; }
+.campo-numero-botoes {
+    position: absolute; top: 5px; right: 5px;
+    height: calc(var(--controle-h) - 10px);
+    width: 28px;
+    display: flex; flex-direction: column; gap: 2px;
+}
+.campo-numero-botoes button {
+    flex: 1;
+    display: grid; place-items: center;
+    padding: 0; border: 0; border-radius: 6px;
+    background: var(--accent-soft); color: var(--accent);
+    font-size: 10px; line-height: 1;
+    transition: background .15s, color .15s;
+}
+.campo-numero-botoes button:hover { background: var(--accent); color: #fff; }
+.campo-numero-botoes button:focus-visible { outline: 2px solid var(--accent); outline-offset: 1px; }
+.campo-numero-botoes button:disabled { opacity: .4; pointer-events: none; }
+.campo-numero > .form-control.is-invalid { background-image: none; padding-right: 42px; }
+
+/* =========================================================
+   Início: mosaico de atalhos em módulos (4 colunas × 2 linhas)
+   Nova venda = 2 módulos na vertical · Consultar produto = 2 na horizontal
+   Estoque, Histórico, Comunidade e Redes = 1 módulo cada.
+   Cada card tem um painel de ilustração com respiro interno (estilo revista).
+   ========================================================= */
+.mosaico {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    grid-auto-rows: 172px;
+    grid-auto-flow: row dense;
+}
+.mosaico .atalho {
+    display: flex; gap: 16px; min-width: 0;
+    padding: 12px;
+    border-radius: 18px;
+    box-shadow: 0 10px 30px rgba(23, 22, 26, .06);
+}
+.atalho-imagem {
+    display: grid; place-items: center; flex-shrink: 0;
+    border-radius: 12px;
+    background: var(--accent-soft);
+    overflow: hidden;
+}
+.atalho-imagem img { width: 78%; height: 78%; object-fit: contain; }
+.atalho-corpo { display: flex; flex-direction: column; justify-content: center; min-width: 0; color: var(--text); }
+.mosaico .atalho strong { font-family: var(--fonte-titulo); font-size: 19px; line-height: 1.2; margin: 0 0 4px; }
+.atalho-corpo > span { font-size: 13px; color: var(--muted); }
+
+/* Nova venda: ilustração em cima, texto embaixo */
+.atalho-alto { grid-row: span 2; flex-direction: column; }
+.atalho-alto .atalho-imagem { flex: 1 1 auto; }
+.atalho-alto .atalho-imagem img { width: 62%; height: 88%; }
+.atalho-alto .atalho-corpo { padding: 4px 12px 10px; }
+.mosaico .atalho-alto strong { font-size: 26px; }
+.atalho-acao {
+    display: inline-flex; align-items: center; gap: 8px;
+    margin-top: 12px; font-size: 14px !important; font-weight: 600;
+    color: var(--accent) !important;
+}
+.atalho-acao i { transition: transform .2s; }
+.atalho-alto:hover .atalho-acao i { transform: translateX(4px); }
+
+/* Consultar produto: ilustração à esquerda, texto e uma busca de exemplo à direita */
+.atalho-largo { grid-column: span 2; flex-direction: row; align-items: stretch; }
+.atalho-largo .atalho-imagem { width: 38%; }
+.atalho-largo .atalho-corpo { flex: 1; padding: 6px 12px 6px 4px; }
+.mosaico .atalho-largo strong { font-size: 24px; }
+.atalho-busca {
+    display: flex; align-items: center; justify-content: space-between; gap: 10px;
+    margin-top: 14px; height: 44px; padding: 0 4px 0 16px;
+    border-radius: 10px; background: var(--surface-2);
+    color: #a39c92 !important; font-size: 13.5px !important;
+}
+.atalho-busca-botao {
+    width: 38px; height: 36px; border-radius: 8px; flex-shrink: 0;
+    display: grid; place-items: center;
+    background: var(--accent); color: #fff; font-size: 15px;
+}
+
+/* cards pequenos: miniatura à esquerda, texto à direita */
+.atalho-mini { flex-direction: row; align-items: stretch; }
+.atalho-mini .atalho-imagem { width: 42%; max-width: 150px; }
+.atalho-mini .atalho-corpo { padding: 4px 6px 4px 0; }
+
+/* Redes sociais */
+.mosaico-redes {
+    border-radius: 18px;
+    background: var(--surface);
+    border: 1px solid var(--line);
+    box-shadow: 0 10px 30px rgba(23, 22, 26, .06);
+    padding: 18px 20px;
+    display: flex; flex-direction: column; justify-content: space-between;
+}
+.redes-titulo { font-family: var(--fonte-titulo); font-size: 19px; font-weight: 700; }
+.redes-botoes { display: flex; gap: 10px; }
+.rede {
+    width: 48px; height: 48px; border-radius: 14px;
+    display: grid; place-items: center;
+    background: var(--surface-2); color: var(--text); font-size: 21px;
+    text-decoration: none;
+    transition: background .2s, color .2s, transform .2s;
+}
+.rede:hover { transform: translateY(-2px); color: #fff; }
+.rede[aria-label^="Instagram"]:hover { background: linear-gradient(45deg, #f9a03f, #e1306c 55%, #833ab4); }
+.rede[aria-label^="WhatsApp"]:hover { background: #25a35a; }
+.rede[aria-label^="Facebook"]:hover { background: #1877f2; }
+.rede:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.redes-telefone {
+    display: inline-flex; align-items: center; gap: 8px;
+    font-size: 14px; font-weight: 600; color: var(--muted); text-decoration: none;
+}
+.redes-telefone:hover { color: var(--text); }
+
+@media (max-width: 1399.98px) {
+    .atalho-mini { flex-direction: column; }
+    .atalho-mini .atalho-imagem { width: 100%; max-width: none; flex: 1 1 auto; }
+    .atalho-mini .atalho-corpo > span { display: none; }
+    .mosaico .atalho-mini strong { font-size: 16px; margin: 0 4px; }
+    .mosaico { grid-auto-rows: 180px; }
+}
+@media (max-width: 1199.98px) {
+    .mosaico { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (max-width: 575.98px) {
+    .mosaico { grid-template-columns: 1fr; grid-auto-rows: auto; }
+    .atalho-alto, .atalho-largo { grid-row: auto; grid-column: auto; }
+    .atalho-alto .atalho-imagem { height: 180px; }
+    .atalho-largo, .atalho-mini { flex-direction: row; }
+    .atalho-largo .atalho-imagem, .atalho-mini .atalho-imagem { width: 110px; height: 110px; flex: 0 0 auto; }
+    .atalho-mini .atalho-corpo > span { display: block; }
+    .atalho-busca { display: none; }
+    .mosaico-redes { gap: 14px; }
+}
+
+/* ajustes do mosaico: cores de texto (o .atalho span genérico deixava tudo cinza) e ilustração sempre inteira */
+.mosaico .atalho .atalho-corpo { color: var(--text); font-size: inherit; }
+.mosaico .atalho .atalho-corpo > span { color: var(--muted); }
+.mosaico .atalho .atalho-busca-botao { color: #fff; }
+.atalho-imagem { position: relative; }
+.atalho-imagem img { position: absolute; inset: 11%; width: 78%; height: 78%; }
+.atalho-alto .atalho-imagem img { inset: 6% 19%; width: 62%; height: 88%; }
+@media (max-width: 575.98px) { .mosaico .atalho-mini strong { margin: 0 0 4px; font-size: 17px; } .mosaico .atalho-largo strong { font-size: 19px; } }
+
+/* Siga a Orion: ícones já nas cores de cada rede (tons suaves), telefone em pílula */
+.mosaico-redes { padding: 18px 18px 16px; position: relative; overflow: hidden; }
+.mosaico-redes::after {                      /* brilho discreto das cores das redes no canto */
+    content: ''; position: absolute; right: -60px; top: -60px; width: 180px; height: 180px; border-radius: 50%;
+    background: radial-gradient(circle at 30% 70%, rgba(225, 48, 108, .10), transparent 60%),
+                radial-gradient(circle at 70% 40%, rgba(24, 119, 242, .08), transparent 60%),
+                radial-gradient(circle at 50% 50%, rgba(37, 163, 90, .07), transparent 65%);
+    pointer-events: none;
+}
+.mosaico-redes > * { position: relative; z-index: 1; }
+.redes-titulo { display: block; }
+.redes-sub { display: block; margin-top: 3px; font-size: 13px; color: var(--muted); }
+.redes-rodape { display: flex; align-items: center; justify-content: space-between; gap: 10px; flex-wrap: wrap; }
+.redes-botoes { gap: 8px; }
+.rede { width: 44px; height: 44px; border-radius: 12px; font-size: 20px; }
+.rede-instagram { background: #fde8f0; color: #d62976; }
+.rede-whatsapp  { background: #e3f6ea; color: #1f9a52; }
+.rede-facebook  { background: #e6effd; color: #1877f2; }
+.rede-instagram:hover { background: linear-gradient(45deg, #f9a03f, #e1306c 55%, #833ab4); color: #fff; }
+.rede-whatsapp:hover  { background: #25a35a; color: #fff; }
+.rede-facebook:hover  { background: #1877f2; color: #fff; }
+.redes-telefone {
+    height: 44px; padding: 0 14px; border-radius: 12px;
+    background: var(--surface-2); color: var(--text); font-size: 13.5px;
+}
+.redes-telefone i { color: var(--muted); }
+.redes-telefone:hover { background: var(--line); }
+@media (max-width: 1399.98px) { .redes-sub { display: none; } }
+.mosaico-redes::after { display: none; }
+
+/* =========================================================
+   Mosaico v3: todos os cards pequenos seguem o modelo do "Nova venda"
+   (ilustração em cima, título e uma breve descrição embaixo)
+   ========================================================= */
+.mosaico { grid-auto-rows: 232px; }
+.mosaico .atalho-mini { flex-direction: column; gap: 10px; }
+.mosaico .atalho-mini .atalho-imagem { width: 100%; max-width: none; flex: 1 1 auto; }
+.mosaico .atalho-mini .atalho-corpo { padding: 0 8px 6px; justify-content: flex-start; }
+.mosaico .atalho-mini .atalho-corpo > span {
+    display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
+}
+.mosaico .atalho-mini strong { font-size: 18px; margin: 0 0 2px; }
+.mosaico .atalho-mini .atalho-imagem img { inset: 8% 25%; width: 50%; height: 84%; }
+.atalho-largo .atalho-corpo { justify-content: center; }
+
+/* Siga a Orion: o painel “imagem” traz os próprios botões das redes */
+.mosaico-redes { padding: 12px; border: 1px solid var(--line); background: var(--surface); }
+.redes-painel {
+    display: flex !important; align-items: center; justify-content: center; gap: 14px;
+    background: linear-gradient(135deg, #fde8f0, #e6effd 55%, #e3f6ea);
+}
+.redes-painel .rede { width: 56px; height: 56px; border-radius: 16px; font-size: 26px; box-shadow: 0 6px 16px rgba(23,22,26,.08); }
+.rede-instagram, .rede-whatsapp, .rede-facebook { background-color: #fff; }
+.redes-telefone {
+    display: inline; height: auto; padding: 0; border-radius: 0; background: none;
+    color: var(--text); font-weight: 600; font-size: inherit; white-space: nowrap;
+}
+.redes-telefone:hover { background: none; text-decoration: underline; }
+
+@media (max-width: 1399.98px) {
+    .mosaico { grid-auto-rows: 236px; }
+    .mosaico .atalho-mini .atalho-corpo > span { display: -webkit-box; }
+    .redes-painel { gap: 8px; }
+    .redes-painel .rede { width: 44px; height: 44px; font-size: 20px; border-radius: 12px; }
+}
+@media (max-width: 575.98px) {
+    .mosaico { grid-auto-rows: auto; }
+    .mosaico .atalho-mini { flex-direction: column; }
+    .mosaico .atalho-mini .atalho-imagem { width: 100%; height: 150px; flex: 0 0 auto; }
+}
+.mosaico .atalho-mini .atalho-corpo { padding: 2px 12px 10px; }
+
+.rede-telefone { background-color: #fff; color: var(--ink); }
+.rede-telefone:hover { background: var(--ink); color: #fff; }
+.redes-painel { gap: 12px; }
+.redes-painel .rede { width: 52px; height: 52px; font-size: 24px; }
+@media (max-width: 1399.98px) { .redes-painel { gap: 6px; } .redes-painel .rede { width: 40px; height: 40px; font-size: 18px; } }
+
+/* =========================================================
+   Mosaico com o card do modo totem: 5 colunas × 2 linhas
+   Nova venda (alto) · Consultar produto (largo) · Consulta travada (largo)
+   Estoque · Histórico · Comunidade · Redes
+   ========================================================= */
+.mosaico { grid-template-columns: repeat(5, minmax(0, 1fr)); }
+.atalho-totem { font: inherit; text-align: left; cursor: pointer; width: 100%; }
+@media (max-width: 1599.98px) {
+    .mosaico { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .mosaico .atalho-mini .atalho-corpo > span { display: -webkit-box; }
+}
+@media (max-width: 575.98px) { .mosaico { grid-template-columns: 1fr; } }
+
+/* =========================================================
+   Modo totem (tela cheia, só fecha com senha)
+   ========================================================= */
+.totem .modal-content { background: var(--paper); border: 0; border-radius: 0; }
+.totem-tela { display: grid; grid-template-columns: minmax(320px, 34%) 1fr; height: 100%; }
+.totem-marca {
+    position: relative; overflow: hidden;
+    background: var(--ink); color: #fff;
+    padding: 48px; display: flex; flex-direction: column; justify-content: space-between; gap: 32px;
+}
+.totem-marca > * { position: relative; z-index: 1; }
+.totem-marca img { width: 150px; }
+.totem-chamada { font-family: var(--fonte-titulo); font-size: clamp(34px, 3.4vw, 52px); font-weight: 700; line-height: 1.05; margin: 0 0 14px; }
+.totem-instrucao { font-size: 18px; line-height: 1.5; color: rgba(255,255,255,.7); margin: 0; }
+.totem-vinil { --tam: 460px; position: absolute !important; right: -170px; bottom: -150px; z-index: 0 !important; opacity: .95; animation-duration: 10s; }
+
+.totem-consulta { padding: 56px clamp(32px, 5vw, 96px); display: flex; flex-direction: column; gap: 18px; overflow-y: auto; }
+.totem-busca { position: relative; }
+.totem-busca i { position: absolute; left: 22px; top: 50%; transform: translateY(-50%); font-size: 28px; color: var(--muted); }
+.totem-busca input {
+    width: 100%; height: 84px; padding: 0 24px 0 70px;
+    border: 2px solid var(--line); border-radius: 18px; background: var(--surface);
+    font-size: 34px; font-weight: 700; letter-spacing: .08em; font-variant-numeric: tabular-nums;
+    color: var(--text); outline: none; transition: border-color .15s, box-shadow .15s;
+}
+.totem-busca input::placeholder { font-size: 22px; font-weight: 400; letter-spacing: 0; color: #a39c92; }
+.totem-busca input:focus { border-color: var(--accent); box-shadow: 0 0 0 4px rgba(194, 65, 12, .12); }
+.totem-mensagem { min-height: 24px; font-size: 16px; color: var(--muted); }
+.totem-mensagem.erro { color: var(--danger); font-weight: 600; }
+
+.totem-produto {
+    background: var(--surface); border: 1px solid var(--line); border-radius: 22px;
+    box-shadow: 0 18px 40px rgba(23,22,26,.08); padding: 36px 40px;
+}
+.totem-produto.surgir { animation: totem-surgir .35s ease; }
+@keyframes totem-surgir { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+.totem-selos { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 16px; }
+.totem-selo { padding: 6px 14px; border-radius: 999px; background: var(--surface-2); font-size: 14px; font-weight: 600; color: var(--muted); }
+.totem-disponivel { background: var(--ok-soft); color: var(--ok); }
+.totem-ultimas { background: var(--warn-soft); color: var(--warn); }
+.totem-esgotado { background: var(--danger-soft); color: var(--danger); }
+.totem-produto h2 { font-family: var(--fonte-titulo); font-size: clamp(30px, 2.8vw, 46px); line-height: 1.1; margin: 0 0 12px; }
+.totem-descricao { font-size: 18px; line-height: 1.55; color: var(--muted); margin: 0 0 24px; max-width: 70ch; }
+.totem-preco { display: flex; align-items: baseline; gap: 14px; border-top: 1px solid var(--line); padding-top: 20px; }
+.totem-preco span { font-size: 18px; color: var(--muted); }
+.totem-preco strong { font-size: clamp(44px, 4.4vw, 72px); font-weight: 800; font-variant-numeric: tabular-nums; line-height: 1; }
+
+.totem-espera { flex: 1; display: grid; place-content: center; justify-items: center; gap: 10px; color: #c9c2b8; text-align: center; }
+.totem-espera i { font-size: 96px; animation: totem-pulsar 2.4s ease-in-out infinite; }
+.totem-espera p { font-size: 20px; margin: 0; color: var(--muted); }
+@keyframes totem-pulsar { 0%, 100% { opacity: .5; } 50% { opacity: 1; } }
+
+.totem-cadeado {
+    position: absolute; right: 20px; bottom: 20px;
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 8px 14px; border-radius: 999px; border: 1px solid var(--line);
+    background: var(--surface); color: var(--muted); font-size: 13px; font-weight: 600;
+    opacity: .55; transition: opacity .2s;
+}
+.totem-cadeado:hover, .totem-cadeado:focus-visible { opacity: 1; }
+
+.totem-senha { position: absolute; inset: 0; display: grid; place-items: center; background: rgba(60, 50, 40, .28); backdrop-filter: blur(3px); z-index: 5; }
+.totem-senha[hidden] { display: none; }
+.totem-senha-caixa { width: min(420px, 92vw); background: var(--surface); border-radius: var(--radius); padding: 28px; box-shadow: 0 24px 70px rgba(0,0,0,.2); }
+.totem-senha-caixa .icone-alerta {
+    width: 44px; height: 44px; border-radius: 50%; display: grid; place-items: center; margin-bottom: 12px;
+    background: var(--accent-soft); color: var(--accent); font-size: 20px;
+}
+.totem-senha-caixa h5 { font-family: var(--fonte-titulo); font-size: 20px; margin: 0 0 4px; }
+.totem-senha-acoes { display: flex; justify-content: flex-end; gap: 8px; margin-top: 20px; }
+
+@media (max-width: 991.98px) {
+    .totem-tela { grid-template-columns: 1fr; grid-template-rows: auto 1fr; }
+    .totem-marca { padding: 24px; flex-direction: row; align-items: center; }
+    .totem-marca img { width: 64px; }
+    .totem-chamada { font-size: 26px; margin: 0 0 4px; }
+    .totem-instrucao { font-size: 14px; }
+    .totem-vinil { display: none; }
+    .totem-consulta { padding: 24px; }
+    .totem-busca input { height: 64px; font-size: 26px; }
+}
+@media (prefers-reduced-motion: reduce) { .totem-espera i, .totem-produto.surgir { animation: none; } }
+@media (max-width: 575.98px) {
+    .totem-produto { padding: 22px; }
+    .totem-preco { flex-wrap: wrap; gap: 6px 12px; }
+    .totem-preco strong { font-size: 40px; }
+}
+
+/* Mosaico final: 4 colunas × 2 linhas = Nova venda (2) + Consultar produto (2) + 4 cards de 1 módulo */
+.mosaico { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+@media (max-width: 1599.98px) { .mosaico { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 575.98px) { .mosaico { grid-template-columns: 1fr; } }
+
+/* Redes e telefone no card de boas-vindas: quadradinhos cinza, bem discretos */
+.hero-redes { display: flex; gap: 8px; margin-top: 18px; }
+.hero-redes a {
+    width: 32px; height: 32px; border-radius: 8px;
+    display: grid; place-items: center;
+    border: 1px solid rgba(255, 255, 255, .10);
+    background: rgba(255, 255, 255, .03);
+    color: rgba(255, 255, 255, .38); font-size: 14px; text-decoration: none;
+    transition: color .2s, border-color .2s, background .2s;
+}
+.hero-redes a:hover { color: rgba(255, 255, 255, .8); border-color: rgba(255, 255, 255, .22); background: rgba(255, 255, 255, .06); }
+.hero-redes a:focus-visible { outline: 2px solid rgba(255, 255, 255, .5); outline-offset: 2px; }
+
+/* redes no card de boas-vindas: sem contorno, ainda mais discretas */
+.hero-redes { gap: 4px; margin-top: 16px; margin-left: -6px; }
+.hero-redes a { width: 30px; height: 30px; border: 0; background: transparent; color: rgba(255, 255, 255, .28); font-size: 14px; }
+.hero-redes a:hover { border: 0; background: rgba(255, 255, 255, .05); color: rgba(255, 255, 255, .7); }
+
+/* Comunidade: funcionário em azul suave (do espectro do foil), cliente na cor da área */
+.selo-funcionario { background: #e4f1fb; color: #1d6fa5; }
+
+/* Início: ícones das redes alinhados com a base do disco (texto no topo, ícones no pé, mesma altura do disco) */
+@media (min-width: 576px) {
+    /* o texto fica onde estava; só a linha de ícones desce até a base do disco */
+    .inicio-hero .hero-redes { position: relative; top: 31px; }   /* base dos ícones = base do disco (190px centrado) */
+}
+
+/* totem: preço menor */
+.totem-preco strong { font-size: clamp(34px, 3vw, 48px); font-weight: 700; }
+@media (max-width: 575.98px) { .totem-preco strong { font-size: 32px; } }
+
+.totem-preco strong { font-size: clamp(28px, 2.3vw, 38px); }
+@media (max-width: 575.98px) { .totem-preco strong { font-size: 28px; } }
+
+/* Logo do menu como assinatura (≈ metade da largura do menu), não como cartaz */
+@media (min-width: 992px) {
+    .marca { width: 132px; }
+    .marca img { width: 132px; height: auto; }
+    .marca::before { width: 300px; height: 300px; }
+    .sidebar-topo { padding-bottom: 22px; }
+}
+
+/* Logo alinhado à esquerda, na mesma linha dos ícones do menu */
+@media (min-width: 992px) {
+    .sidebar-topo { justify-content: flex-start; padding-left: 12px; }
+}
+
+/* Logo pela regra dos terços: começa na borda esquerda da linha (hr) do topo e termina a 2/3 dela */
+@media (min-width: 992px) {
+    .sidebar-topo { padding-left: 0; padding-right: 0; }
+    .marca { width: 66.6667%; }
+    .marca img { width: 100%; height: auto; }
+}
+
+/* Card de boas-vindas: texto um pouco mais baixo (ícones continuam na base do disco) */
+@media (min-width: 576px) {
+    .inicio-hero > div:first-child { position: relative; top: 10px; }
+    .inicio-hero .hero-redes { top: 21px; }
+}
+
+/* logo-menu.png = logo.png recortado na moldura (sem a margem transparente de 4px),
+   para o topo da moldura cair exatamente na linha do topo do conteúdo (36px).
+   O centro do disco no recorte: 48,9% → (153-4)/306 = 48,7% e 66,7% → (216-4)/316 = 67,1% */
+.marca::before { left: 48.7%; top: 67.1%; }
+
+/* Card de boas-vindas: disco grande, com o eixo no meio da borda direita do card */
+@media (min-width: 576px) {
+    .inicio-hero { min-height: 254px; }   /* mesma altura de antes (o disco saiu do fluxo) */
+    .inicio-hero .vinil {
+        --tam: 680px;
+        position: absolute;
+        right: -340px;
+        top: calc(50% - 340px);
+        margin: 0;
+    }
+    /* sulcos de fundo centrados no eixo do disco (meio da borda direita) */
+    .inicio-hero::after { right: 0; top: 50%; bottom: auto; transform: translate(50%, -50%); }
+}
+
+/* =========================================================
+   Refinamento (revisão de UX/UI)
+   ========================================================= */
+/* Movimento só onde é clima (Início/login/totem): nas telas de trabalho os fundos ficam parados */
+/* (o fundo do menu lateral continua animado em todas as telas) */
+/* (CD do fundo e fundo do menu giram em todas as telas) */
+body:not([data-tela="inicio"]) .sidebar .nav-link.active { animation-play-state: paused; }
+
+/* Botão desativado sem ambiguidade: cinza, sem cor de área */
+.btn-primary:disabled, .btn-primary.disabled {
+    background: #e7e3dc !important; border-color: #e7e3dc !important;
+    color: #9b948a !important; box-shadow: none !important; opacity: 1;
+}
+
+/* Ícones das redes: discretos, mas com contraste suficiente para quem enxerga pouco */
+.hero-redes a { color: rgba(255, 255, 255, .5); }
+.hero-redes a:hover { color: rgba(255, 255, 255, .9); }
+
+/* Mesmo arredondamento em todo o sistema */
+.mosaico .atalho { border-radius: var(--radius); }
+.atalho-imagem { border-radius: var(--radius-sm); }
+
+/* Seletor Cliente/Funcionário na cor da área, não em preto */
+.segmentado input:checked + label { background: var(--accent); color: #fff; }
+
+/* Modal de aviso/confirmação (substitui alert/confirm do navegador) */
+.modal-aviso { z-index: 1080; }
+.modal-aviso .aviso-icone {
+    width: 44px; height: 44px; border-radius: 50%; flex-shrink: 0;
+    display: grid; place-items: center; font-size: 20px;
+    background: var(--accent-soft); color: var(--accent);
+}
+.aviso-sucesso .aviso-icone { background: var(--ok-soft); color: var(--ok); }
+.aviso-erro .aviso-icone { background: var(--danger-soft); color: var(--danger); }
+.aviso-pergunta .aviso-icone { background: var(--danger-soft); color: var(--danger); }
+.modal-aviso #modal-aviso-mensagem { white-space: pre-line; }
+
+/* Brilho do menu partindo do centro do disco do logo
+   (logo: começa em 14px, largura 2/3 de 220px; disco a 48,7% × 67,1% do recorte; topo em 36px) */
+@media (min-width: 992px) {
+    .sidebar { --logo-disco-x: 85px; --logo-disco-y: 138px; }
+    .sidebar::after { left: var(--logo-disco-x); top: var(--logo-disco-y); }
+}
+
+/* Disco do card de boas-vindas: giro mais lento (clima, não distração) */
+.inicio-hero .vinil { animation-duration: 18s; }
+.inicio-hero .vinil::after { animation-duration: 18s; }
+
+/* Modo totem: mesmo granulado + brilho do login no painel escuro, disco por cima */
+.totem-marca::after { right: -260px; bottom: -300px; }
+.totem-vinil { z-index: 1 !important; }
+.totem-marca > img, .totem-marca > div:not(.vinil) { z-index: 2; }
+
+/* item "Modo Totem" do menu é um botão (abre o totem), com o mesmo visual dos links */
+.sidebar button.nav-link { width: 100%; background: none; border: 0; text-align: left; font: inherit; font-weight: 500; font-size: 14px; }
+.sidebar button.nav-link:hover { background: rgba(255, 255, 255, .05); }
+
+/* CD do fundo das páginas mais suave */
+.app::after { opacity: .3; }
+
+/* Brilho do menu sempre a partir do centro do disco do logo (posição calculada no script.js, em qualquer largura) */
+.sidebar::after { left: var(--logo-disco-x, 50%); top: var(--logo-disco-y, 95px); }
+
+/* Modo totem: disco igual ao do login (mesma velocidade) */
+.totem-vinil { animation-duration: 12s; }
+
+
+/* =========================================================
+   VARIAÇÃO "CD": a luz batendo num CD / num holográfico amassado.
+   - folha holográfica com manchas de cor (violeta, verde, rosa-vermelho, ciano)
+     e textura de papel laminado amassado (como a referência);
+   - raios de difração de CD saindo do centro do disco de cada área
+     (disco do login, disco da Início, disco do logo no menu) e girando devagar;
+   - reflexo branco que passeia pelo canto;
+   - nos discos que giram, o arco-íris dos sulcos fica parado enquanto o disco gira,
+     como acontece com a luz num disco de verdade.
+   ========================================================= */
+@property --cd-ang { syntax: '<angle>'; inherits: false; initial-value: 0deg; }
+@property --cd-luz-x { syntax: '<percentage>'; inherits: false; initial-value: 78%; }
+@property --cd-luz-y { syntax: '<percentage>'; inherits: false; initial-value: 82%; }
+
+:root { --cd-amassado: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='600' height='600'%3E%3Cfilter id='c' x='0' y='0' width='100%25' height='100%25'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.006 .018' numOctaves='4' seed='7' stitchTiles='stitch'/%3E%3CfeDiffuseLighting lighting-color='#fff' surfaceScale='5' diffuseConstant='1.1'%3E%3CfeDistantLight azimuth='235' elevation='38'/%3E%3C/feDiffuseLighting%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url%28#c%29'/%3E%3C/svg%3E"); }
+
+.login-marca  { --cd-x: calc(100% + 50px); --cd-y: calc(100% - 80px); }
+.totem-marca  { --cd-x: calc(100% - 60px); --cd-y: calc(100% - 80px); }   /* centro do disco do totem */
+.inicio-hero  { --cd-x: 100%; --cd-y: 50%; }
+.sidebar      { --cd-x: 50%; --cd-y: 188px; }
+@media (min-width: 992px) { .sidebar { --cd-x: 85px; --cd-y: 138px; } }   /* centro do disco do logo */
+
+.login-marca::after,
+.totem-marca::after,
+.sidebar::after,
+.inicio-hero::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    left: 0; top: 0; right: 0; bottom: 0;
+    width: auto; height: auto;
+    border-radius: 0;
+    transform: none;
+    z-index: 0;
+    pointer-events: none;
+    background:
+        /* reflexo branco */
+        radial-gradient(ellipse 38% 30% at var(--cd-luz-x) var(--cd-luz-y), rgba(255,255,255,.4), transparent 70%),
+        /* raios de difração do CD, a partir do centro do disco */
+        repeating-conic-gradient(from var(--cd-ang) at var(--cd-x) var(--cd-y),
+            hsla(330, 95%, 70%, .55) 0deg, hsla(30, 95%, 65%, .45) 8deg, hsla(60, 95%, 65%, .45) 14deg,
+            hsla(140, 85%, 60%, .5) 20deg, hsla(190, 95%, 62%, .5) 27deg, hsla(250, 90%, 70%, .5) 34deg,
+            hsla(330, 95%, 70%, .55) 45deg),
+        /* manchas holográficas, como na referência */
+        radial-gradient(ellipse 60% 45% at 12% 8%,  hsla(255, 80%, 72%, .9), transparent 70%),
+        radial-gradient(ellipse 55% 40% at 22% 42%, hsla(95, 75%, 62%, .85), transparent 70%),
+        radial-gradient(ellipse 50% 40% at 62% 40%, hsla(350, 85%, 66%, .9), transparent 70%),
+        radial-gradient(ellipse 55% 45% at 85% 88%, hsla(185, 90%, 60%, .9), transparent 70%),
+        radial-gradient(ellipse 60% 45% at 10% 95%, hsla(215, 85%, 55%, .9), transparent 70%),
+        /* textura de laminado amassado */
+        var(--cd-amassado),
+        #1f1f27;
+    background-size: auto, auto, auto, auto, auto, auto, auto, 600px 600px, auto;
+    background-blend-mode: screen, overlay, normal, normal, normal, normal, normal, overlay, normal;
+    mix-blend-mode: screen;
+    opacity: .2;
+    animation: cd-luz 14s ease-in-out infinite alternate;
+}
+.sidebar::after { opacity: .15; }
+.inicio-hero::after { opacity: .23; }
+
+@keyframes cd-luz {
+    0%   { --cd-ang: 0deg;   --cd-luz-x: 82%; --cd-luz-y: 86%; }
+    50%  { --cd-ang: 22deg;  --cd-luz-x: 60%; --cd-luz-y: 70%; }
+    100% { --cd-ang: 45deg;  --cd-luz-x: 30%; --cd-luz-y: 20%; }
+}
+
+/* granulado com brilho de purpurina por cima da folha */
+.login-marca::before, .totem-marca::before, .sidebar::before, .inicio-hero::before { mix-blend-mode: overlay; }
+
+/* disco do login acima da folha */
+.login-marca .vinil { z-index: 1; opacity: 1; }
+
+/* arco-íris de CD nos sulcos dos discos que giram (reflexo parado, disco girando) */
+.vinil::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+    pointer-events: none;
+    background:
+        conic-gradient(from 200deg,
+            transparent 0deg, hsla(330,95%,72%,.0) 10deg, hsla(330,95%,72%,.55) 22deg, hsla(45,95%,65%,.5) 30deg,
+            hsla(140,85%,60%,.5) 38deg, hsla(195,95%,65%,.55) 46deg, hsla(260,90%,72%,.5) 54deg, transparent 70deg,
+            transparent 180deg,
+            hsla(260,90%,72%,.0) 190deg, hsla(195,95%,65%,.45) 202deg, hsla(140,85%,60%,.45) 210deg,
+            hsla(45,95%,65%,.45) 218deg, hsla(330,95%,72%,.5) 226deg, transparent 245deg);
+    -webkit-mask: radial-gradient(circle, transparent 0 31%, #000 33% 98%, transparent 99%);
+            mask: radial-gradient(circle, transparent 0 31%, #000 33% 98%, transparent 99%);
+    mix-blend-mode: screen;
+    animation: girar 6s linear infinite reverse;   /* anula a rotação do disco */
+}
+.login-marca .vinil::after, .totem-vinil::after { animation-duration: 12s; }   /* mesmo tempo do disco: o reflexo fica parado */
+
+/* textos nas mesmas áreas com tinta holográfica que muda com a luz */
+.login-marca .slogan em,
+.inicio-hero .pagina-sobretitulo {
+    background: linear-gradient(100deg, #b79bff, #7be8b0 25%, #ffd36e 45%, #ff7aa8 65%, #7fd8ff 85%, #b79bff);
+    background-size: 220% 100%;
+    -webkit-background-clip: text; background-clip: text;
+    color: transparent;
+    animation: cd-tinta 9s ease-in-out infinite alternate;
+}
+@keyframes cd-tinta { from { background-position: 0% 50%; } to { background-position: 100% 50%; } }
+
+@media (prefers-reduced-motion: reduce) {
+    .login-marca::after, .totem-marca::after, .sidebar::after, .inicio-hero::after,
+    .vinil::after, .login-marca .slogan em, .inicio-hero .pagina-sobretitulo { animation: none; }
+}
+
+
+/* =========================================================
+   Grafismo do canto inferior direito: CD visto pelo lado prateado.
+   ::after = o CD (gira com o fundo, mostra as trilhas e o texto do miolo)
+   ::before = reflexo de arco-íris (foil) e brilhos prateados, parados
+              enquanto o CD gira, como a luz num CD de verdade.
+   ========================================================= */
+.app::after {
+    background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 900 900'%3E %3Cdefs%3E %3CradialGradient id='prata' cx='50%25' cy='50%25' r='50%25'%3E %3Cstop offset='0' stop-color='%23f4f5f7'/%3E%3Cstop offset='.45' stop-color='%23d9dce2'/%3E %3Cstop offset='.8' stop-color='%23eef0f3'/%3E%3Cstop offset='1' stop-color='%23c7cbd2'/%3E %3C/radialGradient%3E %3Cpath id='arco' d='M 450 335 a 115 115 0 1 1 -0.1 0'/%3E %3Cmask id='furo'%3E%3Crect width='900' height='900' fill='%23fff'/%3E%3Ccircle cx='450' cy='450' r='28' fill='%23000'/%3E%3C/mask%3E %3C/defs%3E %3Cg mask='url%28%23furo%29'%3E %3Ccircle cx='450' cy='450' r='450' fill='url%28%23prata%29'/%3E %3Ccircle cx='450' cy='450' r='448' fill='none' stroke='%23aab0b9' stroke-width='3'/%3E %3Ccircle cx='450' cy='450' r='180' fill='none' stroke='%238d929c' stroke-opacity='0.18' stroke-width='1.6'/%3E%3Ccircle cx='450' cy='450' r='187' fill='none' stroke='%238d929c' stroke-opacity='0.1' stroke-width='0.8'/%3E%3Ccircle cx='450' cy='450' r='194' fill='none' stroke='%238d929c' stroke-opacity='0.1' stroke-width='0.8'/%3E%3Ccircle cx='450' cy='450' r='201' fill='none' stroke='%238d929c' stroke-opacity='0.18' stroke-width='0.8'/%3E%3Ccircle cx='450' cy='450' r='208' fill='none' stroke='%238d929c' stroke-opacity='0.1' stroke-width='0.8'/%3E%3Ccircle cx='450' cy='450' r='215' fill='none' stroke='%238d929c' stroke-opacity='0.1' stroke-width='1.6'/%3E%3Ccircle cx='450' cy='450' r='222' fill='none' stroke='%238d929c' stroke-opacity='0.18' stroke-width='0.8'/%3E%3Ccircle cx='450' cy='450' r='229' fill='none' stroke='%238d929c' stroke-opacity='0.1' stroke-width='0.8'/%3E%3Ccircle cx='450' cy='450' r='236' fill='none' stroke='%238d929c' stroke-opacity='0.1' stroke-width='0.8'/%3E%3Ccircle cx='450' cy='450' r='243' fill='none' stroke='%238d929c' stroke-opacity='0.18' stroke-width='0.8'/%3E%3Ccircle cx='450' cy='450' r='250' fill='none' stroke='%238d929c' stroke-opacity='0.1' stroke-width='1.6'/%3E%3Ccircle cx='450' cy='450' r='257' fill='none' stroke='%238d929c' stroke-opacity='0.1' stroke-width='0.8'/%3E%3Ccircle cx='450' cy='450' r='264' fill='none' stroke='%238d929c' stroke-opacity='0.18' stroke-width='0.8'/%3E%3Ccircle cx='450' cy='450' r='271' fill='none' stroke='%238d929c' stroke-opacity='0.1' stroke-width='0.8'/%3E%3Ccircle cx='450' cy='450' r='278' fill='none' stroke='%238d929c' stroke-opacity='0.1' stroke-width='0.8'/%3E%3Ccircle cx='450' cy='450' r='285' fill='none' stroke='%238d929c' stroke-opacity='0.18' stroke-width='1.6'/%3E%3Ccircle cx='450' cy='450' r='292' fill='none' stroke='%238d929c' stroke-opacity='0.1' stroke-width='0.8'/%3E%3Ccircle cx='450' cy='450' r='299' fill='none' stroke='%238d929c' stroke-opacity='0.1' stroke-width='0.8'/%3E%3Ccircle cx='450' cy='450' r='306' fill='none' stroke='%238d929c' stroke-opacity='0.18' stroke-width='0.8'/%3E%3Ccircle cx='450' cy='450' r='313' fill='none' stroke='%238d929c' stroke-opacity='0.1' stroke-width='0.8'/%3E%3Ccircle cx='450' cy='450' r='320' fill='none' stroke='%238d929c' stroke-opacity='0.1' stroke-width='1.6'/%3E%3Ccircle cx='450' cy='450' r='327' fill='none' stroke='%238d929c' stroke-opacity='0.18' stroke-width='0.8'/%3E%3Ccircle cx='450' cy='450' r='334' fill='none' stroke='%238d929c' stroke-opacity='0.1' stroke-width='0.8'/%3E%3Ccircle cx='450' cy='450' r='341' fill='none' stroke='%238d929c' stroke-opacity='0.1' stroke-width='0.8'/%3E%3Ccircle cx='450' cy='450' r='348' fill='none' stroke='%238d929c' stroke-opacity='0.18' stroke-width='0.8'/%3E%3Ccircle cx='450' cy='450' r='355' fill='none' stroke='%238d929c' stroke-opacity='0.1' stroke-width='1.6'/%3E%3Ccircle cx='450' cy='450' r='362' fill='none' stroke='%238d929c' stroke-opacity='0.1' stroke-width='0.8'/%3E%3Ccircle cx='450' cy='450' r='369' fill='none' stroke='%238d929c' stroke-opacity='0.18' stroke-width='0.8'/%3E%3Ccircle cx='450' cy='450' r='376' fill='none' stroke='%238d929c' stroke-opacity='0.1' stroke-width='0.8'/%3E%3Ccircle cx='450' cy='450' r='383' fill='none' stroke='%238d929c' stroke-opacity='0.1' stroke-width='0.8'/%3E%3Ccircle cx='450' cy='450' r='390' fill='none' stroke='%238d929c' stroke-opacity='0.18' stroke-width='1.6'/%3E%3Ccircle cx='450' cy='450' r='397' fill='none' stroke='%238d929c' stroke-opacity='0.1' stroke-width='0.8'/%3E%3Ccircle cx='450' cy='450' r='404' fill='none' stroke='%238d929c' stroke-opacity='0.1' stroke-width='0.8'/%3E%3Ccircle cx='450' cy='450' r='411' fill='none' stroke='%238d929c' stroke-opacity='0.18' stroke-width='0.8'/%3E%3Ccircle cx='450' cy='450' r='418' fill='none' stroke='%238d929c' stroke-opacity='0.1' stroke-width='0.8'/%3E%3Ccircle cx='450' cy='450' r='425' fill='none' stroke='%238d929c' stroke-opacity='0.1' stroke-width='1.6'/%3E%3Ccircle cx='450' cy='450' r='432' fill='none' stroke='%238d929c' stroke-opacity='0.18' stroke-width='0.8'/%3E %3C%21-- borda espelhada entre o miolo e a %C3%A1rea de dados --%3E %3Ccircle cx='450' cy='450' r='172' fill='%23e7e9ed'/%3E %3Ccircle cx='450' cy='450' r='172' fill='none' stroke='%239aa0aa' stroke-opacity='.5' stroke-width='2'/%3E %3Ctext font-family='Inter, Arial, sans-serif' font-size='10.5' font-weight='600' letter-spacing='2.6' fill='%237d838d' fill-opacity='.8'%3E %3CtextPath href='%23arco'%3EORION RECORD STORE %C2%B7 SIGL %C2%B7 SISTEMA INTEGRADO DE GEST%C3%83O DE LOJA %C2%B7%3C/textPath%3E %3C/text%3E %3C%21-- miolo de pl%C3%A1stico transparente --%3E %3Ccircle cx='450' cy='450' r='96' fill='%23ffffff' fill-opacity='.35'/%3E %3Ccircle cx='450' cy='450' r='96' fill='none' stroke='%23b3b8c0' stroke-opacity='.6' stroke-width='1.5'/%3E %3Ccircle cx='450' cy='450' r='74' fill='none' stroke='%23b3b8c0' stroke-opacity='.5' stroke-width='1'/%3E %3Ccircle cx='450' cy='450' r='40' fill='none' stroke='%23b3b8c0' stroke-opacity='.7' stroke-width='3'/%3E %3C/g%3E %3C/svg%3E") center / contain no-repeat;
+    opacity: .3;
+    z-index: -2;
+}
+.app::before {
+    content: '';
+    position: fixed;
+    right: -300px;
+    bottom: -300px;
+    width: 900px;
+    height: 900px;
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: -1;
+    background:
+        /* brilhos prateados */
+        conic-gradient(from 0deg,
+            rgba(255,255,255,0) 0deg, rgba(255,255,255,.65) 18deg, rgba(255,255,255,0) 40deg,
+            rgba(255,255,255,0) 180deg, rgba(255,255,255,.55) 200deg, rgba(255,255,255,0) 222deg, rgba(255,255,255,0) 360deg),
+        /* faixas de arco-íris da difração */
+        conic-gradient(from var(--cd-ang),
+            transparent 0deg, hsla(330,95%,70%,.0) 40deg,
+            hsla(330,95%,68%,.75) 58deg, hsla(40,95%,62%,.7) 70deg, hsla(95,80%,55%,.7) 82deg,
+            hsla(175,90%,52%,.75) 94deg, hsla(220,90%,62%,.75) 106deg, hsla(270,85%,68%,.7) 118deg, transparent 138deg,
+            transparent 220deg,
+            hsla(270,85%,68%,.0) 228deg, hsla(270,85%,68%,.65) 240deg, hsla(220,90%,62%,.65) 252deg,
+            hsla(175,90%,52%,.65) 264deg, hsla(95,80%,55%,.6) 276deg, hsla(40,95%,62%,.6) 288deg,
+            hsla(330,95%,68%,.65) 300deg, transparent 318deg);
+    -webkit-mask: radial-gradient(circle closest-side, transparent 0 21%, #000 22% 96.5%, transparent 97.5%);
+            mask: radial-gradient(circle closest-side, transparent 0 21%, #000 22% 96.5%, transparent 97.5%);
+    opacity: .2;
+    animation: cd-reflexo 14s ease-in-out infinite alternate;
+}
+@property --cd-ang { syntax: '<angle>'; inherits: false; initial-value: 0deg; }
+@keyframes cd-reflexo { from { --cd-ang: -10deg; } to { --cd-ang: 25deg; } }
+@media (max-width: 991.98px) {
+    .app::before { width: 600px; height: 600px; right: -260px; bottom: -260px; }
+}
+@media (prefers-reduced-motion: reduce) { .app::before { animation: none; } }
+
+/* =========================================================
+   Atalhos da Início no clima do projeto:
+   - a borda vira uma moldura holográfica que corre em volta do card.
+   ========================================================= */
+.atalho {
+    position: relative;
+    overflow: hidden;
+    isolation: isolate;
+    transition: border-color .2s, transform .2s, box-shadow .2s;
+}
+.atalho:hover {
+    border-color: transparent;
+    transform: translateY(-3px);
+    box-shadow: 0 16px 34px rgba(23, 22, 26, .12);
+}
+.atalho:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+/* moldura holográfica */
+.atalho::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    padding: 1.5px;
+    background: conic-gradient(from var(--cd-ang), #ff7aa8, #ffd36e, #7be8b0, #7fd8ff, #b79bff, #ff7aa8);
+    -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+    -webkit-mask-composite: xor;
+            mask: linear-gradient(#000 0 0) content-box exclude, linear-gradient(#000 0 0);
+    opacity: 0;
+    transition: opacity .25s;
+    pointer-events: none;
+    z-index: 1;
+}
+.atalho:hover::before { opacity: 1; animation: atalho-moldura 4s linear infinite; }
+@keyframes atalho-moldura { to { --cd-ang: 360deg; } }
+
+@media (prefers-reduced-motion: reduce) {
+    .atalho:hover::before { animation: none; }
+}
+
+/* =========================================================
+   Links do menu no clima do foil:
+   - hover: vidro escuro + uma faixa de reflexo que atravessa o item uma vez
+   - ativo: fundo com leve tom holográfico; ícone e texto pintados com o foil
+   ========================================================= */
+.sidebar .nav-link {
+    position: relative;
+    overflow: hidden;
+    isolation: isolate;
+    transition: background .2s, color .2s;
+}
+.sidebar .nav-link::after {                 /* reflexo que passa no hover */
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+    background: linear-gradient(105deg,
+        transparent 30%, hsla(330,95%,75%,.10) 42%, rgba(255,255,255,.14) 50%, hsla(185,95%,65%,.10) 58%, transparent 70%);
+    transform: translateX(-110%);
+}
+.sidebar .nav-link:hover { background: rgba(255, 255, 255, .05); color: #fff; }
+.sidebar .nav-link:hover::after { transform: translateX(110%); transition: transform .7s ease; }
+
+.sidebar .nav-link.active {
+    background:
+        linear-gradient(100deg, #c9b3ff, #8fe0ff 20%, #8ef0c0 40%, #ffe08a 60%, #ffa3c8 80%, #c9b3ff),
+        linear-gradient(90deg, hsla(265,85%,72%,.20), hsla(190,90%,60%,.10) 45%, hsla(330,90%,70%,.06) 75%, transparent),
+        rgba(255, 255, 255, .04);
+    background-size: 220px 100%, 200% 100%, auto;
+    background-repeat: repeat-x, no-repeat, no-repeat;
+    -webkit-background-clip: text, padding-box, padding-box;
+            background-clip: text, padding-box, padding-box;
+    color: transparent;
+    font-weight: 600;
+    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, .06);
+    animation: menu-ativo 8s linear infinite;
+}
+@keyframes menu-ativo {
+    from { background-position: 0 0, 0% 0, 0 0; }
+    to   { background-position: 220px 0, 100% 0, 0 0; }
+}
+.sidebar .nav-link.active i { opacity: 1; color: transparent; }
+
+@media (prefers-reduced-motion: reduce) {
+    .sidebar .nav-link.active { animation: none; }
+    .sidebar .nav-link:hover::after { transition: none; }
+}
+
+/* =========================================================
+   Cor de destaque: o laranja vira um violeta "nebulosa", tirado do próprio foil.
+   Botões, seleção, foco, avatar, selo dos discos — tudo na mesma família de cor
+   do holográfico. O foil fica como “ambiente/marca”; o violeta como “ação”.
+   ========================================================= */
+:root {
+    --accent: #5a3fd1;
+    --accent-hover: #4a30b8;
+    --accent-soft: #efebfd;
+    --bs-primary-rgb: 90, 63, 209;
+}
+.btn-primary { --bs-btn-focus-shadow-rgb: 90, 63, 209; }
+.form-control:focus, .form-select:focus,
+.form-control.is-valid:focus, .form-select.is-valid:focus {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px rgba(90, 63, 209, .16);
+}
+.total-destaque { border-color: rgba(90, 63, 209, .22); }
+
+/* selo dos discos de vinil (login e Início) */
+.vinil-selo circle[fill="#c2410c"] { fill: #4b34b8; }
+
+/* botão principal: um reflexo de foil atravessa ao passar o mouse */
+.btn-primary {
+    background-image: linear-gradient(105deg,
+        transparent 35%, hsla(330,95%,80%,.22) 45%, rgba(255,255,255,.28) 50%, hsla(185,95%,75%,.22) 55%, transparent 65%);
+    background-size: 300% 100%;
+    background-position: 100% 0;
+    background-repeat: no-repeat;
+    transition: background-position .7s ease, background-color .15s, border-color .15s;
+}
+.btn-primary:hover:not(:disabled) { background-position: 0% 0; }
+@media (prefers-reduced-motion: reduce) { .btn-primary { transition: none; } }
+
+/* =========================================================
+   VARIAÇÃO "CORES DO FOIL": cada área do sistema pega uma cor do espectro.
+   Botões em tons claros do foil com texto escuro (mais leves que o roxo cheio).
+     Vendas   → pêssego/âmbar (o “laranja do foil”)
+     Catálogo → menta
+     Pessoas  → lilás
+     Login → pêssego
+   Cada cor tem: --accent (forte, para texto/borda), --accent-soft (fundos),
+   --botao / --botao-hover (fundo do botão) e --botao-texto.
+   ========================================================= */
+:root, .app {
+    --accent: #5a3fd1; --accent-hover: #4a30b8; --accent-soft: #f0ebff; --accent-rgb: 90, 63, 209;
+    --botao: #c9b8ff; --botao-hover: #b9a4ff; --botao-texto: #1d1640;
+}
+.vendas, .pesquisa-venda {
+    --accent: #b4471c; --accent-hover: #963a16; --accent-soft: #fff1e6; --accent-rgb: 180, 71, 28;
+    --botao: #ffbf8f; --botao-hover: #ffaa70; --botao-texto: #3a1a08;
+}
+.pesquisa-produto, .busca-avancada, .cadastro-produto, #modalAtualizarProduto, #modalExcluirProduto, #modal-totem {
+    --accent: #0f7a58; --accent-hover: #0b6247; --accent-soft: #e6f8f1; --accent-rgb: 15, 122, 88;
+    --botao: #8fe6c4; --botao-hover: #72dbb3; --botao-texto: #06301f;
+}
+.parceiros-cadastrados, .cadastro-cliente {
+    --accent: #5a3fd1; --accent-hover: #4a30b8; --accent-soft: #f0ebff; --accent-rgb: 90, 63, 209;
+    --botao: #c9b8ff; --botao-hover: #b9a4ff; --botao-texto: #1d1640;
+}
+
+.btn-primary {
+    --bs-btn-bg: var(--botao);
+    --bs-btn-border-color: var(--botao);
+    --bs-btn-color: var(--botao-texto);
+    --bs-btn-hover-bg: var(--botao-hover);
+    --bs-btn-hover-border-color: var(--botao-hover);
+    --bs-btn-hover-color: var(--botao-texto);
+    --bs-btn-active-bg: var(--botao-hover);
+    --bs-btn-active-border-color: var(--botao-hover);
+    --bs-btn-active-color: var(--botao-texto);
+    --bs-btn-disabled-bg: var(--botao);
+    --bs-btn-disabled-border-color: var(--botao);
+    --bs-btn-disabled-color: var(--botao-texto);
+    --bs-btn-focus-shadow-rgb: var(--accent-rgb);
+    font-weight: 600;
+}
+/* botão do login: pêssego (o laranja do foil), igual ao das vendas */
+.formulario-login { --botao: #ffbf8f; --botao-hover: #ffaa70; --botao-texto: #3a1a08; --accent: #b4471c; --accent-rgb: 180, 71, 28; }
+
+.form-control:focus, .form-select:focus,
+.form-control.is-valid:focus, .form-select.is-valid:focus {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px rgba(var(--accent-rgb), .16);
+}
+.total-destaque { border-color: rgba(var(--accent-rgb), .25); }
+
+/* selos dos discos: pêssego do foil */
+.vinil-selo circle[fill="#c2410c"] { fill: #e9773f; }
+
+/* Início: ícone de cada atalho na cor da sua área */
+.atalho[href="/venda"], .atalho[href="/pesquisa-venda"] { --accent: #b4471c; --accent-soft: #fff1e6; }
+.atalho[href="/pesquisa-produto"], .atalho[href="/pesquisa-avancada"], .atalho-totem { --accent: #0f7a58; --accent-soft: #e6f8f1; }
+.atalho[href="/pesquisa-membro"] { --accent: #5a3fd1; --accent-soft: #f0ebff; }
+
+/* menu: sem o reflexo que atravessa o item no hover */
+.sidebar .nav-link::after { display: none; }
+
+/* totem: foco do campo na cor da área */
+.totem-busca input:focus { box-shadow: 0 0 0 4px rgba(var(--accent-rgb), .14); }
+
+/* ---------- Refinamento ---------- */
+/* Botões principais com mais corpo (continuam claros, mas não parecem desativados) */
+:root, .app, .parceiros-cadastrados, .cadastro-cliente { --botao: #b7a0ff; --botao-hover: #a589ff; --botao-texto: #160d3a; }
+.vendas, .pesquisa-venda, .formulario-login { --botao: #ff9f63; --botao-hover: #ff8b47; --botao-texto: #2b1205; }
+.pesquisa-produto, .busca-avancada, .cadastro-produto, #modalAtualizarProduto, #modalExcluirProduto, #modal-totem { --botao: #5fd3a8; --botao-hover: #46c697; --botao-texto: #04281a; }
+.btn-primary:not(:disabled):not(.disabled) { box-shadow: 0 6px 16px rgba(var(--accent-rgb), .22); font-weight: 700; }
+.btn-primary:not(:disabled):not(.disabled):hover { box-shadow: 0 8px 20px rgba(var(--accent-rgb), .3); }
+
+/* Seletor Cliente/Funcionário na cor clara da área */
+.segmentado input:checked + label { background: var(--botao); color: var(--botao-texto); }
+
+/* Disco do card de boas-vindas: selo mais contido e foil dos sulcos mais fraco */
+/* selo do card: cor viva (o volume vem do degradê do próprio SVG) */
+.inicio-hero .vinil::after { opacity: .55; }

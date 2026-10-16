@@ -9,28 +9,32 @@ const formatarMoeda = (valor) => {
 function atualizarTabelaItensVenda() {
     const $tbody = $('#tabela-itens-venda-body');
     $tbody.empty();
+    $('#btn-remover-item').prop('disabled', true);
+    $('#tabela-itens-venda').toggleClass('vazia', listaItensVenda.length === 0);
 
     if (listaItensVenda.length === 0) {
-        $tbody.append('<tr><td colspan="6" class="text-center">Nenhum item na lista</td></tr>');
+        $tbody.append('<tr><td colspan="6"><span class="vazio-disco"><i class="bi bi-cart3"></i>Carrinho vazio. Adicione um produto pelo código.</span></td></tr>');
         $('#itens-lista-compras').val(0);
         $('#btn-avancar-venda').prop('disabled', true);
+        $('#limpar-lista-venda').prop('disabled', true).attr('title', 'O carrinho está vazio');
         valorTotalVenda = 0;
     } else {
         listaItensVenda.forEach((item, index) => {
             const subtotal = item.produto.valor * item.quantidade;
             $tbody.append(`
                 <tr data-index="${index}">
-                    <td>${index + 1}</td>
-                    <td>${item.produto.codProduto}</td>
-                    <td>${item.produto.titulo}</td>
-                    <td>${formatarMoeda(item.produto.valor)}</td>
-                    <td>${item.quantidade}</td>
-                    <td>${formatarMoeda(subtotal)}</td>
+                    <td class="texto-suave">${index + 1}</td>
+                    <td class="codigo">${item.produto.codProduto}</td>
+                    <td class="titulo-celula">${item.produto.titulo}</td>
+                    <td class="text-end">${formatarMoeda(item.produto.valor)}</td>
+                    <td class="text-end">${item.quantidade}</td>
+                    <td class="text-end fw-semibold">${formatarMoeda(subtotal)}</td>
                 </tr>
             `);
         });
         $('#itens-lista-compras').val(listaItensVenda.length);
         $('#btn-avancar-venda').prop('disabled', false);
+        $('#limpar-lista-venda').prop('disabled', false).removeAttr('title');
     }
     calcularValorTotal();
 }
@@ -39,10 +43,49 @@ function calcularValorTotal() {
     valorTotalVenda = listaItensVenda.reduce((total, item) => {
         return total + (item.produto.valor * item.quantidade);
     }, 0);
-    $('#valor-total-display').html(`<strong>Valor Total: ${formatarMoeda(valorTotalVenda)}</strong>`);
+    $('#valor-total-display').html(`<span class="texto-suave fw-normal fs-6 me-2">Total</span><strong>${formatarMoeda(valorTotalVenda)}</strong>`);
+}
+
+// Modal de confirmação do carrinho (no lugar de confirm())
+function confirmarNoCarrinho({ titulo, mensagem, resumo, botao, aoConfirmar }) {
+    const $modal = $('#modal-confirmar-carrinho');
+    $('#confirmar-carrinho-titulo').text(titulo);
+    $('#confirmar-carrinho-mensagem').text(mensagem);
+    $('#confirmar-carrinho-resumo').html(resumo || '').toggle(!!resumo);
+    $('#btn-confirmar-carrinho span').text(botao);
+    $('#btn-confirmar-carrinho').off('click').on('click', function () {
+        aoConfirmar();
+        bootstrap.Modal.getOrCreateInstance($modal[0]).hide();
+    });
+    bootstrap.Modal.getOrCreateInstance($modal[0]).show();
+}
+
+// Mensagem de erro logo abaixo do campo (no lugar de alert)
+function caixaDoCampo($campo) {          // campo numérico fica dentro de .campo-numero (setas próprias)
+    return $campo.parent('.campo-numero').length ? $campo.parent() : $campo;
+}
+
+function mostrarErroCampo($campo, mensagem) {
+    limparErroCampo($campo);
+    $campo.addClass('is-invalid');
+    $('<div class="invalid-feedback erro-campo" role="alert"></div>').text(mensagem).insertAfter(caixaDoCampo($campo));
+    $campo.trigger('focus');
+}
+
+function limparErroCampo($campo) {
+    $campo.removeClass('is-invalid');
+    caixaDoCampo($campo).siblings('.erro-campo').remove();
 }
 
 function formularioVenda() {
+
+    // o erro some assim que a pessoa corrige o campo
+    $(document).on('input change', '#cod-produto-venda, #qtd-produto-venda, #cod-vendedor-conclusao, #data-conclusao', function () {
+        limparErroCampo($(this));
+    });
+    $(document).on('change', 'input[name="forma-pagamento"]', function () {
+        $('.opcoes-cartao').siblings('.erro-campo').remove();
+    });
 
 
     $('#cpf-cliente-conclusao').mask('000.000.000-00');
@@ -69,18 +112,24 @@ function formularioVenda() {
         submitHandler: function (form, event) {
             event.preventDefault();
 
-            const codProduto = $('#cod-produto-venda').val();
-            const quantidadeDesejada = parseInt($('#qtd-produto-venda').val());
+            const $codigo = $('#cod-produto-venda');
+            const $quantidade = $('#qtd-produto-venda');
+            const codProduto = $codigo.val();
+            const quantidadeDesejada = parseInt($quantidade.val());
+            limparErroCampo($codigo);
+            limparErroCampo($quantidade);
 
             $.getJSON(`/api/produtos/codigo/${codProduto}`)
                 .done(function (produto) {
                     if (!produto) {
-                        alert("Produto não encontrado.");
+                        mostrarErroCampo($codigo, "Produto não encontrado.");
                         return;
                     }
 
                     if (produto.quantidade < quantidadeDesejada) {
-                        alert(`Quantidade insuficiente em estoque para o produto ${produto.titulo}. Disponível: ${produto.quantidade}.`);
+                        mostrarErroCampo($quantidade, produto.quantidade > 0
+                            ? `Só há ${produto.quantidade} ${produto.quantidade === 1 ? 'unidade' : 'unidades'} em estoque.`
+                            : 'Produto sem estoque.');
                         return;
                     }
 
@@ -89,7 +138,11 @@ function formularioVenda() {
                     if (itemExistenteIndex !== -1) {
                         const novoTotalQtd = listaItensVenda[itemExistenteIndex].quantidade + quantidadeDesejada;
                         if (produto.quantidade < novoTotalQtd) {
-                             alert(`Quantidade total desejada (${novoTotalQtd}) excede o estoque disponível (${produto.quantidade}) para o produto ${produto.titulo}.`);
+                             const noCarrinho = listaItensVenda[itemExistenteIndex].quantidade;
+                             const restante = Math.max(produto.quantidade - noCarrinho, 0);
+                             mostrarErroCampo($quantidade, restante === 0
+                                 ? `Todo o estoque deste produto (${produto.quantidade}) já está no carrinho.`
+                                 : `Já há ${noCarrinho} no carrinho; dá para adicionar no máximo ${restante}.`);
                              return;
                         }
                         listaItensVenda[itemExistenteIndex].quantidade = novoTotalQtd;
@@ -105,13 +158,15 @@ function formularioVenda() {
 
                     atualizarTabelaItensVenda();
 
-                    $('#cod-produto-venda').val('');
-                    $('#qtd-produto-venda').val('');
+                    $('#cod-produto-venda').val('').trigger('focus');
+                    $('#qtd-produto-venda').val(1);
 
                 })
                 .fail(function (xhr, status, error) {
                     const errorMsg = xhr.responseJSON ? (xhr.responseJSON.detail || xhr.responseJSON.message || JSON.stringify(xhr.responseJSON)) : xhr.responseText;
-                    alert("Erro ao buscar produto: " + errorMsg);
+                    mostrarErroCampo($codigo, xhr.status === 404
+                        ? "Produto não encontrado."
+                        : "Não foi possível buscar o produto. " + (errorMsg || ''));
                 });
         },
         errorElement: 'div',
@@ -130,39 +185,64 @@ function formularioVenda() {
     $('#btn-remover-item').on('click', function () {
         const $selectedRow = $('#tabela-itens-venda-body tr.table-active');
         if ($selectedRow.length === 0) {
-            alert("Selecione um item da lista para remover.");
-            return;
+            return; // o botão só fica ativo com um item selecionado
         }
 
         const indexToRemove = parseInt($selectedRow.data('index'));
-        if (confirm(`Tem certeza que deseja remover o item na posição ${indexToRemove + 1} da lista?`)) {
-            listaItensVenda.splice(indexToRemove, 1);
-            atualizarTabelaItensVenda();
-        }
+        const item = listaItensVenda[indexToRemove];
+        const $resumo = $('<div>');
+        $('<strong>').text(item.produto.titulo).appendTo($resumo);
+        $('<span class="contador">').text(`Código ${item.produto.codProduto} · ${item.quantidade} ${item.quantidade === 1 ? 'unidade' : 'unidades'} · ${formatarMoeda(item.produto.valor * item.quantidade)}`).appendTo($resumo);
+        confirmarNoCarrinho({
+            titulo: 'Remover item do carrinho?',
+            mensagem: 'O produto sai do carrinho desta venda. Você pode adicioná-lo de novo pelo código.',
+            resumo: $resumo.html(),
+            botao: 'Remover item',
+            aoConfirmar: function () {
+                listaItensVenda.splice(indexToRemove, 1);
+                atualizarTabelaItensVenda();
+            }
+        });
     });
 
-    $('#tabela-itens-venda-body').on('click', 'tr', function () {
+    $('#tabela-itens-venda-body').on('click', 'tr[data-index]', function () {
         $('#tabela-itens-venda-body tr').removeClass('table-active');
         $(this).addClass('table-active');
+        $('#btn-remover-item').prop('disabled', false);
     });
 
-    $('#limpar-lista-venda').on('click', function() {
-        if (confirm('Tem certeza que deseja limpar todos os itens da lista de compras?')) {
-            listaItensVenda = [];
-            atualizarTabelaItensVenda();
-            $('#codigo-produto-display').val('');
-            $('#descricao-produto-display').val('');
-            alert('Lista de compras limpa!');
-        }
+    $('#limpar-lista-venda').on('click', function () {
+        if (listaItensVenda.length === 0) return;
+        const unidades = listaItensVenda.reduce((t, item) => t + item.quantidade, 0);
+        const $resumo = $('<div>');
+        $('<strong>').text(`${listaItensVenda.length} ${listaItensVenda.length === 1 ? 'produto' : 'produtos'} · ${unidades} ${unidades === 1 ? 'unidade' : 'unidades'}`).appendTo($resumo);
+        $('<span class="contador">').text(`Total ${formatarMoeda(valorTotalVenda)}`).appendTo($resumo);
+        confirmarNoCarrinho({
+            titulo: 'Limpar o carrinho?',
+            mensagem: 'Todos os itens desta venda serão removidos. Esta ação não pode ser desfeita.',
+            resumo: $resumo.html(),
+            botao: 'Limpar carrinho',
+            aoConfirmar: function () {
+                listaItensVenda = [];
+                atualizarTabelaItensVenda();
+                $('#codigo-produto-display').val('');
+                $('#descricao-produto-display').val('');
+                $('#cod-produto-venda').trigger('focus');
+            }
+        });
     });
 
     $('#modal-concluir-venda').on('show.bs.modal', function () {
         if (listaItensVenda.length === 0) {
-            alert("Não é possível avançar. A lista de compras está vazia.");
+            avisar("Adicione pelo menos um produto ao carrinho para continuar.", "info");
             return false;
         }
         $('#valor-total-conclusao-venda').val(formatarMoeda(valorTotalVenda));
-        $('#data-conclusao').val(new Date().toISOString().split('T')[0]);
+        $('#data-conclusao').val(new Date().toLocaleDateString('sv-SE'));
+        const idUsuario = $('meta[name="usuario-id"]').attr('content');
+        if (idUsuario && !$('#cod-vendedor-conclusao').val()) {
+            $('#cod-vendedor-conclusao').val(idUsuario);
+        }
     });
 
     $('#btn-avancar-pagamento').on('click', function () {
@@ -170,14 +250,15 @@ function formularioVenda() {
         const codVendedor = $('#cod-vendedor-conclusao').val();
         const dataVenda = $('#data-conclusao').val();
 
-        if (!codVendedor) {
-            alert("O Código do Vendedor é obrigatório.");
-            $('#cod-vendedor-conclusao').focus();
-            return;
-        }
+        limparErroCampo($('#cod-vendedor-conclusao'));
+        limparErroCampo($('#data-conclusao'));
         if (!dataVenda) {
-            alert("A Data da Venda é obrigatória.");
-            $('#data-conclusao').focus();
+            mostrarErroCampo($('#data-conclusao'), "Informe a data da venda.");
+        }
+        if (!codVendedor) {
+            mostrarErroCampo($('#cod-vendedor-conclusao'), "Informe o código do vendedor.");
+        }
+        if (!codVendedor || !dataVenda) {
             return;
         }
         vendaEmAndamento.cpfNota = cpfCliente;
@@ -186,11 +267,20 @@ function formularioVenda() {
         vendaEmAndamento.valorTotal = valorTotalVenda;
 
         $('#valor-total-pagamento').val(formatarMoeda(valorTotalVenda));
+        // só abre o pagamento depois de validar os dados
+        bootstrap.Modal.getOrCreateInstance('#modal-concluir-venda').hide();
+        bootstrap.Modal.getOrCreateInstance('#modal-pagamento-venda').show();
+    });
+
+    // o total a receber é sempre preenchido ao abrir o pagamento (inclusive ao voltar e avançar de novo)
+    $('#modal-pagamento-venda').on('show.bs.modal', function () {
+        $('#valor-total-pagamento').val(formatarMoeda(valorTotalVenda));
     });
     $('#btn-concluir-venda').on('click', function () {
         const metodoPagamento = $('input[name="forma-pagamento"]:checked').val();
         if (!metodoPagamento) {
-            alert("Selecione uma forma de pagamento.");
+            $('.opcoes-cartao').siblings('.erro-campo').remove();
+            $('<div class="invalid-feedback erro-campo mb-3" role="alert">Selecione uma forma de pagamento.</div>').insertAfter('.opcoes-cartao');
             return;
         }
         vendaEmAndamento.idMetodoPagamento = parseInt(metodoPagamento);
@@ -206,7 +296,7 @@ function formularioVenda() {
             }).fail(function(xhr) {
                 estoqueAtualizadoComSucesso = false;
                 console.error(`Falha ao dar baixa no estoque do produto ${item.produto.titulo}:`, xhr.responseText);
-                alert(`Erro ao dar baixa no estoque do produto ${item.produto.titulo}. Venda não concluída.`);
+                avisar(`Erro ao dar baixa no estoque do produto ${item.produto.titulo}. Venda não concluída.`, "erro");
             });
             promises.push(promiseAtualizarEstoque);
 
@@ -243,12 +333,12 @@ function formularioVenda() {
                     $('#codigo-produto-display').val('');
                     $('#descricao-produto-display').val('');
                 } else {
-                    alert("Algumas operações falharam. Verifique o console para detalhes.");
+                    avisar("Algumas operações falharam. Verifique o console para detalhes.", "erro");
                 }
             })
             .catch((error) => {
                 console.error("Erro geral durante a conclusão da venda:", error);
-                alert("Ocorreu um erro inesperado ao concluir a venda.");
+                avisar("Ocorreu um erro inesperado ao concluir a venda.", "erro");
             });
     });
     atualizarTabelaItensVenda();

@@ -1,81 +1,237 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
-
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>SIGL - Loja Orion</title>
+    <title>SIGL – Orion Record Store</title>
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet">
-
+    <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
     <link rel="stylesheet" th:href="@{/style/style.css}">
 </head>
-
 <body>
-<div class="navbar-container">
-    <nav class="navbar navbar-expand-lg navbar-dark bg-custom-black">
-        <div class="container">
-            <a class="navbar-brand" th:href="@{/}">
-                <img th:src="@{/img/logo.png}" alt="Logo Orion" style="max-height: 100px;">
+<div class="app">
+
+    <!-- ===== Menu lateral ===== -->
+    <aside class="sidebar">
+        <div class="sidebar-topo">
+            <a class="marca" th:href="@{/}" title="Orion Record Store — Início">
+                <img th:src="@{/img/logo-menu.png}" alt="Logo Orion Record Store">
             </a>
-
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
-                    aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
+            <button class="sidebar-toggler d-lg-none" type="button" data-bs-toggle="collapse"
+                    data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false"
+                    aria-label="Abrir menu">
+                <i class="bi bi-list"></i>
             </button>
-
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav ms-auto">
-                    <li class="nav-item">
-                        <a class="nav-link active" aria-current="page" th:href="@{/}">INICIO</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" th:href="@{/venda}">VENDAS</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" th:href="@{/pesquisa-produto}">PRODUTOS</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" th:href="@{/pesquisa-membro}">COMUNIDADE</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" th:href="@{/login}" >SAIR</a>
-                    </li>
-                </ul>
-            </div>
         </div>
-    </nav>
-</div>
 
-<main class="conteudo-principal" id="conteudo-dinamico">
-    <!-- Conteúdo inicial -->
-    <section>
-        <div class="container boas-vindas">
-            <div class="row justify-content-center">
-                <div class="col-sm-12 text-center">
-                    <h1 class="display-6"><strong>Sistema Integrado de Gestão de Loja</strong></h1>
-                    <p class="texto-uso">
-                        Este é o seu painel de controle para o universo da Orion...
-                    </p>
-                    <img th:src="@{/img/fundo.png}" alt="arte-orion">
+        <div class="collapse d-lg-block sidebar-menu" id="navbarNav">
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a class="nav-link active" aria-current="page" th:href="@{/}"><i class="bi bi-house"></i>Início</a>
+                </li>
+
+                <li class="menu-grupo">Vendas</li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/venda"><i class="bi bi-bag-plus"></i>Nova Venda</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/pesquisa-venda"><i class="bi bi-receipt"></i>Histórico de Vendas</a>
+                </li>
+
+                <li class="menu-grupo">Catálogo</li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/pesquisa-produto"><i class="bi bi-upc-scan"></i>Consultar Produto</a>
+                </li>
+                <li class="nav-item">
+                    <button type="button" class="nav-link abrir-totem" disabled title="Disponível em breve"><i class="bi bi-display"></i>Modo Totem</button>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/pesquisa-avancada"><i class="bi bi-boxes"></i>Estoque</a>
+                </li>
+
+                <li class="menu-grupo">Pessoas</li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/pesquisa-membro"><i class="bi bi-people"></i>Comunidade</a>
+                </li>
+            </ul>
+
+            <div class="sidebar-rodape">
+                <div class="usuario">
+                    <span class="usuario-avatar"><i class="bi bi-person"></i></span>
+                    <span class="usuario-dados">
+                        <strong>Equipe Orion</strong>
+                        <span>SIGL</span>
+                    </span>
+                    <form th:action="@{/login}" method="get" class="usuario-sair">
+                        <button type="submit" class="btn-sair" title="Sair do sistema" aria-label="Sair do sistema">
+                            <i class="bi bi-box-arrow-right"></i>
+                        </button>
+                    </form>
                 </div>
             </div>
         </div>
-    </section>
-</main>
+    </aside>
 
-<footer class="rodape">
-    <div class="container py-2 rodape">
-        <div class="my-0 row align-items-center">
-            <div class="col-sm-12 text-center">
-                <p class="mb-0 texto-rodape">&copy; 2025 - Todos os direitos reservados.</p>
+    <!-- ===== Modo totem: Consulta de preço travada (só fecha com a senha do funcionário) ===== -->
+    <div class="modal totem" id="modal-totem" tabindex="-1" aria-label="Consulta de preço" aria-hidden="true"
+         data-bs-backdrop="static" data-bs-keyboard="false">
+        <div class="modal-dialog modal-fullscreen">
+            <div class="modal-content">
+                <div class="totem-tela">
+                    <section class="totem-marca">
+                        <img th:src="@{/img/logo.png}" alt="Orion Record Store">
+                        <div>
+                            <p class="totem-chamada">Consulte o preço</p>
+                            <p class="totem-instrucao">Aproxime o código de barras do leitor<br>ou digite os 6 números do produto.</p>
+                        </div>
+                        <div class="vinil totem-vinil" aria-hidden="true">
+                            <svg class="vinil-selo" viewBox="0 0 300 300" aria-hidden="true">
+                    <defs><path id="arco-selo-totem" d="M 32 150 a 118 118 0 1 1 236 0 a 118 118 0 1 1 -236 0"/></defs>
+                    <circle cx="150" cy="150" r="148" fill="#c2410c"/>
+                    <circle cx="150" cy="150" r="140" fill="none" stroke="#fff" stroke-opacity=".25"/>
+                    <text font-family="Bricolage Grotesque, Inter, sans-serif" font-size="19" font-weight="700" letter-spacing="7" fill="#fff" fill-opacity=".85">
+                        <textPath href="#arco-selo-totem">ORION RECORD STORE · LADO A · STEREO ·</textPath>
+                    </text>
+                    <text x="150" y="132" text-anchor="middle" font-family="Bricolage Grotesque, Inter, sans-serif" font-size="34" font-weight="700" letter-spacing="6" fill="#fff">ORION</text>
+                    <text x="150" y="196" text-anchor="middle" font-family="Inter, sans-serif" font-size="15" font-weight="600" letter-spacing="5" fill="#fff" fill-opacity=".85">SIGL</text>
+                    <circle cx="150" cy="150" r="9" fill="#17161a"/>
+                </svg>
+                        </div>
+                    </section>
+
+                    <section class="totem-consulta">
+                        <label for="totem-codigo" class="visually-hidden">Código do produto</label>
+                        <div class="totem-busca">
+                            <i class="bi bi-upc-scan"></i>
+                            <input type="text" id="totem-codigo" inputmode="numeric" maxlength="6" autocomplete="off"
+                                   placeholder="Código do produto">
+                        </div>
+                        <div class="totem-mensagem" id="totem-mensagem" role="status"></div>
+
+                        <article class="totem-produto" id="totem-produto" hidden>
+                            <div class="totem-selos">
+                                <span class="totem-selo" id="totem-tipo"></span>
+                                <span class="totem-selo" id="totem-estado"></span>
+                                <span class="totem-selo" id="totem-disponivel"></span>
+                            </div>
+                            <h2 id="totem-titulo"></h2>
+                            <p class="totem-descricao" id="totem-descricao"></p>
+                            <div class="totem-preco"><span>Preço</span><strong id="totem-preco"></strong></div>
+                        </article>
+
+                        <div class="totem-espera" id="totem-espera">
+                            <i class="bi bi-upc-scan"></i>
+                            <p>Aguardando um produto…</p>
+                        </div>
+                    </section>
+                </div>
+
+                <button type="button" class="totem-cadeado" id="totem-cadeado" title="Encerrar modo totem">
+                    <i class="bi bi-lock"></i><span>Funcionário</span>
+                </button>
+
+                <form class="totem-senha" id="totem-senha" hidden novalidate>
+                    <div class="totem-senha-caixa">
+                        <span class="icone-alerta"><i class="bi bi-unlock"></i></span>
+                        <h5>Encerrar modo totem</h5>
+                        <p class="texto-suave">Digite a senha de qualquer funcionário da loja.</p>
+                        <label for="totem-senha-campo" class="form-label">Senha</label>
+                        <input type="password" id="totem-senha-campo" class="form-control" autocomplete="current-password">
+                        <div class="totem-senha-acoes">
+                            <button type="button" class="btn btn-light" id="totem-senha-cancelar">Cancelar</button>
+                            <button type="submit" class="btn btn-primary" id="totem-senha-confirmar"><i class="bi bi-unlock"></i>Desbloquear</button>
+                        </div>
+                    </div>
+                </form>
             </div>
         </div>
     </div>
-</footer>
+
+    <!-- ===== Conteúdo (carregado dinamicamente pelo script.js) ===== -->
+    <main class="conteudo-principal" id="conteudo-dinamico">
+        <section class="inicio-hero">
+            <div>
+                <p class="pagina-sobretitulo">Sistema Integrado de Gestão de Loja</p>
+                <h1>Bem-vindo ao painel da Orion</h1>
+                <p>Vendas, catálogo, estoque e comunidade da loja em um só lugar.</p>
+                <!-- TODO: trocar os "#" pelos endereços reais das redes da loja -->
+                <nav class="hero-redes" aria-label="Redes e contato da Orion">
+                    <a href="#" aria-label="Instagram da Orion" title="Instagram" target="_blank" rel="noopener"><i class="bi bi-instagram"></i></a>
+                    <a href="#" aria-label="WhatsApp da Orion" title="WhatsApp" target="_blank" rel="noopener"><i class="bi bi-whatsapp"></i></a>
+                    <a href="#" aria-label="Facebook da Orion" title="Facebook" target="_blank" rel="noopener"><i class="bi bi-facebook"></i></a>
+                    <a href="tel:+555133343454" aria-label="Ligar para a Orion: (51) 3334-3454" title="(51) 3334-3454"><i class="bi bi-telephone"></i></a>
+                </nav>
+            </div>
+            <div class="vinil" aria-hidden="true">
+                <svg class="vinil-selo" viewBox="0 0 300 300" aria-hidden="true">
+                    <defs><radialGradient id="selo-inicio-cor" cx="38%" cy="32%" r="75%"><stop offset="0" stop-color="#ff9a52"/><stop offset=".55" stop-color="#ec6a24"/><stop offset="1" stop-color="#b8400f"/></radialGradient><path id="arco-selo" d="M 32 150 a 118 118 0 1 1 236 0 a 118 118 0 1 1 -236 0"/></defs>
+                    <circle cx="150" cy="150" r="148" fill="url(#selo-inicio-cor)"/>
+                    <circle cx="150" cy="150" r="140" fill="none" stroke="#fff" stroke-opacity=".25"/>
+                    <text font-family="Bricolage Grotesque, Inter, sans-serif" font-size="19" font-weight="700" letter-spacing="7" fill="#fff" fill-opacity=".85">
+                        <textPath href="#arco-selo">ORION RECORD STORE · LADO A · STEREO ·</textPath>
+                    </text>
+                    <text x="150" y="132" text-anchor="middle" font-family="Bricolage Grotesque, Inter, sans-serif" font-size="34" font-weight="700" letter-spacing="6" fill="#fff">ORION</text>
+                    <text x="150" y="196" text-anchor="middle" font-family="Inter, sans-serif" font-size="15" font-weight="600" letter-spacing="5" fill="#fff" fill-opacity=".85">SIGL</text>
+                    <circle cx="150" cy="150" r="9" fill="#17161a"/>
+                </svg>
+            </div>
+        </section>
+
+        <!-- Mosaico de atalhos (cards com ilustração, inspirados em layouts de revista):
+             Nova venda alto (2 módulos), Consultar produto largo (2 módulos),
+             Estoque, Histórico e Comunidade com 1 módulo; redes sociais fecham o retângulo -->
+        <div class="atalhos mosaico">
+            <a class="atalho atalho-alto" data-spa href="/venda">
+                <span class="atalho-imagem"><img th:src="@{/img/atalho-venda.svg}" alt=""></span>
+                <span class="atalho-corpo">
+                    <strong>Nova venda</strong>
+                    <span>Monte o carrinho pelo código dos produtos e finalize o pagamento.</span>
+                </span>
+            </a>
+            <a class="atalho atalho-largo" data-spa href="/pesquisa-produto">
+                <span class="atalho-imagem"><img th:src="@{/img/atalho-consulta.svg}" alt=""></span>
+                <span class="atalho-corpo">
+                    <strong>Consultar produto</strong>
+                    <span>Preço, estoque e descrição pelo código de 6 dígitos.</span>
+                </span>
+            </a>
+            <button type="button" class="atalho atalho-mini atalho-totem" id="abrir-totem" disabled title="Disponível em breve">
+                <span class="atalho-imagem"><img th:src="@{/img/atalho-totem.svg}" alt=""></span>
+                <span class="atalho-corpo">
+                    <strong>Modo Totem</strong>
+                    <span>O cliente consulta as informações do produto através do código de 6 dígitos.</span>
+                </span>
+            </button>
+            <a class="atalho atalho-mini" data-spa href="/pesquisa-avancada">
+                <span class="atalho-imagem"><img th:src="@{/img/atalho-estoque.svg}" alt=""></span>
+                <span class="atalho-corpo">
+                    <strong>Estoque</strong>
+                    <span>Liste, atualize e remova produtos.</span>
+                </span>
+            </a>
+            <a class="atalho atalho-mini" data-spa href="/pesquisa-venda">
+                <span class="atalho-imagem"><img th:src="@{/img/atalho-historico.svg}" alt=""></span>
+                <span class="atalho-corpo">
+                    <strong>Histórico de vendas</strong>
+                    <span>Vendas registradas, com filtro por produto.</span>
+                </span>
+            </a>
+            <a class="atalho atalho-mini" data-spa href="/pesquisa-membro">
+                <span class="atalho-imagem"><img th:src="@{/img/atalho-comunidade.svg}" alt=""></span>
+                <span class="atalho-corpo">
+                    <strong>Comunidade</strong>
+                    <span>Clientes e funcionários cadastrados.</span>
+                </span>
+            </a>
+            <!-- TODO: trocar os "#" pelos endereços reais das redes da loja -->
+        </div>
+    </main>
+</div>
+
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
@@ -86,9 +242,6 @@
 <script th:src="@{/script/cadastroFormParceiro.js}"></script>
 <script th:src="@{/script/cadastroFormProduto.js}"></script>
 <script th:src="@{/script/formVendas.js}"></script>
-<script th:src="@{/script/pesquisaProduto.js}"></script>
-<script th:src="@{/script/consultaVendas.js}"></script>
-<script th:src="@{/script/consultaAvancadaProdutos.js}"></script>
-
+<script th:src="@{/script/totem.js}"></script>
 </body>
 </html>

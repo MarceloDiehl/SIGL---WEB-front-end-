@@ -1,24 +1,28 @@
 function formularioParceiros() {
-    function alternarCamposParceiro() {
+    function alternarCamposParceiro(animar = true) {
+        const duracao = animar ? 150 : 0;
         const tipoSelecionado = $('input[name="parceiro"]:checked').val();
-        const camposFuncionario = $('#emergencia_parceiro,#ctpas_parceiro,#cargo_parceiro,#escolaridade_parceiro,#especialidade_parceiro,#ingresso_parceiro,#genero_parceiro,#senha_parceiro,#senha2_parceiro').closest('.col-sm-2, .col-sm-3, .col-sm-6');
-        const campoCliente = $('#desde_parceiro').closest('.col-sm-2');
+        // Blocos marcados com data-somente="cliente" / "funcionario" no HTML
+        const camposFuncionario = $('#formulario-membros [data-somente="funcionario"]');
+        const campoCliente = $('#formulario-membros [data-somente="cliente"]');
 
         if (tipoSelecionado === 'cliente') {
-            campoCliente.slideDown();
-            camposFuncionario.slideUp();
+            campoCliente.slideDown(duracao);
+            camposFuncionario.slideUp(duracao);
         } else {
-            campoCliente.slideUp();
-            camposFuncionario.slideDown();
+            campoCliente.slideUp(duracao);
+            camposFuncionario.slideDown(duracao);
         }
     }
-    alternarCamposParceiro();
+    alternarCamposParceiro(false);
     $('input[name="parceiro"]').on('change', alternarCamposParceiro);
+    $('#limpar-cadastro-membro').on('click', () => setTimeout(alternarCamposParceiro, 0));
 
     // Máscaras
     $('#telefone_parceiro').mask('(00) 00000-0000');
     $('#cep_parceiro').mask('00000-000');
     $('#cpf_parceiro').mask('000.000.000-00');
+    $('#emergencia_parceiro').mask('(00) 00000-0000');
 
     $.validator.addMethod("cpf", function (value, element) {
         value = jQuery.trim(value);
@@ -133,7 +137,7 @@ function formularioParceiros() {
                 contentType: "application/json",
                 data: JSON.stringify(dados),
                 success: function (resposta) {
-                    alert(resposta);
+                    avisar(resposta, "sucesso");
                     $("#formulario-membros")[0].reset();
                     alternarCamposParceiro();
                 },
@@ -143,7 +147,7 @@ function formularioParceiros() {
                         const json = JSON.parse(xhr.responseText);
                         msg = json.detail || json.body || xhr.responseText;
                     } catch (e) {}
-                    alert("Erro ao cadastrar: " + msg);
+                    avisar("Erro ao cadastrar: " + msg, "erro");
                 }
             });
         },
@@ -161,4 +165,3 @@ function formularioParceiros() {
         }
     });
 }
-

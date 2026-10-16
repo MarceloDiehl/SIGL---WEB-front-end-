@@ -1,45 +1,73 @@
-<div class="container" xmlns:th="http://www.w3.org/1999/xhtml">
-    <div class="row justify-content-center align-items-center">
-        <div class="mb-3">
-            <h3 class="titulo-paginas display-6">Pesquisar produtos</h3>
+<div class="pesquisa-produto">
+
+    <header class="pagina-cabecalho">
+        <div>
+            <p class="pagina-sobretitulo">Catálogo</p>
+            <h1 class="pagina-titulo">Consultar produto</h1>
+            <p class="pagina-descricao">Digite o código de 6 dígitos para ver preço, estoque e descrição.</p>
         </div>
-    </div>
-    <form action="#" method="get" class="formulario-pesquisa-fixa" id="formulario-pesquisa-fixa">
-        <div class="row">
-            <div class="my-2 col-sm-12">
-                <label for="titulo-produto" class="form-label">Título do Produto</label>
-                <input type="text" name="titulo-produto" id="titulo-produto" class="form-control" readonly>
-            </div>
+    </header>
 
-            <div class="my-2 col-sm-12">
-                <label for="observacoes" class="form-label">Descrição</label>
-                <textarea id="observacoes" name="observacoes" class="form-control" rows="8" readonly></textarea>
-            </div>
-            <div class="my-2 col-sm-12 align-items-end">
-                <div class="row align-items-end my-4">
-                    <div class="col-sm-2">
-                        <label for="estoque-produto" class="form-label">Quantidade</label>
-                        <input type="number" name="estoque-produto" id="estoque-produto" readonly class="form-control">
-                    </div>
-                    <div class="col-sm-3">
-                        <label for="codigo-produto" class="form-label">Código do Produto</label>
-                        <input type="text" name="codigo-produto" id="codigo-produto" class="form-control"
-                            placeholder="Busque pelo Código do Produto">
-                    </div>
-                    <div class="col-sm-7 text-end">
-                        <p class="valor-produto" style="font-size: 30px; margin-bottom: 0px;" id="valor-unitario">
-                            <strong>Valor do Produto: R$0,00</strong>
-                        </p>
-                    </div>
+    <form action="#" method="get" class="formulario-pesquisa-fixa" id="formulario-pesquisa-fixa" onsubmit="return false;">
 
+        <!-- Código do produto e, ao lado, tipo, estado e quantidade em estoque -->
+        <div class="consulta-linha">
+            <div class="busca consulta-busca">
+                <i class="bi bi-upc-scan"></i>
+                <label for="codigo-produto" class="visually-hidden">Código do produto</label>
+                <input type="text" name="codigo-produto" id="codigo-produto" class="form-control"
+                       placeholder="Digite o código do produto (6 dígitos)" maxlength="6" inputmode="numeric" autocomplete="off" autofocus>
+            </div>
+            <div class="ficha">
+                <span class="ficha-icone"><i class="bi bi-tag"></i></span>
+                <div class="ficha-texto">
+                    <span class="ficha-rotulo">Tipo de produto</span>
+                    <strong id="tipo-produto-consulta" class="sem-valor">—</strong>
+                </div>
+            </div>
+            <div class="ficha">
+                <span class="ficha-icone"><i class="bi bi-stars"></i></span>
+                <div class="ficha-texto">
+                    <span class="ficha-rotulo">Estado</span>
+                    <strong id="condicao-produto-consulta" class="sem-valor">—</strong>
+                </div>
+            </div>
+            <div class="ficha ficha-estoque" id="ficha-estoque">
+                <span class="ficha-icone"><i class="bi bi-boxes"></i></span>
+                <div class="ficha-texto">
+                    <label class="ficha-rotulo" for="estoque-produto">Quantidade em estoque</label>
+                    <span class="ficha-valor">
+                        <input type="number" name="estoque-produto" id="estoque-produto"
+                               class="campo-leitura num" placeholder="—" readonly>
+                        <span class="ficha-status" id="estoque-status"></span>
+                    </span>
                 </div>
             </div>
         </div>
+
+        <section class="painel painel-consulta">
+            <div class="painel-corpo consulta-texto">
+                <!-- Marca-d'água: lupa enquanto não há produto; ícone do tipo quando há -->
+                <span class="consulta-marca-dagua" id="consulta-marca-dagua" aria-hidden="true"><i class="bi bi-search"></i></span>
+
+                <label for="titulo-produto" class="metrica-rotulo d-block mb-1">Título</label>
+                <input type="text" name="titulo-produto" id="titulo-produto" class="form-control campo-leitura"
+                       placeholder="—" readonly>
+
+                <label for="observacoes" class="metrica-rotulo d-block mt-3 mb-1">Descrição</label>
+                <textarea id="observacoes" name="observacoes" class="form-control campo-leitura"
+                          placeholder="—" readonly></textarea>
+            </div>
+
+            <div class="painel-rodape consulta-rodape">
+                <button type="button" id="limpar-pesquisa-produto" class="btn btn-light">
+                    <i class="bi bi-x-lg"></i>Limpar pesquisa
+                </button>
+                <div class="consulta-preco">
+                    <span class="texto-suave">Preço</span>
+                    <p class="valor-produto num" id="valor-unitario"><strong>—</strong></p>
+                </div>
+            </div>
+        </section>
     </form>
-    <div class="row">
-        <div class="col-sm-12 text-end ali">
-            <a th:href="@{/pesquisa-avancada}" href="pages/pesquisa-avancada.html" id="btn-pesquisa-avancada" class="btn btn-secondary px-4">Pesquisa
-                Avançada</a>
-        </div>
-    </div>
 </div>

@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 240">
+  <!-- caixas empilhadas -->
+  <ellipse cx="120" cy="208" rx="86" ry="10" fill="#000" opacity=".08"/>
+  <g>
+    <path d="M38 130 L94 112 L150 130 L94 148 Z" fill="#e3b583"/>
+    <path d="M38 130 V186 L94 204 V148 Z" fill="#cf995f"/>
+    <path d="M150 130 V186 L94 204 V148 Z" fill="#b98250"/>
+    <path d="M66 121 L122 139 V150 L66 132 Z" fill="#f1d3ae" opacity=".7"/>
+  </g>
+  <g>
+    <path d="M100 118 L150 102 L200 118 L150 134 Z" fill="#e3b583"/>
+    <path d="M100 118 V178 L150 194 V134 Z" fill="#cf995f"/>
+    <path d="M200 118 V178 L150 194 V134 Z" fill="#b98250"/>
+  </g>
+  <g>
+    <path d="M66 70 L120 52 L174 70 L120 88 Z" fill="#ecc495"/>
+    <path d="M66 70 V120 L120 138 V88 Z" fill="#d7a46a"/>
+    <path d="M174 70 V120 L120 138 V88 Z" fill="#c18b56"/>
+    <path d="M93 61 L147 79 V90 L93 72 Z" fill="#f6dfc0" opacity=".7"/>
+    <rect x="130" y="100" width="30" height="16" rx="3" fill="#fff" transform="skewY(-18)" opacity=".85"/>
+  </g>
+</svg>

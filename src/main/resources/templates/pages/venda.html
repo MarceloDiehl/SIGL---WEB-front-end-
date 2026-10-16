@@ -1,490 +1,227 @@
-<!--<div class="container vendas" xmlns:th="http://www.w3.org/1999/xhtml">
-    <div class="row justify-content-center align-items-center">
-        <div class="mb-3">
-            <h3 class="titulo-paginas display-6">Controle de Vendas</h3>
-        </div>
-    </div>
+<div class="vendas">
 
-    <form action="#" method="get" id="formulario-venda-produto">
-        <div class="row">
-            <div class="col-sm-3">
-                <div class="mb-3"><label for="cod-produto-venda" class="form-label">Cód. Produto</label>
-                    <input type="text" id="cod-produto-venda" name="cod-produto-estoque" class="form-control" />
+    <header class="pagina-cabecalho">
+        <div>
+            <p class="pagina-sobretitulo">Vendas</p>
+            <h1 class="pagina-titulo">Nova venda</h1>
+            <p class="pagina-descricao">Adicione produtos pelo código, confira o carrinho e finalize o pagamento.</p>
+        </div>
+    </header>
+
+    <div class="pdv">
+
+        <!-- ===== Adicionar item ===== -->
+        <form action="#" method="get" id="formulario-venda-produto" class="painel" novalidate>
+            <div class="painel-cabecalho">
+                <h2 class="painel-titulo"><span class="passo">1</span>Adicionar produto</h2>
+            </div>
+            <div class="painel-corpo">
+                <div class="mb-3">
+                    <label for="cod-produto-venda" class="form-label">Código do produto</label>
+                    <input type="text" id="cod-produto-venda" name="cod-produto-estoque" class="form-control"
+                           maxlength="6" inputmode="numeric" placeholder="000000" autocomplete="off" />
                 </div>
                 <div class="mb-3">
                     <label for="qtd-produto-venda" class="form-label">Quantidade</label>
-                    <input type="text" id="qtd-produto-venda" name="qtd-produto-estoque" class="form-control" />
+                    <input type="number" id="qtd-produto-venda" name="qtd-produto-estoque" class="form-control"
+                           min="1" value="1" />
                 </div>
-                <div class="mb-3">
-                    <label for="itens-lista-compras" class="form-label">Ítens na lista</label>
-                    <input type="text" id="itens-lista-compras" name="itens-lista-compras" class="form-control"
-                        readonly />
-                </div>
-                <div class="mb-3">
-                    <div class="d-grid">
-                        <button type="submit" class="btn btn-secondary" id="btn-produto-lista">Incluir Produto à
-                            Lista</button>
-                    </div>
-                </div>
-                <div class="mb-3">
-                    <div class="d-grid">
-                        <a th:href="@{/pesquisa-venda}"  class="btn btn-secondary">Pesquisar Vendas Realizadas</a>
-                    </div>
+                <div class="d-grid mb-3">
+                    <button type="submit" class="btn btn-primary" id="btn-produto-lista">
+                        <i class="bi bi-plus-lg"></i>Adicionar ao carrinho
+                    </button>
                 </div>
 
-            </div>
-            <div class="col-sm-9">
-                <div class="row mb-3">
-                    <div class="col-sm-3">
-                        <label for="cod-produto-venda" class="form-label">Código</label>
-                        <input type="text" id="codigo-produto-venda" name="cod-produto-venda" class="form-control"
-                            readonly />
-                    </div>
-                    <div class="col-sm-9">
-                        <label for="descricao-produto-venda" class="form-label">Descrição</label>
-                        <input type="text" id="descricao-produto-venda" name="descricao-produto-venda"
-                            class="form-control" readonly />
-                    </div>
-                </div>
-                <div class="col-sm-12">
-                    <table class="table table-striped">
-                        <thead>
-                            <tr>
-                                <th scope="col">Cód. Produto</th>
-                                <th scope="col">Titulo</th>
-                                <th scope="col">Valor Unitário</th>
-                                <th scope="col">Quantidade</th>
-                                <th scope="col">Sub-total</th>
-
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>1</td>
-                                <td>-</td>
-                                <td>-</td>
-                                <td>-</td>
-                                <td>-</td>
-
-                            </tr>
-                            <tr>
-                                <td>2</td>
-                                <td>-</td>
-                                <td>-</td>
-                                <td>-</td>
-                                <td>-</td>
-
-                            </tr>
-                            <tr>
-                                <td>3</td>
-                                <td>-</td>
-                                <td>-</td>
-                                <td>-</td>
-                                <td>-</td>
-
-                            </tr>
-                            <tr>
-                                <td>4</td>
-                                <td>-</td>
-                                <td>-</td>
-                                <td>-</td>
-                                <td>-</td>
-
-                            </tr>
-                            <tr>
-                                <td>5</td>
-                                <td>-</td>
-                                <td>-</td>
-                                <td>-</td>
-                                <td>-</td>
-
-                            </tr>
-                            <tr>
-                                <td>6</td>
-                                <td>-</td>
-                                <td>-</td>
-                                <td>-</td>
-                                <td>-</td>
-
-                            </tr>
-                            <tr>
-                                <td>7</td>
-                                <td>-</td>
-                                <td>-</td>
-                                <td>-</td>
-                                <td>-</td>
-
-                            </tr>
-                            <tr>
-                                <td>8</td>
-                                <td>-</td>
-                                <td>-</td>
-                                <td>-</td>
-                                <td>-</td>
-
-                            </tr>
-                            <tr>
-                                <td>9</td>
-                                <td>-</td>
-                                <td>-</td>
-                                <td>-</td>
-                                <td>-</td>
-
-                            </tr>
-                            <tr>
-                                <td>10</td>
-                                <td>-</td>
-                                <td>-</td>
-                                <td>-</td>
-                                <td>-</td>
-
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-                <div class="text-end">
-                    <p class="valor-produto" style="font-size: 30px;" id="valor-unitario">
-                        <strong>Valor Total: R$0,00</strong>
-                    </p>
-                </div>
-
-            </div>
-        </div>
-    </form>
-    <div class="row">
-        <div class="col-sm-4"></div>
-        <div class="col-sm-8">
-            <div class="row">
-                <div class="col-sm-3">
-                    <div class="d-grid">
-                        <button class="btn btn-danger">Excluir item</button>
-                    </div>
-                </div>
-                <div class="col-sm-3">
-                    <div class="d-grid"><button id="limpar-lista-venda" class="btn btn-secondary">Limpar Lista</button>
-                    </div>
-                </div>
-                <div class="col-sm-6 gap-2">
-                    <div class="d-grid">
-                        <button class="btn btn-primary" data-bs-toggle="modal"
-                            data-bs-target="#modal-concluir-venda">Avançar</button>
-
+                <div class="ultimo-item">
+                    <div class="metrica-rotulo mb-2">Último produto adicionado</div>
+                    <div class="row g-1">
+                        <div class="col-12">
+                            <label for="codigo-produto-display" class="visually-hidden">Código</label>
+                            <input type="text" id="codigo-produto-display" name="cod-produto-display"
+                                   class="form-control campo-leitura codigo" placeholder="—" readonly />
+                        </div>
+                        <div class="col-12">
+                            <label for="descricao-produto-display" class="visually-hidden">Descrição</label>
+                            <input type="text" id="descricao-produto-display" name="descricao-produto-display"
+                                   class="form-control campo-leitura fw-semibold" placeholder="Nenhum ainda" readonly />
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
+        </form>
+
+        <!-- ===== Carrinho ===== -->
+        <section class="painel painel-carrinho">
+            <div class="painel-cabecalho">
+                <h2 class="painel-titulo"><span class="passo">2</span>Carrinho</h2>
+                <label class="itens-contador contador" for="itens-lista-compras">
+                    <input type="text" id="itens-lista-compras" name="itens-lista-compras" readonly value="0" />
+                    itens
+                </label>
+            </div>
+
+            <div class="tabela-wrap">
+                <table class="table tabela" id="tabela-itens-venda">
+                    <thead>
+                    <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">Código</th>
+                        <th scope="col">Título</th>
+                        <th scope="col" class="text-end">Valor unit.</th>
+                        <th scope="col" class="text-end">Qtd</th>
+                        <th scope="col" class="text-end">Subtotal</th>
+                    </tr>
+                    </thead>
+                    <tbody id="tabela-itens-venda-body" class="num">
+                    <tr><td colspan="6">Nenhum item na lista</td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="painel-rodape">
+                <div class="d-flex flex-wrap align-items-center justify-content-between gap-3">
+                    <div class="d-flex gap-2">
+                        <button type="button" class="btn btn-perigo" id="btn-remover-item" disabled title="Selecione um item do carrinho">
+                            <i class="bi bi-trash3"></i>Remover item
+                        </button>
+                        <button type="button" id="limpar-lista-venda" class="btn btn-light" disabled title="O carrinho está vazio">Limpar carrinho</button>
+                    </div>
+                    <div class="d-flex align-items-center gap-3 ms-auto">
+                        <p class="valor-produto num" id="valor-total-display"><span class="texto-suave fw-normal fs-6 me-2">Total</span><strong>R$ 0,00</strong></p>
+                        <button type="button" class="btn btn-primary btn-lg" id="btn-avancar-venda"
+                                data-bs-toggle="modal" data-bs-target="#modal-concluir-venda" disabled>
+                            Finalizar venda<i class="bi bi-arrow-right"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
     </div>
-    <div class="modal fade" id="modal-concluir-venda" tabindex="-1" aria-labelledby="concluir-venda-label"
-        aria-hidden="true">
-        <div class="modal-dialog">
+
+    <!-- ===== Etapa 1: dados da venda ===== -->
+    <div class="modal fade" id="modal-concluir-venda" tabindex="-1" aria-labelledby="concluir-venda-label" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title"><strong>Conclusão de Venda</strong></h5>
+                    <div>
+                        <div class="etapas"><span class="atual">Dados</span><span>Pagamento</span><span>Concluído</span></div>
+                        <h5 class="modal-title" id="concluir-venda-label">Dados da venda</h5>
+                    </div>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
                 </div>
                 <div class="modal-body">
-                    <div class="row">
-                        <div class="col-sm-12">
-                            <label for="cpf-cliente-conclusao" class="form-label">CPF Cliente</label>
-                            <input type="text" id="cpf-cliente-conclusao" name="cpf-cliente-conclusao"
-                                class="form-control" />
-                        </div>
+                    <div class="mb-3">
+                        <label for="cpf-cliente-conclusao" class="form-label">CPF do cliente <span class="opcional">(opcional, para nota)</span></label>
+                        <input type="text" id="cpf-cliente-conclusao" name="cpf-cliente-conclusao" class="form-control"
+                               placeholder="000.000.000-00" />
                     </div>
-                    <div class="row">
-                        <div class="col-sm-4">
-                            <label for="cod-vendedor-conclusao" class="form-label">Cód. Vendedor</label>
-                            <input type="text" id="cod-vendedor-conclusao" name="cod-vendedor-conclusao"
-                                class="form-control" />
+                    <div class="row g-3 mb-3">
+                        <div class="col-sm-6">
+                            <label for="cod-vendedor-conclusao" class="form-label">Código do vendedor</label>
+                            <input type="text" id="cod-vendedor-conclusao" name="cod-vendedor-conclusao" class="form-control" />
                         </div>
-                        <div class="col-sm-4">
+                        <div class="col-sm-6">
                             <label for="data-conclusao" class="form-label">Data</label>
                             <input type="date" id="data-conclusao" name="data-conclusao" class="form-control" />
                         </div>
-                        <div class="col-sm-4">
-                            <label for="valor-total-conclusao" class="form-label">Valor Total:</label>
-                            <input type="text" id="valor-total-conclusao-venda" name="valor-total-conclusao"
-                                class="form-control" readonly />
-                        </div>
                     </div>
+                    <label class="total-destaque" for="valor-total-conclusao-venda">
+                        <span>Total da venda</span>
+                        <input type="text" id="valor-total-conclusao-venda" name="valor-total-conclusao" class="num" readonly />
+                    </label>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
-                    <button type="button" class="btn btn-primary" data-bs-toggle="modal"
-                        data-bs-target="#modal-pagamento-venda">Avançar</button>
+                    <button type="button" class="btn btn-light" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-primary" id="btn-avancar-pagamento">
+                        Ir para pagamento<i class="bi bi-arrow-right"></i>
+                    </button>
                 </div>
             </div>
-        </div>
-    </div>
-    <div class="modal fade" id="modal-pagamento-venda" tabindex="-1" aria-labelledby="pagamento-venda-label"
-        aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="pagamento-venda-label"><strong>Forma de Pagamento</strong></h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
-                </div>
-                <div class="modal-body">
-                    <div class="row justify-content-center align-items-center">
-                        <div class="col-sm-4 " style="margin-top: 30px;">
-                            <div class="form-check">
-                                <input type="radio" id="pagamento-dinheiro" name="forma-pagamento" value="dinheiro"
-                                    class="form-check-input" checked>
-                                <label for="pagamento-dinheiro"
-                                    class="form-check-label"><strong>Dinheiro</strong></label>
-                            </div>
-                            <div class="form-check">
-                                <input type="radio" id="pagamento-credito" name="forma-pagamento" value="credito"
-                                    class="form-check-input">
-                                <label for="pagamento-credito" class="form-check-label"><strong>Crédito</strong></label>
-                            </div>
-                            <div class="form-check">
-                                <input type="radio" id="pagamento-debito" name="forma-pagamento" value="debito"
-                                    class="form-check-input">
-                                <label for="pagamento-debito" class="form-check-label"><strong>Débito</strong></label>
-                            </div>
-                            <div class="form-check">
-                                <input type="radio" id="pagamento-pix" name="forma-pagamento" value="pix"
-                                    class="form-check-input">
-                                <label for="pagamento-pix" class="form-check-label"><strong>PIX</strong></label>
-                            </div>
-                            <label for="valor-total-conclusao" class="form-label mt-3"><strong>Valor
-                                    Total:</strong></label>
-                            <input type="text" id="valor-total-conclusao" name="valor-total-conclusao"
-                                class="form-control" readonly />
-                        </div>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
-                    <button type="button" class="btn btn-primary" data-bs-toggle="modal"
-                        data-bs-target="#modal-pagamento-finalizado">Concluir</button>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="modal fade" id="modal-pagamento-finalizado" tabindex="-1" aria-labelledby="pagamento-venda-finalizado"
-        aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="pagamento-venda-finalizado"><strong>Status</strong></h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
-                </div>
-                <div class="modal-body">
-                    <div class="row justify-content-center align-items-center">
-                        <div class="col-sm-12 text-center">
-                            <h3><strong>Pagamento Finalizado!</strong></h3>
-                        </div>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
-
-                </div>
-            </div>
-        </div>
-    </div>
-</div>-->
-<div class="container vendas" xmlns:th="http://www.w3.org/1999/xhtml">
-    <div class="row justify-content-center align-items-center">
-        <div class="mb-3">
-            <h3 class="titulo-paginas display-6">Controle de Vendas</h3>
         </div>
     </div>
 
-    <form action="#" method="get" id="formulario-venda-produto">
-        <div class="row">
-            <div class="col-sm-3">
-                <div class="mb-3"><label for="cod-produto-venda" class="form-label">Cód. Produto</label>
-                    <input type="text" id="cod-produto-venda" name="cod-produto-estoque" class="form-control" />
-                </div>
-                <div class="mb-3">
-                    <label for="qtd-produto-venda" class="form-label">Quantidade</label>
-                    <input type="number" id="qtd-produto-venda" name="qtd-produto-estoque" class="form-control" min="1" />
-                </div>
-                <div class="mb-3">
-                    <label for="itens-lista-compras" class="form-label">Ítens na lista</label>
-                    <input type="text" id="itens-lista-compras" name="itens-lista-compras" class="form-control"
-                           readonly value="0" /> </div>
-                <div class="mb-3">
-                    <div class="d-grid">
-                        <button type="submit" class="btn btn-secondary" id="btn-produto-lista">Incluir Produto à
-                            Lista</button>
-                    </div>
-                </div>
-                <div class="mb-3">
-                    <div class="d-grid">
-                        <a th:href="@{/pesquisa-venda}"  class="btn btn-secondary">Pesquisar Vendas Realizadas</a>
-                    </div>
-                </div>
-
-            </div>
-            <div class="col-sm-9">
-                <div class="row mb-3">
-                    <div class="col-sm-3">
-                        <label for="codigo-produto-display" class="form-label">Código</label>
-                        <input type="text" id="codigo-produto-display" name="cod-produto-display" class="form-control"
-                               readonly />
-                    </div>
-                    <div class="col-sm-9">
-                        <label for="descricao-produto-display" class="form-label">Descrição</label>
-                        <input type="text" id="descricao-produto-display" name="descricao-produto-display"
-                               class="form-control" readonly />
-                    </div>
-                </div>
-                <div class="col-sm-12">
-                    <table class="table table-striped" id="tabela-itens-venda">
-                        <thead>
-                        <tr>
-                            <th scope="col">Posição</th> <th scope="col">Cód. Produto</th>
-                            <th scope="col">Titulo</th>
-                            <th scope="col">Valor Unitário</th>
-                            <th scope="col">Quantidade</th>
-                            <th scope="col">Sub-total</th>
-                        </tr>
-                        </thead>
-                        <tbody id="tabela-itens-venda-body">
-                        <tr><td colspan="6" class="text-center">Nenhum item na lista</td></tr>
-                        </tbody>
-                    </table>
-                </div>
-                <div class="text-end">
-                    <p class="valor-produto" style="font-size: 30px;" id="valor-total-display">
-                        <strong>Valor Total: R$0,00</strong>
-                    </p>
-                </div>
-
-            </div>
-        </div>
-    </form>
-    <div class="row">
-        <div class="col-sm-4"></div>
-        <div class="col-sm-8">
-            <div class="row">
-                <div class="col-sm-3">
-                    <div class="d-grid">
-                        <button type="button" class="btn btn-danger" id="btn-remover-item">Excluir item</button>
-                    </div>
-                </div>
-                <div class="col-sm-3">
-                    <div class="d-grid"><button type="button" id="limpar-lista-venda" class="btn btn-secondary">Limpar Lista</button>
-                    </div>
-                </div>
-                <div class="col-sm-6 gap-2">
-                    <div class="d-grid">
-                        <button type="button" class="btn btn-primary" id="btn-avancar-venda"
-                                data-bs-toggle="modal" data-bs-target="#modal-concluir-venda" disabled>Avançar</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="modal fade" id="modal-concluir-venda" tabindex="-1" aria-labelledby="concluir-venda-label"
-         aria-hidden="true">
-        <div class="modal-dialog">
+    <!-- ===== Etapa 2: pagamento ===== -->
+    <div class="modal fade" id="modal-pagamento-venda" tabindex="-1" aria-labelledby="pagamento-venda-label" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="concluir-venda-label"><strong>Conclusão de Venda</strong></h5>
+                    <div>
+                        <div class="etapas"><span class="feita">Dados</span><span class="atual">Pagamento</span><span>Concluído</span></div>
+                        <h5 class="modal-title" id="pagamento-venda-label">Forma de pagamento</h5>
+                    </div>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
                 </div>
                 <div class="modal-body">
-                    <div class="row mb-3">
-                        <div class="col-sm-12">
-                            <label for="cpf-cliente-conclusao" class="form-label">CPF Cliente</label>
-                            <input type="text" id="cpf-cliente-conclusao" name="cpf-cliente-conclusao"
-                                   class="form-control" />
+                    <div class="opcoes-cartao mb-3" role="radiogroup" aria-label="Forma de pagamento">
+                        <div>
+                            <input type="radio" id="pagamento-dinheiro" name="forma-pagamento" value="1" checked>
+                            <label for="pagamento-dinheiro"><i class="bi bi-cash-coin"></i>Dinheiro</label>
+                        </div>
+                        <div>
+                            <input type="radio" id="pagamento-credito" name="forma-pagamento" value="2">
+                            <label for="pagamento-credito"><i class="bi bi-credit-card"></i>Crédito</label>
+                        </div>
+                        <div>
+                            <input type="radio" id="pagamento-debito" name="forma-pagamento" value="3">
+                            <label for="pagamento-debito"><i class="bi bi-credit-card-2-front"></i>Débito</label>
+                        </div>
+                        <div>
+                            <input type="radio" id="pagamento-pix" name="forma-pagamento" value="4">
+                            <label for="pagamento-pix"><i class="bi bi-qr-code"></i>PIX</label>
                         </div>
                     </div>
-                    <div class="row mb-3">
-                        <div class="col-sm-4">
-                            <label for="cod-vendedor-conclusao" class="form-label">Cód. Vendedor</label>
-                            <input type="text" id="cod-vendedor-conclusao" name="cod-vendedor-conclusao"
-                                   class="form-control" />
-                        </div>
-                        <div class="col-sm-4">
-                            <label for="data-conclusao" class="form-label">Data</label>
-                            <input type="date" id="data-conclusao" name="data-conclusao" class="form-control" />
-                        </div>
-                        <div class="col-sm-4">
-                            <label for="valor-total-conclusao-venda" class="form-label">Valor Total:</label>
-                            <input type="text" id="valor-total-conclusao-venda" name="valor-total-conclusao"
-                                   class="form-control" readonly />
-                        </div>
-                    </div>
+                    <label class="total-destaque" for="valor-total-pagamento">
+                        <span>Total a receber</span>
+                        <input type="text" id="valor-total-pagamento" name="valor-total-conclusao" class="num" readonly />
+                    </label>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
-                    <button type="button" class="btn btn-primary" id="btn-avancar-pagamento"
-                            data-bs-toggle="modal" data-bs-target="#modal-pagamento-venda">Avançar</button>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="modal fade" id="modal-pagamento-venda" tabindex="-1" aria-labelledby="pagamento-venda-label"
-         aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="pagamento-venda-label"><strong>Forma de Pagamento</strong></h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
-                </div>
-                <div class="modal-body">
-                    <div class="row justify-content-center align-items-center">
-                        <div class="col-sm-6 " style="margin-top: 30px;">
-                            <div class="form-check">
-                                <input type="radio" id="pagamento-dinheiro" name="forma-pagamento" value="1"
-                                       class="form-check-input" checked>
-                                <label for="pagamento-dinheiro"
-                                       class="form-check-label"><strong>Dinheiro</strong></label>
-                            </div>
-                            <div class="form-check">
-                                <input type="radio" id="pagamento-credito" name="forma-pagamento" value="2"
-                                       class="form-check-input">
-                                <label for="pagamento-credito" class="form-check-label"><strong>Crédito</strong></label>
-                            </div>
-                            <div class="form-check">
-                                <input type="radio" id="pagamento-debito" name="forma-pagamento" value="3"
-                                       class="form-check-input">
-                                <label for="pagamento-debito" class="form-check-label"><strong>Débito</strong></label>
-                            </div>
-                            <div class="form-check">
-                                <input type="radio" id="pagamento-pix" name="forma-pagamento" value="4"
-                                       class="form-check-input">
-                                <label for="pagamento-pix" class="form-check-label"><strong>PIX</strong></label>
-                            </div>
-                            <label for="valor-total-pagamento" class="form-label mt-3"><strong>Valor
-                                Total:</strong></label>
-                            <input type="text" id="valor-total-pagamento" name="valor-total-conclusao"
-                                   class="form-control" readonly />
-                        </div>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
+                    <button type="button" class="btn btn-light" data-bs-toggle="modal" data-bs-target="#modal-concluir-venda">
+                        <i class="bi bi-arrow-left"></i>Voltar
+                    </button>
                     <button type="button" class="btn btn-primary" id="btn-concluir-venda"
-                            data-bs-toggle="modal" data-bs-target="#modal-pagamento-finalizado">Concluir</button>
+                            data-bs-toggle="modal" data-bs-target="#modal-pagamento-finalizado">
+                        <i class="bi bi-check2"></i>Concluir venda
+                    </button>
                 </div>
             </div>
         </div>
     </div>
-    <div class="modal fade" id="modal-pagamento-finalizado" tabindex="-1" aria-labelledby="pagamento-venda-finalizado"
-         aria-hidden="true">
-        <div class="modal-dialog">
+
+    <!-- ===== Etapa 3: concluído ===== -->
+    <div class="modal fade" id="modal-pagamento-finalizado" tabindex="-1" aria-labelledby="pagamento-venda-finalizado-label" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-sm">
             <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="pagamento-venda-finalizado-label"><strong>Status</strong></h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
+                <div class="modal-body sucesso">
+                    <div class="icone"><i class="bi bi-check-lg"></i></div>
+                    <h3 id="pagamento-venda-finalizado-label">Pagamento finalizado!</h3>
+                    <p class="texto-suave mb-0">A venda foi registrada e o estoque atualizado.</p>
                 </div>
+                <div class="modal-footer justify-content-center">
+                    <button type="button" class="btn btn-primary" data-bs-dismiss="modal"><i class="bi bi-check2"></i>Concluir</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- ===== Confirmação no carrinho (remover item / limpar carrinho) ===== -->
+    <div class="modal fade confirmar-exclusao" id="modal-confirmar-carrinho" tabindex="-1" aria-labelledby="confirmar-carrinho-titulo" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
                 <div class="modal-body">
-                    <div class="row justify-content-center align-items-center">
-                        <div class="col-sm-12 text-center">
-                            <h3><strong>Pagamento Finalizado!</strong></h3>
+                    <div class="d-flex gap-3 align-items-start">
+                        <span class="icone-alerta"><i class="bi bi-trash3"></i></span>
+                        <div>
+                            <h5 class="modal-title mb-1" id="confirmar-carrinho-titulo">Remover item?</h5>
+                            <p class="texto-suave mb-0" id="confirmar-carrinho-mensagem"></p>
                         </div>
                     </div>
+                    <div class="produto-resumo" id="confirmar-carrinho-resumo"></div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
-
+                    <button type="button" class="btn btn-light" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-danger" id="btn-confirmar-carrinho">
+                        <i class="bi bi-trash3"></i><span>Remover</span>
+                    </button>
                 </div>
             </div>
         </div>

@@ -1,109 +1,51 @@
-<div class="container cadastro-cliente" xmlns:th="http://www.w3.org/1999/xhtml">
-    <div class="row justify-content-center align-items-center">
-        <div class="mb-3">
-            <h3 class="titulo-paginas display-6">Cadastrar novos membros</h3>
+<div class="cadastro-cliente">
+
+    <header class="pagina-cabecalho">
+        <div>
+            <p class="pagina-sobretitulo">Pessoas</p>
+            <h1 class="pagina-titulo">Cadastrar membro</h1>
+            <p class="pagina-descricao">Escolha o tipo de cadastro; funcionários também recebem acesso ao sistema.</p>
         </div>
-    </div>
+    </header>
 
-    <form action="#" method="post" class="formulario-parceiros mt-4" id="formulario-membros">
-        <div class="row">
-            <div class="col-6 my-2">
-                <div class="row align-items-start">
-                    <div class="col-sm-6">
-                        <p><strong>OPÇÃO DE CADASTRO:</strong></p>
-                    </div>
-                    <div class="col-sm-3">
-                        <input type="radio" id="tipo_cliente" name="parceiro" value="cliente" checked>
-                        <label for="tipo_cliente"><strong>Cliente</strong></label>
-                    </div>
-                    <div class="col-sm-3">
-                        <input type="radio" id="tipo_funcionario" name="parceiro" value="funcionario">
-                        <label for="tipo_funcionario"><strong>Funcionário</strong></label>
-                    </div>
+    <form action="#" method="post" class="formulario-parceiros" id="formulario-membros" novalidate>
 
-                </div>
-            </div>
-            <div class="col-12 my-2">
-                <div class="row">
-                    <div class="col-sm-4">
+        <div class="segmentado mb-4" role="radiogroup" aria-label="Tipo de cadastro">
+            <input type="radio" id="tipo_cliente" name="parceiro" value="cliente" checked>
+            <label for="tipo_cliente"><i class="bi bi-person"></i>Cliente</label>
+            <input type="radio" id="tipo_funcionario" name="parceiro" value="funcionario">
+            <label for="tipo_funcionario"><i class="bi bi-person-badge"></i>Funcionário</label>
+        </div>
+
+        <!-- Dados pessoais -->
+        <section class="painel secao-form">
+            <div class="painel-cabecalho"><h2 class="painel-titulo">Dados pessoais</h2></div>
+            <div class="painel-corpo">
+                <div class="row g-3">
+                    <div class="col-md-4">
                         <label for="nome_parceiro" class="form-label">Nome</label>
-                        <input type="text" id="nome_parceiro" name="nome_parceiro" class="form-control" />
+                        <input type="text" id="nome_parceiro" name="nome_parceiro" class="form-control" autocomplete="given-name" />
                     </div>
-                    <div class="col-sm-2">
+                    <div class="col-md-5">
                         <label for="sobrenome_parceiro" class="form-label">Sobrenome</label>
-                        <input type="text" id="sobrenome_parceiro" name="sobrenome_parceiro" class="form-control" />
+                        <input type="text" id="sobrenome_parceiro" name="sobrenome_parceiro" class="form-control" autocomplete="family-name" />
                     </div>
-                    <div class="col-sm-2">
-                        <label for="telefone_parceiro" class="form-label">Telefone</label>
-                        <input type="text" id="telefone_parceiro" name="telefone_parceiro" class="form-control" />
-                    </div>
-                    <div class="col-sm-4">
-                        <label for="email_parceiro" class="form-label">E-mail</label>
-                        <input type="text" id="email_parceiro" name="email_parceiro" class="form-control" />
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-12 my-2">
-                <div class="row">
-                    <div class="col-sm-2">
-                        <label for="data_parceiro" class="form-label">Data de Nascimento</label>
+                    <div class="col-md-3">
+                        <label for="data_parceiro" class="form-label">Data de nascimento</label>
                         <input type="date" id="data_parceiro" name="data_parceiro" class="form-control" />
                     </div>
-                    <div class="col-sm-4">
-                        <label for="endereco_parceiro" class="form-label">Endereço</label>
-                        <input type="text" id="endereco_parceiro" name="endereco_parceiro" class="form-control" />
+                    <div class="col-md-4">
+                        <label for="cpf_parceiro" class="form-label">CPF</label>
+                        <input type="text" id="cpf_parceiro" name="cpf_parceiro" class="form-control" placeholder="000.000.000-00" />
                     </div>
-                    <div class="col-sm-2">
-                        <label for="cidade_parceiro" class="form-label">Cidade</label>
-                        <input type="text" id="cidade_parceiro" name="cidade_parceiro" class="form-control" />
-                    </div>
-                    <div class="col-sm-1">
-                        <label for="uf_parceiro" class="form-label">UF</label>
-                        <input type="text" id="uf_parceiro" name="uf_parceiro" class="form-control" />
-                    </div>
-                    <div class="col-sm-1">
-                        <label for="numero_parceiro" class="form-label">Número</label>
-                        <input type="text" id="numero_parceiro" name="numero_parceiro" class="form-control" />
-                    </div>
-                    <div class="col-sm-2">
-                        <label for="cep_parceiro" class="form-label">CEP</label>
-                        <input type="text" id="cep_parceiro" name="cep_parceiro" class="form-control" />
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-12 my-2">
-                <div class="row">
-                    <div class="col-sm-3">
-                        <label for="bairro_parceiro" class="form-label">Bairro</label>
-                        <input type="text" id="bairro_parceiro" name="bairro_cliente" class="form-control" />
-                    </div>
-                    <div class="col-sm-2">
+                    <div class="col-md-4">
                         <label for="rg_parceiro" class="form-label">RG</label>
                         <input type="text" id="rg_parceiro" name="rg_parceiro" class="form-control" />
                     </div>
-                    <div class="col-sm-2">
-                        <label for="cpf_parceiro" class="form-label">CPF</label>
-                        <input type="text" id="cpf_parceiro" name="cpf_parceiro" class="form-control" />
-                    </div>
-                    <div class="col-sm-3">
-                        <label for="ctpas_parceiro" class="form-label">CTPAS</label>
-                        <input type="text" id="ctpas_parceiro" name="ctpas_parceiro" class="form-control" />
-                    </div>
-                    <div class="col-sm-2">
-                        <label for="desde_parceiro" class="form-label">Cliente desde</label>
-                        <input type="date" id="desde_parceiro" name="desde_parceiro" class="form-control" />
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-12 my-2">
-                <div class="row">
-                    <div class="col-sm-3">
+                    <div class="col-md-4" data-somente="funcionario">
                         <label for="genero_parceiro" class="form-label">Gênero</label>
                         <select class="form-select" id="genero_parceiro" name="genero">
-                            <option selected disabled value="">Selecione uma opção</option>
+                            <option selected disabled value="">Selecione...</option>
                             <option value="1">Feminino</option>
                             <option value="2">Masculino</option>
                             <option value="3">Não informado</option>
@@ -111,23 +53,82 @@
                             <option value="5">Prefiro não informar</option>
                         </select>
                     </div>
-                    <div class="col-sm-3">
-                        <label for="emergencia_parceiro" class="form-label">Telefone de Emergência</label>
+                    <div class="col-md-4" data-somente="cliente">
+                        <label for="desde_parceiro" class="form-label">Cliente desde</label>
+                        <input type="date" id="desde_parceiro" name="desde_parceiro" class="form-control" />
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Contato e endereço -->
+        <section class="painel secao-form">
+            <div class="painel-cabecalho"><h2 class="painel-titulo">Contato e endereço</h2></div>
+            <div class="painel-corpo">
+                <div class="row g-3">
+                    <div class="col-md-4">
+                        <label for="telefone_parceiro" class="form-label">Telefone</label>
+                        <input type="text" id="telefone_parceiro" name="telefone_parceiro" class="form-control" placeholder="(00) 00000-0000" autocomplete="tel" />
+                    </div>
+                    <div class="col-md-4" data-somente="funcionario">
+                        <label for="emergencia_parceiro" class="form-label">Telefone de emergência</label>
                         <input type="text" id="emergencia_parceiro" name="emergencia_parceiro" class="form-control" />
                     </div>
-                    <div class="col-sm-3">
+                    <div class="w-100 m-0"></div>
+                    <div class="col-md-3">
+                        <label for="cep_parceiro" class="form-label">CEP</label>
+                        <input type="text" id="cep_parceiro" name="cep_parceiro" class="form-control" placeholder="00000-000" autocomplete="postal-code" />
+                    </div>
+                    <div class="col-md-7">
+                        <label for="endereco_parceiro" class="form-label">Endereço</label>
+                        <input type="text" id="endereco_parceiro" name="endereco_parceiro" class="form-control" placeholder="Rua, avenida..." autocomplete="address-line1" />
+                    </div>
+                    <div class="col-md-2">
+                        <label for="numero_parceiro" class="form-label">Número</label>
+                        <input type="text" id="numero_parceiro" name="numero_parceiro" class="form-control" inputmode="numeric" />
+                    </div>
+                    <div class="col-md-5">
+                        <label for="bairro_parceiro" class="form-label">Bairro</label>
+                        <input type="text" id="bairro_parceiro" name="bairro_cliente" class="form-control" />
+                    </div>
+                    <div class="col-md-5">
+                        <label for="cidade_parceiro" class="form-label">Cidade</label>
+                        <input type="text" id="cidade_parceiro" name="cidade_parceiro" class="form-control" autocomplete="address-level2" />
+                    </div>
+                    <div class="col-md-2">
+                        <label for="uf_parceiro" class="form-label">UF</label>
+                        <input type="text" id="uf_parceiro" name="uf_parceiro" class="form-control text-uppercase" maxlength="2" placeholder="RS" />
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Vínculo (somente funcionário) -->
+        <section class="painel secao-form" data-somente="funcionario">
+            <div class="painel-cabecalho"><h2 class="painel-titulo">Vínculo com a loja</h2></div>
+            <div class="painel-corpo">
+                <div class="row g-3">
+                    <div class="col-md-4">
                         <label for="cargo_parceiro" class="form-label">Cargo</label>
                         <select class="form-select" id="cargo_parceiro" name="cargo_parceiro">
-                            <option selected disabled value="">Selecione uma opção</option>
+                            <option selected disabled value="">Selecione...</option>
                             <option value="1">Vendedor</option>
                             <option value="2">Gerente</option>
                             <option value="3">Estoquista</option>
                         </select>
                     </div>
-                    <div class="col-sm-3">
+                    <div class="col-md-4">
+                        <label for="ingresso_parceiro" class="form-label">Data de admissão</label>
+                        <input type="date" id="ingresso_parceiro" name="ingresso_parceiro" class="form-control" />
+                    </div>
+                    <div class="col-md-4">
+                        <label for="ctpas_parceiro" class="form-label">CTPS</label>
+                        <input type="text" id="ctpas_parceiro" name="ctpas_parceiro" class="form-control" />
+                    </div>
+                    <div class="col-md-5">
                         <label for="escolaridade_parceiro" class="form-label">Escolaridade</label>
                         <select class="form-select" id="escolaridade_parceiro" name="escolaridade_parceiro">
-                            <option selected disabled value="">Selecione uma opção</option>
+                            <option selected disabled value="">Selecione...</option>
                             <option value="1">Ensino Fundamental Incompleto</option>
                             <option value="2">Ensino Fundamental Completo</option>
                             <option value="3">Ensino Médio Incompleto</option>
@@ -140,44 +141,45 @@
                             <option value="10">Doutorado</option>
                         </select>
                     </div>
-                </div>
-            </div>
-
-            <div class="col-12 my-2">
-                <div class="row">
-                    <div class="col-sm-6">
+                    <div class="col-md-7">
                         <label for="especialidade_parceiro" class="form-label">Especialidade</label>
-                        <input type="text" id="especialidade_parceiro" name="especialidade_parceiro"
-                            class="form-control" />
-                    </div>
-                    <div class="col-sm-2">
-                        <label for="ingresso_parceiro" class="form-label">Data de Ingresso</label>
-                        <input type="date" id="ingresso_parceiro" name="ingresso_parceiro" class="form-control" />
-                    </div>
-                    <div class="col-sm-2">
-                        <label for="senha_parceiro" class="form-label">Senha</label>
-                        <input type="password" id="senha_parceiro" name="senha_parceiro" class="form-control" />
-                    </div>
-                    <div class="col-sm-2">
-                        <label for="senha2_parceiro" class="form-label">Confirmar Senha</label>
-                        <input type="password" id="senha2_parceiro" name="senha2_parceiro" class="form-control" />
+                        <input type="text" id="especialidade_parceiro" name="especialidade_parceiro" class="form-control"
+                               placeholder="Ex.: jazz e MPB, equipamentos de áudio..." />
                     </div>
                 </div>
             </div>
+        </section>
 
-            <div class="row justify-content-between align-items-center">
-                <div class="col-auto">
-                    <div class="d-grid">
-                        <a class="btn btn-danger px-4" th:href="@{/pesquisa-membro}"
-                            id="voltar-pesquisa-membro">Voltar</a>
+        <!-- Acesso ao sistema (somente funcionário) -->
+        <section class="painel secao-form" data-somente="funcionario">
+            <div class="painel-cabecalho"><h2 class="painel-titulo">Acesso ao sistema</h2></div>
+            <div class="painel-corpo">
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <label for="email_parceiro" class="form-label">E-mail (login)</label>
+                        <input type="email" id="email_parceiro" name="email_parceiro" class="form-control" autocomplete="email" />
+                    </div>
+                    <div class="col-md-3">
+                        <label for="senha_parceiro" class="form-label">Senha</label>
+                        <input type="password" id="senha_parceiro" name="senha_parceiro" class="form-control" autocomplete="new-password" />
+                    </div>
+                    <div class="col-md-3">
+                        <label for="senha2_parceiro" class="form-label">Confirmar senha</label>
+                        <input type="password" id="senha2_parceiro" name="senha2_parceiro" class="form-control" autocomplete="new-password" />
                     </div>
                 </div>
-                <div class="col-auto">
-                    <div class="d-flex gap-2">
-                        <button type="reset" id="limpar-cadastro-membro" class="btn btn-secondary px-4">Limpar</button>
-                        <button type="submit" id="enviar_cadastro-membro" class="btn btn-primary px-4">Salvar</button>
-                    </div>
-                </div>
+            </div>
+        </section>
+
+        <div class="acoes-form">
+            <a class="btn btn-light" href="/pesquisa-membro" id="voltar-pesquisa-membro">
+                <i class="bi bi-arrow-left"></i>Voltar
+            </a>
+            <div class="grupo">
+                <button type="reset" id="limpar-cadastro-membro" class="btn btn-texto">Limpar</button>
+                <button type="submit" id="enviar_cadastro-membro" class="btn btn-primary">
+                    <i class="bi bi-check2"></i>Salvar cadastro
+                </button>
             </div>
         </div>
     </form>
