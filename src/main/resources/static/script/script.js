@@ -114,6 +114,12 @@ function descricaoDe(lista, id) {
     return opcao ? opcao.descricao : (id ?? '');
 }
 
+// Gerente: cancelar venda, excluir cliente e funcionários (RegrasDeAcesso.GERIR no servidor).
+// Só esconde botões; quem não pode recebe 403 do servidor de qualquer forma.
+function usuarioPodeGerir() {
+    return document.body.dataset.podeGerir === 'true';
+}
+
 // Ícone de cada tipo de produto (apresentação, por isso fica no front; o nome do tipo vem do banco)
 function iconeDoTipo(idTipo) {
     const icones = {

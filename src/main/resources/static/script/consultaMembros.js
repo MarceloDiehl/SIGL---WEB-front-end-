@@ -60,9 +60,14 @@ function inicializarConsultaMembros(containerSelector) {
         $btnExcluir.prop('disabled', true);
         mostrarDetalhes(null);
 
+        // funcionários só para o gerente; os demais cargos veem apenas clientes
+        const buscarFuncionarios = () => usuarioPodeGerir()
+            ? $.getJSON('/api/funcionarios', { cpf: cpf })
+            : $.Deferred().resolve([]).promise();
+
         $.getJSON('/api/clientes', { cpf: cpf })
             .done(function (clientes) {
-                $.getJSON('/api/funcionarios', { cpf: cpf })
+                buscarFuncionarios()
                     .done(function (funcionarios) {
                         $tbody.empty();
 
@@ -95,7 +100,10 @@ function inicializarConsultaMembros(containerSelector) {
                         });
 
                         const qtdClientes = clientes.length, qtdFunc = funcionarios.length;
-                        $resumo.text(`${qtdClientes} ${qtdClientes === 1 ? 'cliente' : 'clientes'} · ${qtdFunc} ${qtdFunc === 1 ? 'funcionário' : 'funcionários'}`);
+                        const textoClientes = `${qtdClientes} ${qtdClientes === 1 ? 'cliente' : 'clientes'}`;
+                        $resumo.text(usuarioPodeGerir()
+                            ? `${textoClientes} · ${qtdFunc} ${qtdFunc === 1 ? 'funcionário' : 'funcionários'}`
+                            : textoClientes);
 
                         $tbody.find('tr').off('click').on('click', function () {
                             $tbody.find('tr').removeClass('table-active');

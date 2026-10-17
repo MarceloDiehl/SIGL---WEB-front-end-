@@ -41,9 +41,7 @@ public class SegurancaConfig {
                 new RequestHeaderRequestMatcher("X-Requested-With", "XMLHttpRequest"));
 
         http
-                .authorizeHttpRequests(regras -> regras
-                        .requestMatchers("/login", "/style/**", "/script/**", "/img/**", "/favicon.ico", "/error").permitAll()
-                        .anyRequest().authenticated())
+                .authorizeHttpRequests(RegrasDeAcesso::aplicar)   // matriz de permissões por cargo
                 .formLogin(login -> login
                         .loginPage("/login")                  // tela própria (ViewController + login.html)
                         .loginProcessingUrl("/login")         // POST do formulário, tratado pelo Spring

@@ -52,7 +52,7 @@ function inicializarConsultaVendas() {
                 <h2 class="painel-titulo">Venda nº ${escaparHtml(v.id)}</h2>
                 <div class="d-flex align-items-center gap-2">
                     ${seloSituacao(v)}
-                    ${v.status === 'CONCLUIDA'
+                    ${v.status === 'CONCLUIDA' && usuarioPodeGerir()
                         ? '<button type="button" class="btn btn-perigo" id="cancelar-venda"><i class="bi bi-x-circle"></i>Cancelar venda</button>'
                         : ''}
                 </div>

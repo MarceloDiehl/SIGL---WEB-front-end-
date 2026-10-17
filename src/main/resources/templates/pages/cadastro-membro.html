@@ -13,8 +13,11 @@
         <div class="segmentado mb-4" role="radiogroup" aria-label="Tipo de cadastro">
             <input type="radio" id="tipo_cliente" name="parceiro" value="cliente" checked>
             <label for="tipo_cliente"><i class="bi bi-person"></i>Cliente</label>
+            <!-- só o gerente cadastra funcionários (RegrasDeAcesso) -->
+            <th:block th:if="${usuario.podeGerir}">
             <input type="radio" id="tipo_funcionario" name="parceiro" value="funcionario">
             <label for="tipo_funcionario"><i class="bi bi-person-badge"></i>Funcionário</label>
+            </th:block>
         </div>
 
         <!-- Dados pessoais -->

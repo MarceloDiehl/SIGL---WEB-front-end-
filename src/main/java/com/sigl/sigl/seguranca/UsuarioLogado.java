@@ -47,18 +47,37 @@ public class UsuarioLogado implements UserDetails, CredentialsContainer {
         return new UsuarioLogado(id, email, novoHash, nome, sobrenome, idCargo, cargo);
     }
 
-    // Papel no formato do Spring Security (ROLE_GERENTE...), pelo id do cargo: renomear o cargo no
-    // banco não muda permissões. Base para a matriz de permissões por cargo (item 10); por enquanto
-    // todo funcionário logado acessa tudo.
-    @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        String papel = switch (idCargo == null ? 0 : idCargo) {
-            case Cargo.VENDEDOR -> "VENDEDOR";
-            case Cargo.GERENTE -> "GERENTE";
-            case Cargo.ESTOQUISTA -> "ESTOQUISTA";
+    // Papel pelo id do cargo: renomear o cargo no banco não muda permissões
+    public String getPapel() {
+        return switch (idCargo == null ? 0 : idCargo) {
+            case Cargo.VENDEDOR -> RegrasDeAcesso.VENDEDOR;
+            case Cargo.GERENTE -> RegrasDeAcesso.GERENTE;
+            case Cargo.ESTOQUISTA -> RegrasDeAcesso.ESTOQUISTA;
             default -> "FUNCIONARIO";
         };
-        return List.of(new SimpleGrantedAuthority("ROLE_" + papel));
+    }
+
+    // No formato do Spring Security: ROLE_GERENTE etc. (usado por hasRole nas RegrasDeAcesso)
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return List.of(new SimpleGrantedAuthority("ROLE_" + getPapel()));
+    }
+
+    // Para as telas esconderem o que o cargo não pode usar (o servidor confere de novo)
+    public boolean isPodeVender() {
+        return RegrasDeAcesso.VENDER.contains(getPapel());
+    }
+
+    public boolean isPodeEditarProdutos() {
+        return RegrasDeAcesso.EDITAR_PRODUTOS.contains(getPapel());
+    }
+
+    public boolean isPodeAtenderClientes() {
+        return RegrasDeAcesso.ATENDER_CLIENTES.contains(getPapel());
+    }
+
+    public boolean isPodeGerir() {
+        return RegrasDeAcesso.GERIR.contains(getPapel());
     }
 
     public String getNomeCompleto() {
@@ -70,10 +89,6 @@ public class UsuarioLogado implements UserDetails, CredentialsContainer {
         String primeira = nome == null || nome.isBlank() ? "" : nome.substring(0, 1);
         String segunda = sobrenome == null || sobrenome.isBlank() ? "" : sobrenome.substring(0, 1);
         return (primeira + segunda).toUpperCase();
-    }
-
-    public boolean isGerente() {
-        return idCargo != null && idCargo == Cargo.GERENTE;
     }
 
     @Override
