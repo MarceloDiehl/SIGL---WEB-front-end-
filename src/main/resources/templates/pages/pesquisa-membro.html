@@ -23,7 +23,7 @@
             </div>
             <div class="acoes">
                 <span class="contador num align-self-center me-2" id="resumo-membros"></span>
-                <button type="button" id="excluir_membro" class="btn btn-perigo" disabled>
+                <button type="button" id="excluir_membro" class="btn btn-perigo" disabled th:if="${usuario.podeGerir}">
                     <i class="bi bi-trash3"></i>Excluir
                 </button>
             </div>

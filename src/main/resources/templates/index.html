@@ -15,7 +15,8 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
     <link rel="stylesheet" th:href="@{/style/style.css}">
 </head>
-<body>
+<!-- permissões que os scripts usam para esconder botões (ex.: "Cancelar venda"); o servidor confere de novo -->
+<body th:data-pode-gerir="${usuario.podeGerir}">
 <div class="app">
 
     <!-- ===== Menu lateral ===== -->
@@ -37,6 +38,8 @@
                     <a class="nav-link active" aria-current="page" th:href="@{/}"><i class="bi bi-house"></i>Início</a>
                 </li>
 
+                <!-- Cada grupo do menu só aparece para os cargos que podem usá-lo (RegrasDeAcesso) -->
+                <th:block th:if="${usuario.podeVender}">
                 <li class="menu-grupo">Vendas</li>
                 <li class="nav-item">
                     <a class="nav-link" href="/venda"><i class="bi bi-bag-plus"></i>Nova Venda</a>
@@ -44,6 +47,7 @@
                 <li class="nav-item">
                     <a class="nav-link" href="/pesquisa-venda"><i class="bi bi-receipt"></i>Histórico de Vendas</a>
                 </li>
+                </th:block>
 
                 <li class="menu-grupo">Catálogo</li>
                 <li class="nav-item">
@@ -56,10 +60,12 @@
                     <a class="nav-link" href="/pesquisa-avancada"><i class="bi bi-boxes"></i>Estoque</a>
                 </li>
 
+                <th:block th:if="${usuario.podeAtenderClientes}">
                 <li class="menu-grupo">Pessoas</li>
                 <li class="nav-item">
                     <a class="nav-link" href="/pesquisa-membro"><i class="bi bi-people"></i>Comunidade</a>
                 </li>
+                </th:block>
             </ul>
 
             <div class="sidebar-rodape">
@@ -188,7 +194,7 @@
              Nova venda alto (2 módulos), Consultar produto largo (2 módulos),
              Estoque, Histórico e Comunidade com 1 módulo; redes sociais fecham o retângulo -->
         <div class="atalhos mosaico">
-            <a class="atalho atalho-alto" data-spa href="/venda">
+            <a class="atalho atalho-alto" data-spa href="/venda" th:if="${usuario.podeVender}">
                 <span class="atalho-imagem"><img th:src="@{/img/atalho-venda.svg}" alt=""></span>
                 <span class="atalho-corpo">
                     <strong>Nova venda</strong>
@@ -216,14 +222,14 @@
                     <span>Liste, atualize e remova produtos.</span>
                 </span>
             </a>
-            <a class="atalho atalho-mini" data-spa href="/pesquisa-venda">
+            <a class="atalho atalho-mini" data-spa href="/pesquisa-venda" th:if="${usuario.podeVender}">
                 <span class="atalho-imagem"><img th:src="@{/img/atalho-historico.svg}" alt=""></span>
                 <span class="atalho-corpo">
                     <strong>Histórico de vendas</strong>
                     <span>Vendas registradas, com filtro por produto.</span>
                 </span>
             </a>
-            <a class="atalho atalho-mini" data-spa href="/pesquisa-membro">
+            <a class="atalho atalho-mini" data-spa href="/pesquisa-membro" th:if="${usuario.podeAtenderClientes}">
                 <span class="atalho-imagem"><img th:src="@{/img/atalho-comunidade.svg}" alt=""></span>
                 <span class="atalho-corpo">
                     <strong>Comunidade</strong>

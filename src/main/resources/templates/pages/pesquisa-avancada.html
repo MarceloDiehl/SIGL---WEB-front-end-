@@ -4,9 +4,9 @@
         <div>
             <p class="pagina-sobretitulo">Catálogo</p>
             <h1 class="pagina-titulo">Estoque</h1>
-            <p class="pagina-descricao">Selecione um produto para atualizar preço e quantidade ou excluí-lo.</p>
+            <p class="pagina-descricao" th:text="${usuario.podeEditarProdutos} ? 'Selecione um produto para atualizar preço e quantidade ou excluí-lo.' : 'Produtos em estoque, com preço e quantidade.'">Selecione um produto para atualizar preço e quantidade ou excluí-lo.</p>
         </div>
-        <div class="pagina-acoes">
+        <div class="pagina-acoes" th:if="${usuario.podeEditarProdutos}">
             <a class="btn btn-primary" href="/cadastro-produto" id="cadastrar_membro">
                 <i class="bi bi-plus-lg"></i>Cadastrar produto
             </a>
@@ -23,10 +23,10 @@
             </div>
             <div class="acoes">
                 <span class="contador num align-self-center me-2" id="resumo-produtos"></span>
-                <button type="button" id="atualizar_produto" class="btn btn-light" disabled>
+                <button type="button" id="atualizar_produto" class="btn btn-light" disabled th:if="${usuario.podeEditarProdutos}">
                     <i class="bi bi-pencil"></i>Atualizar
                 </button>
-                <button type="button" id="excluir_produto" class="btn btn-perigo" disabled>
+                <button type="button" id="excluir_produto" class="btn btn-perigo" disabled th:if="${usuario.podeEditarProdutos}">
                     <i class="bi bi-trash3"></i>Excluir
                 </button>
             </div>
