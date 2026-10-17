@@ -39,15 +39,15 @@ function inicializarConsultaAvancadaProdutos() {
                     const qtd = p.quantidade ?? 0;
                     const seloQtd = qtd === 0 ? 'selo-perigo' : (qtd <= 3 ? 'selo-alerta' : 'selo-ok');
                     $tbody.append(`
-                        <tr data-codigo="${p.codProduto}">
-                            <td class="codigo">${p.codProduto}</td>
+                        <tr data-codigo="${escaparHtml(p.codProduto)}">
+                            <td class="codigo">${escaparHtml(p.codProduto)}</td>
                             <td>
-                                <span class="titulo-celula">${p.titulo ?? ''}</span>
-                                <span class="sub-celula text-truncate" style="max-width: 42ch;">${p.descricao ?? ''}</span>
+                                <span class="titulo-celula">${escaparHtml(p.titulo)}</span>
+                                <span class="sub-celula text-truncate" style="max-width: 42ch;">${escaparHtml(p.descricao)}</span>
                             </td>
-                            <td><span class="tipo-produto"><i class="bi ${iconesTipo[p.idTipo] ?? 'bi-box'}"></i>${tiposProduto[p.idTipo] ?? p.idTipo ?? ''}</span></td>
-                            <td><span class="selo">${condicoesProduto[p.idCondicao] ?? p.idCondicao ?? ''}</span></td>
-                            <td class="text-end"><span class="selo ${seloQtd}">${qtd}</span></td>
+                            <td><span class="tipo-produto"><i class="bi ${iconesTipo[p.idTipo] ?? 'bi-box'}"></i>${escaparHtml(tiposProduto[p.idTipo] ?? p.idTipo)}</span></td>
+                            <td><span class="selo">${escaparHtml(condicoesProduto[p.idCondicao] ?? p.idCondicao)}</span></td>
+                            <td class="text-end"><span class="selo ${seloQtd}">${escaparHtml(qtd)}</span></td>
                             <td class="text-end fw-semibold">${moeda(p.valor)}</td>
                             <td>${dataBR(p.entrada)}</td>
                         </tr>

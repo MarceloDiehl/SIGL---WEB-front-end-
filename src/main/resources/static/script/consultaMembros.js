@@ -17,7 +17,7 @@ function inicializarConsultaMembros(containerSelector) {
 
     const dataBR = (iso) => iso ? String(iso).split('-').reverse().join('/') : '';
     const vazio = '<span class="texto-suave">—</span>';
-    const ou = (v) => (v === null || v === undefined || v === '') ? vazio : v;
+    const ou = (v) => (v === null || v === undefined || v === '') ? vazio : escaparHtml(v);
 
     const detalhesVazios = $detalhes.html();
     let membros = [];
@@ -44,7 +44,7 @@ function inicializarConsultaMembros(containerSelector) {
 
         $detalhes.html(`
             <div class="painel-cabecalho">
-                <h2 class="painel-titulo">${m.nome ?? ''} ${m.sobrenome ?? ''}</h2>
+                <h2 class="painel-titulo">${escaparHtml(m.nome)} ${escaparHtml(m.sobrenome)}</h2>
                 ${seloTipo(m.tipo)}
             </div>
             <div class="painel-corpo">
@@ -86,9 +86,9 @@ function inicializarConsultaMembros(containerSelector) {
                             const desde = m.tipo === 'cliente' ? m.clienteDesde : m.dataEntrada;
                             const subtitulo = m.tipo === 'cliente' ? '' : (cargos[m.idCargo] ?? '');
                             $tbody.append(`
-                                <tr data-tipo="${m.tipo}" data-id="${m.id}" data-indice="${i}">
+                                <tr data-tipo="${m.tipo}" data-id="${escaparHtml(m.id)}" data-indice="${i}">
                                     <td>
-                                        <span class="titulo-celula">${m.nome ?? ''} ${m.sobrenome ?? ''}</span>
+                                        <span class="titulo-celula">${escaparHtml(m.nome)} ${escaparHtml(m.sobrenome)}</span>
                                         ${subtitulo ? `<span class="sub-celula">${subtitulo}</span>` : ''}
                                     </td>
                                     <td>${seloTipo(m.tipo)}</td>

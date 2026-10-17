@@ -35,16 +35,16 @@ function inicializarConsultaVendas() {
                     soma += Number(v.valorTotal ?? 0);
                     $tbody.append(`
                         <tr>
-                            <td class="codigo">${v.id}</td>
-                            <td class="codigo">${v.codProduto}</td>
-                            <td class="titulo-celula">${v.tituloProduto ?? ''}</td>
+                            <td class="codigo">${escaparHtml(v.id)}</td>
+                            <td class="codigo">${escaparHtml(v.codProduto)}</td>
+                            <td class="titulo-celula">${escaparHtml(v.tituloProduto)}</td>
                             <td class="text-end">${moeda(v.valorUnitario)}</td>
-                            <td class="text-end">${v.quantidade}</td>
+                            <td class="text-end">${escaparHtml(v.quantidade)}</td>
                             <td class="text-end fw-semibold">${moeda(v.valorTotal)}</td>
                             <td>${dataBR(v.dataVenda)}</td>
-                            <td>#${v.idVendedor}</td>
-                            <td class="codigo">${cpfBR(v.cpfNota) || '<span class="texto-suave">—</span>'}</td>
-                            <td><span class="selo">${metodosPagamento[v.idMetodoPagamento] ?? v.idMetodoPagamento}</span></td>
+                            <td>#${escaparHtml(v.idVendedor)}</td>
+                            <td class="codigo">${escaparHtml(cpfBR(v.cpfNota)) || '<span class="texto-suave">—</span>'}</td>
+                            <td><span class="selo">${escaparHtml(metodosPagamento[v.idMetodoPagamento] ?? v.idMetodoPagamento)}</span></td>
                         </tr>
                     `);
                 });

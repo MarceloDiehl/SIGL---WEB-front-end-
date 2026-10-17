@@ -24,8 +24,8 @@ function atualizarTabelaItensVenda() {
             $tbody.append(`
                 <tr data-index="${index}">
                     <td class="texto-suave">${index + 1}</td>
-                    <td class="codigo">${item.produto.codProduto}</td>
-                    <td class="titulo-celula">${item.produto.titulo}</td>
+                    <td class="codigo">${escaparHtml(item.produto.codProduto)}</td>
+                    <td class="titulo-celula">${escaparHtml(item.produto.titulo)}</td>
                     <td class="text-end">${formatarMoeda(item.produto.valor)}</td>
                     <td class="text-end">${item.quantidade}</td>
                     <td class="text-end fw-semibold">${formatarMoeda(subtotal)}</td>
