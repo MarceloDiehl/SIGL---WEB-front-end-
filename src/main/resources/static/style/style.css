@@ -1530,11 +1530,13 @@ input[type=number].form-control::-webkit-outer-spin-button { -webkit-appearance:
     .sidebar-topo { justify-content: flex-start; padding-left: 12px; }
 }
 
-/* Logo pela regra dos terços: começa na borda esquerda da linha (hr) do topo e termina a 2/3 dela */
+/* Logo na largura da linha (hr) do topo: começa na borda esquerda dela e termina na direita
+   (220px exibidos de um PNG de 306px, então ainda é redução, sem perda de nitidez) */
 @media (min-width: 992px) {
     .sidebar-topo { padding-left: 0; padding-right: 0; }
-    .marca { width: 66.6667%; }
+    .marca { width: 100%; }
     .marca img { width: 100%; height: auto; }
+    .marca::before { width: 440px; height: 440px; }
 }
 
 /* Card de boas-vindas: texto um pouco mais baixo (ícones continuam na base do disco) */
