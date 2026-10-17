@@ -12,6 +12,10 @@ import org.hibernate.annotations.Immutable;
 @Table(name = "cargo")
 public class Cargo implements OpcaoDeApoio {
 
+    public static final int VENDEDOR = 1;
+    public static final int GERENTE = 2;
+    public static final int ESTOQUISTA = 3;
+
     @Id
     private Integer id;
 

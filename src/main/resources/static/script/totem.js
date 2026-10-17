@@ -1,5 +1,5 @@
 // Modo totem: Consulta de preço travada em tela cheia, para o cliente bipar os produtos sozinho.
-// Só fecha com a senha de um funcionário da loja (conferida no servidor, em /api/totem/encerrar).
+// Só fecha com a senha de quem ativou ou de um gerente (conferida no servidor, em /api/totem/encerrar).
 // O estado fica na sessão: recarregar a página reabre o totem.
 $(function () {
     const elModal = document.getElementById('modal-totem');

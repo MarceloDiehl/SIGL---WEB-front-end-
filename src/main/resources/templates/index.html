@@ -3,6 +3,9 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- Token CSRF do Spring Security: o script.js envia no cabeçalho de toda chamada AJAX que altera dados -->
+    <meta name="_csrf" th:content="${_csrf.token}">
+    <meta name="_csrf_header" th:content="${_csrf.headerName}">
     <title>SIGL – Orion Record Store</title>
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -61,12 +64,12 @@
 
             <div class="sidebar-rodape">
                 <div class="usuario">
-                    <span class="usuario-avatar"><i class="bi bi-person"></i></span>
+                    <span class="usuario-avatar" th:text="${usuario.iniciais}">MD</span>
                     <span class="usuario-dados">
-                        <strong>Equipe Orion</strong>
-                        <span>SIGL</span>
+                        <strong th:text="${usuario.nomeCompleto}">Nome do funcionário</strong>
+                        <span th:text="${usuario.cargo}">Cargo</span>
                     </span>
-                    <form th:action="@{/login}" method="get" class="usuario-sair">
+                    <form th:action="@{/logout}" method="post" class="usuario-sair">
                         <button type="submit" class="btn-sair" title="Sair do sistema" aria-label="Sair do sistema">
                             <i class="bi bi-box-arrow-right"></i>
                         </button>
@@ -138,7 +141,7 @@
                     <div class="totem-senha-caixa">
                         <span class="icone-alerta"><i class="bi bi-unlock"></i></span>
                         <h5>Encerrar modo totem</h5>
-                        <p class="texto-suave">Digite a senha de qualquer funcionário da loja.</p>
+                        <p class="texto-suave">Digite a sua senha ou a de um gerente.</p>
                         <label for="totem-senha-campo" class="form-label">Senha</label>
                         <input type="password" id="totem-senha-campo" class="form-control" autocomplete="current-password">
                         <div class="totem-senha-acoes">
@@ -237,7 +240,6 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.19.5/dist/jquery.validate.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.16/jquery.mask.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
 <script th:src="@{/script/script.js}"></script>
 <script th:src="@{/script/cadastroFormParceiro.js}"></script>
 <script th:src="@{/script/cadastroFormProduto.js}"></script>

@@ -1,5 +1,7 @@
 package com.sigl.sigl.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.sigl.sigl.model.apoio.Cargo;
 import jakarta.persistence.*;
 import java.time.LocalDate;
 
@@ -23,6 +25,11 @@ public class Funcionario {
 
     @Column(name = "idCargo", nullable = false)
     private Integer idCargo;
+
+    // Mesmo idCargo, como entidade, só para leitura (nome do cargo no login); grava-se pelo idCargo
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "idCargo", insertable = false, updatable = false)
+    private Cargo cargo;
 
     @Column(name = "idEscolaridade", nullable = false)
     private Integer idEscolaridade;
@@ -242,6 +249,11 @@ public class Funcionario {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    @JsonIgnore
+    public Cargo getCargo() {
+        return cargo;
     }
 
     public String getSenha() {

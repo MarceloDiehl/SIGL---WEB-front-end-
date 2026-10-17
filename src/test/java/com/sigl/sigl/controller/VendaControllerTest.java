@@ -25,6 +25,8 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -52,7 +54,7 @@ class VendaControllerTest {
         ReflectionTestUtils.setField(venda, "id", 42);
         when(vendaService.registrar(any(NovaVendaPedido.class))).thenReturn(venda);
 
-        mockMvc.perform(post("/api/vendas").contentType(MediaType.APPLICATION_JSON).content(PEDIDO))
+        mockMvc.perform(post("/api/vendas").with(user("marcelo@orion.com.br")).with(csrf()).contentType(MediaType.APPLICATION_JSON).content(PEDIDO))
                 .andExpect(status().isCreated())
                 .andExpect(header().string("Location", "http://localhost/api/vendas/42"))
                 .andExpect(jsonPath("$.id").value(42))
@@ -64,7 +66,7 @@ class VendaControllerTest {
     @Test
     @DisplayName("POST sem itens é recusado antes de chegar ao serviço")
     void registrar_SemItens_Devolve400() throws Exception {
-        mockMvc.perform(post("/api/vendas").contentType(MediaType.APPLICATION_JSON)
+        mockMvc.perform(post("/api/vendas").with(user("marcelo@orion.com.br")).with(csrf()).contentType(MediaType.APPLICATION_JSON)
                         .content("{\"idVendedor\": 3, \"idMetodoPagamento\": 4, \"itens\": []}"))
                 .andExpect(status().isBadRequest());
         verify(vendaService, never()).registrar(any());
@@ -76,7 +78,7 @@ class VendaControllerTest {
         when(vendaService.registrar(any(NovaVendaPedido.class)))
                 .thenThrow(new RegraDeNegocioException(HttpStatus.CONFLICT, "Só há 1 unidade de Abbey Road."));
 
-        mockMvc.perform(post("/api/vendas").contentType(MediaType.APPLICATION_JSON).content(PEDIDO))
+        mockMvc.perform(post("/api/vendas").with(user("marcelo@orion.com.br")).with(csrf()).contentType(MediaType.APPLICATION_JSON).content(PEDIDO))
                 .andExpect(status().isConflict())
                 .andExpect(jsonPath("$.detail").value("Só há 1 unidade de Abbey Road."));
     }

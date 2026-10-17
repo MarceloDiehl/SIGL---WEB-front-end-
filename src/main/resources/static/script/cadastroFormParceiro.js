@@ -98,8 +98,8 @@ function formularioParceiros() {
             cargo_parceiro: { required: "O cargo é obrigatório." },
             escolaridade_parceiro: { required: "A escolaridade é obrigatória." },
             ingresso_parceiro: { required: "A data de ingresso é obrigatória." },
-            senha_parceiro: { required: "A senha é obrigatória.", minlength: "Mínimo 6 caracteres." },
-            senha2_parceiro: { required: "Confirme a senha.", minlength: "Mínimo 6 caracteres.", equalTo: "As senhas não correspondem." },
+            senha_parceiro: { required: "A senha é obrigatória.", minlength: "Mínimo 5 caracteres." },
+            senha2_parceiro: { required: "Confirme a senha.", minlength: "Mínimo 5 caracteres.", equalTo: "As senhas não correspondem." },
             especialidade_parceiro: { required: "Campo obrigatório." }
         },
 
@@ -132,8 +132,8 @@ function formularioParceiros() {
                 dados.especialidade = $('#especialidade_parceiro').val();
                 dados.dataEntrada = $('#ingresso_parceiro').val(); // yyyy-mm-dd
                 dados.idGenero = parseInt($('#genero_parceiro').val());
-                //dados.senha = $('#senha_parceiro').val();
-                dados.senha = CryptoJS.MD5($('#senha_parceiro').val()).toString();
+                // senha como digitada: o servidor gera o hash BCrypt (FuncionarioService)
+                dados.senha = $('#senha_parceiro').val();
             }
 
             const url = tipo === 'cliente' ? '/api/clientes' : '/api/funcionarios';
