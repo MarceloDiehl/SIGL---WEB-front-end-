@@ -1,13 +1,16 @@
 package com.sigl.sigl.model;
 
+import com.sigl.sigl.model.apoio.OpcaoDeApoio;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import org.hibernate.annotations.Immutable;
 
 @Entity
+@Immutable
 @Table(name = "metodopagamento")
-public class MetodoPagamento {
+public class MetodoPagamento implements OpcaoDeApoio {
 
     public static final int DINHEIRO = 1;
 
@@ -29,10 +32,12 @@ public class MetodoPagamento {
         return id != null && id == DINHEIRO;
     }
 
+    @Override
     public Integer getId() {
         return id;
     }
 
+    @Override
     public String getDescricao() {
         return descricao;
     }
