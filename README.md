@@ -15,6 +15,10 @@ Começou como projeto do curso técnico e foi evoluído para um sistema com logi
 - **Modo totem:** consulta de preço em tela cheia para o cliente; só é encerrado com a senha de quem ativou ou de um gerente.
 - **Login e permissões por cargo:** cada cargo vê e acessa apenas o que usa no dia a dia.
 
+| Login | Início |
+|---|---|
+| ![Login](docs/telas/01-login.jpg) | ![Início](docs/telas/02-inicio.jpg) |
+
 | Nova venda | Histórico de vendas |
 |---|---|
 | ![Nova venda](docs/telas/03-nova-venda.jpg) | ![Histórico de vendas](docs/telas/04-historico.jpg) |
