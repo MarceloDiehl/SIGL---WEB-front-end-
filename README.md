@@ -2,9 +2,12 @@
 
 Sistema web de gestão para a **Orion Record Store**, uma loja de discos, instrumentos e artigos de música: frente de caixa (PDV), histórico de vendas, catálogo e estoque, cadastro de clientes e funcionários e um **modo totem** para o cliente consultar preços sozinho.
 
-Começou como projeto do curso técnico e foi evoluído para um sistema com login e permissões por cargo, vendas transacionais no servidor e banco versionado.
-
 ![Início](docs/telas/02-inicio.jpg)
+
+## Histórico do projeto
+
+- **Outubro de 2025:** desenvolvido e finalizado como atividade do curso **Técnico em Desenvolvimento de Sistemas do SENAC/RS**.
+- **Outubro de 2026:** revisitado com novas funcionalidades e melhorias: novo front-end, login com Spring Security e permissões por cargo, vendas transacionais no servidor, proteção de dados pessoais, banco versionado com Flyway e testes automatizados. A finalização contou com o auxílio de inteligência artificial, o **Claude** (Anthropic).
 
 ## Funcionalidades
 
