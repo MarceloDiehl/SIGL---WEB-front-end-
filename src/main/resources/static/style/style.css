@@ -2005,3 +2005,21 @@ body:not([data-tela="inicio"]) .sidebar .nav-link.active { animation-play-state:
 tr.venda-cancelada td { color: var(--muted); }
 tr.venda-cancelada .valor-venda { text-decoration: line-through; }
 .detalhes-venda .tabela-wrap { margin-top: 16px; }
+
+/* Card de boas-vindas com a altura do logo do menu: a base do card fica na mesma linha da base do
+   logo (logo-menu.png tem 306x316 e ocupa a largura útil do menu, --sidebar-w menos 2 x 14px).
+   O conteúdo encolhe na mesma proporção (227,2 / 254 ≈ 0,894); os tamanhos de fonte não mudam. */
+@media (min-width: 992px) {
+    .inicio-hero {
+        min-height: 0;
+        height: calc((var(--sidebar-w) - 28px) * 316 / 306);
+        padding: 28.6px;                                   /* 32px x 0,894 */
+    }
+    .inicio-hero > div:first-child { top: 9px; }           /* 10px x 0,894 */
+    .inicio-hero .hero-redes { top: 19px; }                /* 21px x 0,894 */
+    .inicio-hero .vinil {                                  /* 680px x 0,894; eixo no meio da borda direita */
+        --tam: 608px;
+        right: -304px;
+        top: calc(50% - 304px);
+    }
+}
