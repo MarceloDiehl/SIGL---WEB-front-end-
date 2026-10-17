@@ -115,10 +115,11 @@
                         <input type="text" id="cpf-cliente-conclusao" name="cpf-cliente-conclusao" class="form-control"
                                placeholder="000.000.000-00" />
                     </div>
+                    <!-- A venda é registrada em nome de quem está logado (o servidor usa a sessão, não este texto) -->
                     <div class="mb-3">
-                        <label for="cod-vendedor-conclusao" class="form-label">Código do vendedor</label>
-                        <input type="text" id="cod-vendedor-conclusao" name="cod-vendedor-conclusao" class="form-control"
-                               inputmode="numeric" autocomplete="off" />
+                        <span class="form-label d-block">Vendedor</span>
+                        <p class="fw-semibold mb-0" id="vendedor-conclusao"
+                           th:text="${usuario.nomeCompleto + ' (' + usuario.cargo + ')'}">Nome do vendedor</p>
                     </div>
                     <label class="total-destaque" for="valor-total-conclusao-venda">
                         <span>Total da venda</span>
@@ -147,23 +148,8 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
                 </div>
                 <div class="modal-body">
+                    <!-- cartões das formas de pagamento cadastradas no banco (montados pelo formVendas.js) -->
                     <div class="opcoes-cartao mb-3" role="radiogroup" aria-label="Forma de pagamento">
-                        <div>
-                            <input type="radio" id="pagamento-dinheiro" name="forma-pagamento" value="1" checked>
-                            <label for="pagamento-dinheiro"><i class="bi bi-cash-coin"></i>Dinheiro</label>
-                        </div>
-                        <div>
-                            <input type="radio" id="pagamento-credito" name="forma-pagamento" value="2">
-                            <label for="pagamento-credito"><i class="bi bi-credit-card"></i>Crédito</label>
-                        </div>
-                        <div>
-                            <input type="radio" id="pagamento-debito" name="forma-pagamento" value="3">
-                            <label for="pagamento-debito"><i class="bi bi-credit-card-2-front"></i>Débito</label>
-                        </div>
-                        <div>
-                            <input type="radio" id="pagamento-pix" name="forma-pagamento" value="4">
-                            <label for="pagamento-pix"><i class="bi bi-qr-code"></i>PIX</label>
-                        </div>
                     </div>
                     <label class="total-destaque" for="valor-total-pagamento">
                         <span>Total a receber</span>

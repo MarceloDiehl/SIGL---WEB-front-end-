@@ -36,15 +36,25 @@
     </section>
 
     <main class="login-form-area">
-        <form th:action="@{/api/auth/login}" method="post" class="formulario-login" id="formulario-login" novalidate>
+        <!-- POST /login é tratado pelo Spring Security (SegurancaConfig); th:action inclui o token CSRF -->
+        <form th:action="@{/login}" method="post" class="formulario-login" id="formulario-login" novalidate>
             <div class="mb-4">
                 <h1>Entrar</h1>
                 <p class="texto-suave mb-0">Use o e-mail e senha cadastrados.</p>
             </div>
 
-            <div th:if="${loginError}" class="alert alert-danger d-flex align-items-center gap-2" role="alert">
+            <!-- Mensagens conforme o parâmetro da URL: ?erro (login recusado), ?saiu (logout), ?expirou (sessão) -->
+            <div th:if="${param.erro}" class="alert alert-danger d-flex align-items-center gap-2" role="alert">
                 <i class="bi bi-exclamation-circle"></i>
-                <span th:text="${loginError}">E-mail ou senha inválidos.</span>
+                <span>E-mail ou senha inválidos.</span>
+            </div>
+            <div th:if="${param.saiu}" class="alert alert-success d-flex align-items-center gap-2" role="status">
+                <i class="bi bi-check-circle"></i>
+                <span>Você saiu do sistema.</span>
+            </div>
+            <div th:if="${param.expirou}" class="alert alert-warning d-flex align-items-center gap-2" role="status">
+                <i class="bi bi-clock-history"></i>
+                <span>Sua sessão expirou. Entre de novo para continuar.</span>
             </div>
             <div class="mb-3">
                 <label for="login_email" class="form-label">E-mail</label>

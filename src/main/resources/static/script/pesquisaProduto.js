@@ -7,29 +7,27 @@ function inicializarPesquisarProduto() {
     const $quantidadeInput = $('#estoque-produto');
     const $valorSpan = $('#valor-unitario');
 
-    const tipos = {
-        1: ['Disco de vinil', 'bi-vinyl'], 2: ['CD', 'bi-disc'], 3: ['Papelaria', 'bi-pencil'],
-        4: ['Livros', 'bi-book'], 5: ['Moda e vestuário', 'bi-bag'], 6: ['Equipamentos eletrônicos', 'bi-speaker'],
-        7: ['Instrumentos musicais', 'bi-music-note-beamed'], 8: ['Raridades', 'bi-gem']
-    };
-    const condicoes = { 1: 'Novo', 2: 'Usado (ótimo)', 3: 'Usado (bom)', 4: 'Usado (com marcas)' };
     const $tipo = $('#tipo-produto-consulta');
     const $condicao = $('#condicao-produto-consulta');
 
+    // Nomes do tipo e da condição vêm do banco (apoio()); o ícone do tipo, de iconeDoTipo()
     function mostrarTipo(idTipo, idCondicao) {
-        const tipo = tipos[idTipo];
-        $tipo.text(tipo ? tipo[0] : '—').toggleClass('sem-valor', !tipo);
-        $condicao.text(condicoes[idCondicao] ?? '—').toggleClass('sem-valor', !condicoes[idCondicao]);
-        $('.consulta-linha').toggleClass('com-produto', !!tipo);
+        apoio().then(function (listas) {
+            const temProduto = idTipo != null;
+            $tipo.text(temProduto ? descricaoDe(listas.tipos, idTipo) : '—').toggleClass('sem-valor', !temProduto);
+            $condicao.text(idCondicao != null ? descricaoDe(listas.condicoes, idCondicao) : '—')
+                .toggleClass('sem-valor', idCondicao == null);
+            $('.consulta-linha').toggleClass('com-produto', temProduto);
 
-        // Grafismo de fundo: lupa sem produto, ícone do tipo com produto (com animação ao trocar)
-        const classe = tipo ? tipo[1] : 'bi-search';
-        const $marca = $('#consulta-marca-dagua');
-        if (!$marca.find('i').hasClass(classe)) {
-            $marca.removeClass('surgir').html(`<i class="bi ${classe}"></i>`);
-            void $marca[0].offsetWidth;   // reinicia a animação
-            $marca.addClass('surgir');
-        }
+            // Grafismo de fundo: lupa sem produto, ícone do tipo com produto (com animação ao trocar)
+            const classe = temProduto ? iconeDoTipo(idTipo) : 'bi-search';
+            const $marca = $('#consulta-marca-dagua');
+            if (!$marca.find('i').hasClass(classe)) {
+                $marca.removeClass('surgir').html(`<i class="bi ${classe}"></i>`);
+                void $marca[0].offsetWidth;   // reinicia a animação
+                $marca.addClass('surgir');
+            }
+        });
     }
 
     function mostrarEstoque(qtd) {

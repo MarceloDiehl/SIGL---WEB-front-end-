@@ -20,7 +20,7 @@ public interface FuncionarioRepository extends JpaRepository<Funcionario, Intege
 
     Optional<Funcionario> findByEmailAndSenha(String email, String senha);
 
-    boolean existsBySenha(String senha);
+    List<Funcionario> findByIdCargo(Integer idCargo);
 
     Optional<Funcionario> findByRg(String rg);
 

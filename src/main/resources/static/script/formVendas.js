@@ -80,7 +80,7 @@ function limparErroCampo($campo) {
 function formularioVenda() {
 
     // o erro some assim que a pessoa corrige o campo
-    $(document).on('input change', '#cod-produto-venda, #qtd-produto-venda, #cod-vendedor-conclusao', function () {
+    $(document).on('input change', '#cod-produto-venda, #qtd-produto-venda', function () {
         limparErroCampo($(this));
     });
     $(document).on('change', 'input[name="forma-pagamento"]', function () {
@@ -89,7 +89,24 @@ function formularioVenda() {
 
 
     $('#cpf-cliente-conclusao').mask('000.000.000-00');
-    $('#cod-vendedor-conclusao').mask('00000');
+
+    // Formas de pagamento vêm do banco (apoio()); o ícone de cada uma é apresentação e fica aqui.
+    // A primeira forma da lista já vem marcada.
+    const iconesPagamento = { 1: 'bi-cash-coin', 2: 'bi-credit-card', 3: 'bi-credit-card-2-front', 4: 'bi-qr-code' };
+    apoio().then(function (listas) {
+        const $opcoes = $('.opcoes-cartao').empty();
+        listas.metodosPagamento.forEach(function (metodo, i) {
+            const id = 'pagamento-' + metodo.id;
+            const $opcao = $('<div>');
+            $('<input type="radio" name="forma-pagamento">').attr('id', id).val(metodo.id).prop('checked', i === 0).appendTo($opcao);
+            $('<label>').attr('for', id)
+                .append($('<i>').addClass('bi ' + (iconesPagamento[metodo.id] || 'bi-wallet2')))
+                .append(document.createTextNode(metodo.descricao))
+                .appendTo($opcao);
+            $opcoes.append($opcao);
+        });
+        mostrarCamposDoPagamento();
+    });
 
 
     $('#formulario-venda-produto').validate({
@@ -238,21 +255,10 @@ function formularioVenda() {
             return false;
         }
         $('#valor-total-conclusao-venda').val(formatarMoeda(valorTotalVenda));
-        const idUsuario = $('meta[name="usuario-id"]').attr('content');
-        if (idUsuario && !$('#cod-vendedor-conclusao').val()) {
-            $('#cod-vendedor-conclusao').val(idUsuario);
-        }
     });
 
     $('#btn-avancar-pagamento').on('click', function () {
-        const $vendedor = $('#cod-vendedor-conclusao');
-        limparErroCampo($vendedor);
-        if (!$vendedor.val()) {
-            mostrarErroCampo($vendedor, "Informe o código do vendedor.");
-            return;
-        }
         vendaEmAndamento.cpfNota = $('#cpf-cliente-conclusao').val().replace(/\D/g, '');
-        vendaEmAndamento.idVendedor = parseInt($vendedor.val());
 
         // só abre o pagamento depois de validar os dados
         bootstrap.Modal.getOrCreateInstance('#modal-concluir-venda').hide();
@@ -267,6 +273,7 @@ function formularioVenda() {
         return limpo === '' || isNaN(valor) ? null : Math.round(valor * 100) / 100;
     }
 
+    // id 1 = Dinheiro, o mesmo de MetodoPagamento.DINHEIRO no servidor
     const ehDinheiro = () => $('input[name="forma-pagamento"]:checked').val() === '1';
 
     // o troco mostrado aqui é só uma prévia: o valor oficial é calculado pelo servidor
@@ -289,7 +296,8 @@ function formularioVenda() {
         atualizarTroco();
         mostrarCamposDoPagamento();
     });
-    $('input[name="forma-pagamento"]').on('change', mostrarCamposDoPagamento);
+    // delegado no contêiner: os cartões de pagamento são criados depois, quando apoio() responde
+    $('.opcoes-cartao').on('change', 'input[name="forma-pagamento"]', mostrarCamposDoPagamento);
     $('#valor-recebido').on('input', function () {
         limparErroCampo($(this));
         atualizarTroco();
@@ -306,8 +314,9 @@ function formularioVenda() {
         $('#cpf-cliente-conclusao').val('');
     }
 
-    // Um único POST com código e quantidade de cada item. Preço, total, troco, data e baixa de
-    // estoque ficam com o servidor, numa transação: ou a venda inteira é registrada, ou nada.
+    // Um único POST com código e quantidade de cada item. Vendedor (usuário logado), preço, total,
+    // troco, data e baixa de estoque ficam com o servidor, numa transação: ou a venda inteira é
+    // registrada, ou nada.
     $('#btn-concluir-venda').on('click', function () {
         const $botao = $(this);
         const $recebido = $('#valor-recebido');
@@ -315,7 +324,6 @@ function formularioVenda() {
         $('#erro-venda').prop('hidden', true);
 
         const pedido = {
-            idVendedor: vendaEmAndamento.idVendedor,
             idMetodoPagamento: parseInt($('input[name="forma-pagamento"]:checked').val()),
             cpfNota: vendaEmAndamento.cpfNota || null,
             itens: listaItensVenda.map(item => ({ codProduto: item.produto.codProduto, quantidade: item.quantidade }))

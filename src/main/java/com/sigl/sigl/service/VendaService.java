@@ -44,11 +44,12 @@ public class VendaService {
     /**
      * Registra a venda inteira numa transação: confere e baixa o estoque de cada item, calcula
      * o total com os preços do banco e grava cabeçalho e itens. Se algo falhar, nada é gravado.
+     * O vendedor é o usuário logado (idVendedor vem da sessão, pelo controller).
      */
     @Transactional
-    public Venda registrar(NovaVendaPedido pedido) {
-        Funcionario vendedor = funcionarioRepository.findById(pedido.idVendedor())
-                .orElseThrow(() -> recusar(HttpStatus.BAD_REQUEST, "Vendedor nº " + pedido.idVendedor() + " não encontrado."));
+    public Venda registrar(NovaVendaPedido pedido, Integer idVendedor) {
+        Funcionario vendedor = funcionarioRepository.findById(idVendedor)
+                .orElseThrow(() -> recusar(HttpStatus.BAD_REQUEST, "Vendedor nº " + idVendedor + " não encontrado."));
         MetodoPagamento metodo = metodoPagamentoRepository.findById(pedido.idMetodoPagamento())
                 .orElseThrow(() -> recusar(HttpStatus.BAD_REQUEST, "Forma de pagamento inválida."));
 

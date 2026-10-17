@@ -4,15 +4,11 @@ function formularioProduto() {
     const $form = $('#formulario-produto');
     const $mensagemFeedback = $('#mensagem-feedback');
 
-    const tipoMap = {
-        'disco': 1, 'cd': 2, 'papelaria': 3,
-        'livros': 4, 'moda': 5, 'equipamentos': 6,
-        'instrumentos': 7, 'raridades': 8
-    };
-
-    const condicaoMap = {
-        'novo': 1, 'usado-otimo': 2, 'usado-bom': 3, 'usado-marcas-uso': 4
-    };
+    // Tipos e condições vêm do banco (GET /api/apoio); o valor de cada opção já é o id
+    const selectsPreenchidos = apoio().then(function (listas) {
+        preencherSelect($('#tipo-produto'), listas.tipos);
+        preencherSelect($('#condicao-produto'), listas.condicoes);
+    });
 
     function limparFormulario() {
         $form[0].reset();
@@ -37,7 +33,8 @@ function formularioProduto() {
     const urlParams = new URLSearchParams(window.location.search);
     const codigoParam = urlParams.get("codigo");
     if (codigoParam) {
-        $.ajax({
+        // espera as opções dos selects existirem antes de marcar o tipo e a condição do produto
+        selectsPreenchidos.then(() => $.ajax({
             url: `/api/produtos/codigo/${codigoParam}`,
             method: 'GET',
             dataType: 'json'
@@ -49,14 +46,14 @@ function formularioProduto() {
                 $('#descricao-produto').val(produto.descricao);
                 $('#valor-produto').val(produto.valor);
                 $('#quantidade-produto').val(produto.quantidade);
-                $('#tipo-produto').val(Object.keys(tipoMap).find(key => tipoMap[key] === produto.idTipo));
-                $('#condicao-produto').val(Object.keys(condicaoMap).find(key => condicaoMap[key] === produto.idCondicao));
+                $('#tipo-produto').val(produto.idTipo);
+                $('#condicao-produto').val(produto.idCondicao);
                 $('#data-produto').val(produto.entrada);
             }
         })
         .fail(function() {
             avisar("Erro ao carregar produto para atualização.", "erro");
-        });
+        }));
     }
 
     $form.validate({
@@ -100,8 +97,8 @@ function formularioProduto() {
                 valor: parseFloat($('#valor-produto').val().replace(',', '.')),
                 quantidade: parseInt($('#quantidade-produto').val()),
                 entrada: $('#data-produto').val(),
-                idTipo: tipoMap[$('#tipo-produto').val()],
-                idCondicao: condicaoMap[$('#condicao-produto').val()]
+                idTipo: parseInt($('#tipo-produto').val()),
+                idCondicao: parseInt($('#condicao-produto').val())
             };
 
             console.log("Dados do produto a serem enviados:", produtoData);

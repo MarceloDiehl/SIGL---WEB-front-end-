@@ -10,13 +10,10 @@ import java.math.BigDecimal;
 import java.util.List;
 
 /**
- * O que o caixa envia para registrar uma venda. Preços, títulos, total, troco e data/hora
- * não vêm do navegador: são calculados no servidor a partir do banco.
+ * O que o caixa envia para registrar uma venda. Vendedor (usuário logado), preços, títulos,
+ * total, troco e data/hora não vêm do navegador: são definidos no servidor.
  */
 public record NovaVendaPedido(
-        @NotNull(message = "Informe o vendedor.")
-        Integer idVendedor,
-
         @NotNull(message = "Informe a forma de pagamento.")
         Integer idMetodoPagamento,
 
