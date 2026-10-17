@@ -55,6 +55,7 @@ Começou como projeto do curso técnico e foi evoluído para um sistema com logi
   | Clientes (ver e cadastrar)        | ✔ | – | ✔ |
   | Excluir cliente, funcionários     | – | – | ✔ |
 
+- **Dados pessoais (LGPD, princípio da necessidade).** O servidor decide o que cada cargo recebe: o vendedor vê do cliente só nome, contato, cidade e o CPF mascarado (`***.982.247-**`), e busca clientes apenas pelo CPF completo, para que buscas por pedaços não revelem os dígitos ocultos. RG, nascimento, endereço e os dados de funcionários ficam com o gerente. O CPF da nota segue a mesma regra no histórico de vendas.
 - **Banco versionado.** Toda mudança de schema é uma migração do Flyway em `src/main/resources/db/migration`, testada num banco vazio e numa cópia do banco existente antes de ser aplicada.
 - **Tabelas de apoio vindas do banco.** Tipos de produto, condições, cargos, escolaridades, gêneros e formas de pagamento são servidos por `GET /api/apoio`, em vez de ficarem fixos no HTML.
 

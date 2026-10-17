@@ -4,7 +4,7 @@
         <div>
             <p class="pagina-sobretitulo">Pessoas</p>
             <h1 class="pagina-titulo">Comunidade</h1>
-            <p class="pagina-descricao">Clientes e funcionários cadastrados; clique em uma pessoa para ver os dados.</p>
+            <p class="pagina-descricao" th:text="${usuario.podeGerir} ? 'Clientes e funcionários cadastrados; clique em uma pessoa para ver os dados.' : 'Clientes cadastrados; clique em um cliente para ver os dados de contato.'">Clientes e funcionários cadastrados; clique em uma pessoa para ver os dados.</p>
         </div>
         <div class="pagina-acoes">
             <a href="/cadastro-membro" id="cadastrar_membro" class="btn btn-primary">
@@ -19,6 +19,7 @@
                 <i class="bi bi-search"></i>
                 <label for="cpf_pesquisa" class="visually-hidden">Filtrar pelo CPF</label>
                 <input type="text" id="cpf_pesquisa" name="cpf_pesquisa" class="form-control"
+                       th:placeholder="${usuario.podeGerir} ? 'Filtrar pelo CPF' : 'Buscar pelo CPF completo'"
                        placeholder="Filtrar pelo CPF" autocomplete="off" />
             </div>
             <div class="acoes">

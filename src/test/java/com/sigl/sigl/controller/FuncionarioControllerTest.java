@@ -50,12 +50,12 @@ class FuncionarioControllerTest {
     }
 
     @Test
-    @DisplayName("Filtro por CPF continua funcionando e também não devolve a senha")
+    @DisplayName("Filtro por CPF consulta o banco (não filtra em memória) e também não devolve a senha")
     void listarFuncionarios_ComFiltroDeCpf_NaoDevolveSenha() throws Exception {
         Funcionario funcionario = new Funcionario();
         funcionario.setCpf("390.533.447-05");
         funcionario.setSenha("e10adc3949ba59abbe56e057f20f883e");
-        when(funcionarioRepository.findAll()).thenReturn(List.of(funcionario));
+        when(funcionarioRepository.findByCpfContaining("390.533")).thenReturn(List.of(funcionario));
 
         mockMvc.perform(get("/api/funcionarios").param("cpf", "390.533"))
                 .andExpect(status().isOk())

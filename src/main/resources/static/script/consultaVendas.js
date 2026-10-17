@@ -12,6 +12,7 @@ function inicializarConsultaVendas() {
         return data.split('-').reverse().join('/') + ' ' + hora.slice(0, 5);
     };
     const cpfBR = (c) => {
+        if (String(c ?? '').includes('*')) return c;   // já veio mascarado do servidor (cargo sem acesso ao CPF)
         const d = String(c ?? '').replace(/\D/g, '');
         return d.length === 11 ? d.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, '$1.$2.$3-$4') : d;
     };

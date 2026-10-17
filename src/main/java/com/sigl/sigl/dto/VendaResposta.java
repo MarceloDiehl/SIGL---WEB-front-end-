@@ -4,6 +4,7 @@ import com.sigl.sigl.model.Funcionario;
 import com.sigl.sigl.model.ItemVenda;
 import com.sigl.sigl.model.StatusVenda;
 import com.sigl.sigl.model.Venda;
+import com.sigl.sigl.seguranca.DadosPessoais;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -36,13 +37,15 @@ public record VendaResposta(
         }
     }
 
-    public static VendaResposta de(Venda venda) {
+    /** cpfCompleto: só o gerente vê o CPF da nota inteiro; para os demais cargos vai mascarado. */
+    public static VendaResposta de(Venda venda, boolean cpfCompleto) {
         Funcionario vendedor = venda.getVendedor();
         return new VendaResposta(
                 venda.getId(), venda.getDataHora(),
                 vendedor.getId(), vendedor.getNome() + " " + vendedor.getSobrenome(),
                 venda.getMetodoPagamento().getId(), venda.getMetodoPagamento().getDescricao(),
-                venda.getCpfNota(), venda.getQuantidadeDeUnidades(),
+                cpfCompleto ? venda.getCpfNota() : DadosPessoais.mascararCpf(venda.getCpfNota()),
+                venda.getQuantidadeDeUnidades(),
                 venda.getValorTotal(), venda.getValorRecebido(), venda.getTroco(),
                 venda.getStatus(), venda.getCanceladaEm(),
                 venda.getItens().stream().map(Item::de).toList()
