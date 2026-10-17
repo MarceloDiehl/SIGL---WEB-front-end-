@@ -80,6 +80,23 @@ function escaparHtml(valor) {
     return String(valor ?? '').replace(/[&<>"']/g, c => entidades[c]);
 }
 
+// Mensagem de erro de uma resposta da API: ProblemDetail ({detail}), mapa de validação ({campo: msg})
+// ou texto simples. Página de erro em HTML ou resposta vazia viram a mensagem padrão.
+function mensagemDoServidor(xhr, padrao) {
+    let corpo = xhr.responseJSON;
+    if (!corpo) {
+        try { corpo = JSON.parse(xhr.responseText); } catch (e) { corpo = null; }
+    }
+    if (corpo && corpo.detail) return corpo.detail;
+    if (corpo && corpo.message) return corpo.message;   // erro padrão do Spring
+    if (corpo && typeof corpo === 'object') {
+        const primeira = Object.values(corpo).find(v => typeof v === 'string');
+        if (primeira) return primeira;
+    }
+    const texto = (xhr.responseText || '').trim();
+    return texto && !texto.startsWith('<') && texto.length < 300 ? texto : padrao;
+}
+
 $(document).ready(function () {
     const conteudoDinamico = $('#conteudo-dinamico');
 

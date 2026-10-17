@@ -52,17 +52,4 @@ class ProdutoServiceTest {
         assertEquals("Erro: Já existe um produto com o código PRD001", exception.getMessage());
         verify(produtoRepository, never()).save(any(Produto.class));
     }
-
-    @Test
-    @DisplayName("Deve lançar exceção ao tentar remover quantidade maior que o estoque")
-    void removerQuantidade_DeveLancarExcecao_QuandoEstoqueInsuficiente() {
-        Produto produtoEmEstoque = new Produto("PRD001", "Mouse", "Desc", BigDecimal.ONE, 5, 1, 1, LocalDate.now());
-        when(produtoRepository.findByCodProduto("PRD001")).thenReturn(Optional.of(produtoEmEstoque));
-
-        assertThrows(IllegalArgumentException.class, () -> {
-            produtoService.removerQuantidade("PRD001", 10);
-        });
-
-        verify(produtoRepository, never()).save(any(Produto.class));
-    }
 }

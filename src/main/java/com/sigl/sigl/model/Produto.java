@@ -14,6 +14,11 @@ public class Produto {
     @Size(min = 6, max = 6, message = "O código do produto deve ter 6 caracteres")
     private String codProduto;
 
+    // Chave primária da tabela (gerada pelo banco); no JPA o identificador é o codProduto.
+    // Só leitura: usada como referência em itemvenda.idProduto.
+    @Column(name = "id", insertable = false, updatable = false)
+    private Integer id;
+
     @NotBlank(message = "O título é obrigatório")
     @Size(max = 70, message = "O título não pode exceder 70 caracteres")
     @Column(nullable = false, length = 70)
@@ -64,6 +69,8 @@ public class Produto {
     }
 
     // Getters e Setters
+    public Integer getId() { return id; }
+
     public String getCodProduto() { return codProduto; }
     public void setCodProduto(String codProduto) { this.codProduto = codProduto; }
 
@@ -94,5 +101,10 @@ public class Produto {
             throw new IllegalArgumentException("Quantidade em estoque insuficiente para o produto " + this.codProduto);
         }
         this.quantidade -= qtdVendida;
+    }
+
+    // Devolução ao estoque (cancelamento de venda)
+    public void adicionarQuantidade(int qtdDevolvida) {
+        this.quantidade += qtdDevolvida;
     }
 }

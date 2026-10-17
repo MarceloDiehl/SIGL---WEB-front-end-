@@ -742,11 +742,11 @@ textarea.form-control { min-height: auto; }
 .painel-lista .tabela td[colspan] { padding: 60px 14px; }
 
 /* ---------- Tela: Comunidade (detalhes do membro) ---------- */
-.detalhes-membro { min-height: 300px; display: flex; flex-direction: column; }   /* nunca rola: a altura acomoda todos os campos */
-.detalhes-membro .vazio { flex: 1 1 auto; display: flex; flex-direction: column; align-items: center; justify-content: center; }
-.detalhes-membro dl { display: grid; grid-template-columns: repeat(auto-fill, minmax(170px, 1fr)); gap: 12px 20px; margin: 0; }
-.detalhes-membro dt { font-size: 12px; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: .05em; }
-.detalhes-membro dd { margin: 2px 0 0; font-size: 14px; }
+.detalhes-membro, .detalhes-venda { min-height: 300px; display: flex; flex-direction: column; }   /* nunca rola: a altura acomoda todos os campos */
+.detalhes-membro .vazio, .detalhes-venda .vazio { flex: 1 1 auto; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+.detalhes-membro dl, .detalhes-venda dl { display: grid; grid-template-columns: repeat(auto-fill, minmax(170px, 1fr)); gap: 12px 20px; margin: 0; }
+.detalhes-membro dt, .detalhes-venda dt { font-size: 12px; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: .05em; }
+.detalhes-membro dd, .detalhes-venda dd { margin: 2px 0 0; font-size: 14px; }
 .vazio { text-align: center; color: var(--muted); padding: 28px 16px; }
 .vazio i { font-size: 28px; display: block; margin-bottom: 6px; opacity: .6; }
 
@@ -1998,3 +1998,8 @@ body:not([data-tela="inicio"]) .sidebar .nav-link.active { animation-play-state:
 .atalho:disabled:hover::before { opacity: 0; animation: none; }
 .sidebar .nav-link:disabled:hover { background: none; color: inherit; }
 .sidebar .nav-link:disabled:hover::after { transform: none; transition: none; }
+
+/* Histórico de vendas: venda cancelada fica esmaecida e com o total riscado */
+tr.venda-cancelada td { color: var(--muted); }
+tr.venda-cancelada .valor-venda { text-decoration: line-through; }
+.detalhes-venda .tabela-wrap { margin-top: 16px; }

@@ -1,6 +1,7 @@
 package com.sigl.sigl.controller;
 
 import com.sigl.sigl.model.Produto;
+import com.sigl.sigl.repository.ItemVendaRepository;
 import com.sigl.sigl.repository.ProdutoRepository;
 import com.sigl.sigl.service.ProdutoService;
 import jakarta.validation.Valid;
@@ -24,6 +25,9 @@ public class ProdutoController {
 
     @Autowired
     private ProdutoService produtoService;
+
+    @Autowired
+    private ItemVendaRepository itemVendaRepository;
 
     @GetMapping
     public List<Produto> listarProdutos() {
@@ -61,24 +65,17 @@ public class ProdutoController {
     public ResponseEntity<String> excluirProduto(@PathVariable String codigo) {
         return produtoRepository.findByCodProduto(codigo)
                 .map(produto -> {
+                    // o histórico de vendas aponta para o produto (itemvenda.idProduto)
+                    if (itemVendaRepository.existsByIdProduto(produto.getId())) {
+                        return ResponseEntity.status(HttpStatus.CONFLICT)
+                                .body("O produto " + codigo + " já foi vendido e não pode ser excluído: "
+                                        + "o histórico de vendas depende dele.");
+                    }
                     produtoRepository.delete(produto);
                     return ResponseEntity.ok("Produto código " + codigo + " excluído!");
                 })
                 .orElse(ResponseEntity.status(HttpStatus.NOT_FOUND)
                         .body("Produto não encontrado para o código: " + codigo));
-    }
-
-    @PatchMapping("/{codProduto}/removerQuantidade")
-    public ResponseEntity<Object> removerQuantidadeProduto(@PathVariable String codProduto, @RequestParam Integer quantidade) {
-        try {
-            Produto produtoAtualizado = produtoService.removerQuantidade(codProduto, quantidade);
-            return ResponseEntity.ok(produtoAtualizado);
-        } catch (IllegalArgumentException e) {
-            // Captura tanto o erro de "produto não encontrado" quanto "estoque insuficiente"
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Erro ao atualizar quantidade.");
-        }
     }
 
     @PutMapping("/{codProduto}")

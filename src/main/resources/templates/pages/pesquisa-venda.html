@@ -4,11 +4,11 @@
         <div>
             <p class="pagina-sobretitulo">Vendas</p>
             <h1 class="pagina-titulo">Histórico de vendas</h1>
-            <p class="pagina-descricao">Cada linha é um item vendido; filtre pelo código do produto.</p>
+            <p class="pagina-descricao">Clique em uma venda para ver os itens; filtre pelo código de um produto vendido.</p>
         </div>
     </header>
 
-    <section class="painel painel-lista">
+    <section class="painel painel-lista painel-lista-curta">
         <form action="#" method="post" class="barra-ferramentas" onsubmit="return false;">
             <div class="busca">
                 <i class="bi bi-search"></i>
@@ -23,22 +23,27 @@
             <table class="table tabela" id="tabela-vendas">
                 <thead>
                 <tr>
-                    <th>ID</th>
-                    <th>Código</th>
-                    <th>Título</th>
-                    <th class="text-end">Valor unit.</th>
-                    <th class="text-end">Qtd</th>
-                    <th class="text-end">Total</th>
-                    <th>Data</th>
+                    <th>Nº</th>
+                    <th>Data e hora</th>
                     <th>Vendedor</th>
                     <th>CPF cliente</th>
                     <th>Pagamento</th>
+                    <th class="text-end">Itens</th>
+                    <th class="text-end">Total</th>
+                    <th>Situação</th>
                 </tr>
                 </thead>
                 <tbody id="tabela-vendas-body" class="num">
-                <tr><td colspan="10">Carregando...</td></tr>
+                <tr><td colspan="8">Carregando...</td></tr>
                 </tbody>
             </table>
+        </div>
+    </section>
+
+    <section class="painel detalhes-venda" id="detalhes-venda">
+        <div class="vazio">
+            <i class="bi bi-receipt"></i>
+            Selecione uma venda na lista para ver os itens.
         </div>
     </section>
 </div>
