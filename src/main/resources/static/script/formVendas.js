@@ -80,7 +80,7 @@ function limparErroCampo($campo) {
 function formularioVenda() {
 
     // o erro some assim que a pessoa corrige o campo
-    $(document).on('input change', '#cod-produto-venda, #qtd-produto-venda, #cod-vendedor-conclusao, #data-conclusao', function () {
+    $(document).on('input change', '#cod-produto-venda, #qtd-produto-venda, #cod-vendedor-conclusao', function () {
         limparErroCampo($(this));
     });
     $(document).on('change', 'input[name="forma-pagamento"]', function () {
@@ -238,7 +238,6 @@ function formularioVenda() {
             return false;
         }
         $('#valor-total-conclusao-venda').val(formatarMoeda(valorTotalVenda));
-        $('#data-conclusao').val(new Date().toLocaleDateString('sv-SE'));
         const idUsuario = $('meta[name="usuario-id"]').attr('content');
         if (idUsuario && !$('#cod-vendedor-conclusao').val()) {
             $('#cod-vendedor-conclusao').val(idUsuario);
@@ -246,99 +245,119 @@ function formularioVenda() {
     });
 
     $('#btn-avancar-pagamento').on('click', function () {
-        const cpfCliente = $('#cpf-cliente-conclusao').val().replace(/\D/g, '');
-        const codVendedor = $('#cod-vendedor-conclusao').val();
-        const dataVenda = $('#data-conclusao').val();
-
-        limparErroCampo($('#cod-vendedor-conclusao'));
-        limparErroCampo($('#data-conclusao'));
-        if (!dataVenda) {
-            mostrarErroCampo($('#data-conclusao'), "Informe a data da venda.");
-        }
-        if (!codVendedor) {
-            mostrarErroCampo($('#cod-vendedor-conclusao'), "Informe o código do vendedor.");
-        }
-        if (!codVendedor || !dataVenda) {
+        const $vendedor = $('#cod-vendedor-conclusao');
+        limparErroCampo($vendedor);
+        if (!$vendedor.val()) {
+            mostrarErroCampo($vendedor, "Informe o código do vendedor.");
             return;
         }
-        vendaEmAndamento.cpfNota = cpfCliente;
-        vendaEmAndamento.idVendedor = parseInt(codVendedor);
-        vendaEmAndamento.dataVenda = dataVenda;
-        vendaEmAndamento.valorTotal = valorTotalVenda;
+        vendaEmAndamento.cpfNota = $('#cpf-cliente-conclusao').val().replace(/\D/g, '');
+        vendaEmAndamento.idVendedor = parseInt($vendedor.val());
 
-        $('#valor-total-pagamento').val(formatarMoeda(valorTotalVenda));
         // só abre o pagamento depois de validar os dados
         bootstrap.Modal.getOrCreateInstance('#modal-concluir-venda').hide();
         bootstrap.Modal.getOrCreateInstance('#modal-pagamento-venda').show();
     });
 
+    // Valor digitado em reais ("1.200,50", "1200,50" ou "1200.50") -> número; vazio ou inválido -> null
+    function lerValorEmReais(texto) {
+        let limpo = String(texto || '').trim().replace(/\s|R\$/g, '');
+        if (limpo.includes(',')) limpo = limpo.replace(/\./g, '').replace(',', '.');
+        const valor = Number(limpo);
+        return limpo === '' || isNaN(valor) ? null : Math.round(valor * 100) / 100;
+    }
+
+    const ehDinheiro = () => $('input[name="forma-pagamento"]:checked').val() === '1';
+
+    // o troco mostrado aqui é só uma prévia: o valor oficial é calculado pelo servidor
+    function atualizarTroco() {
+        const recebido = lerValorEmReais($('#valor-recebido').val());
+        const troco = recebido === null ? null : recebido - valorTotalVenda;
+        $('#valor-troco').html(`<strong>${troco === null || troco < 0 ? '—' : formatarMoeda(troco)}</strong>`);
+    }
+
+    function mostrarCamposDoPagamento() {
+        $('#pagamento-dinheiro-campos').prop('hidden', !ehDinheiro());
+        $('#erro-venda').prop('hidden', true);
+    }
+
     // o total a receber é sempre preenchido ao abrir o pagamento (inclusive ao voltar e avançar de novo)
     $('#modal-pagamento-venda').on('show.bs.modal', function () {
         $('#valor-total-pagamento').val(formatarMoeda(valorTotalVenda));
+        $('#valor-recebido').val('');
+        limparErroCampo($('#valor-recebido'));
+        atualizarTroco();
+        mostrarCamposDoPagamento();
     });
+    $('input[name="forma-pagamento"]').on('change', mostrarCamposDoPagamento);
+    $('#valor-recebido').on('input', function () {
+        limparErroCampo($(this));
+        atualizarTroco();
+    });
+
+    function limparVenda() {
+        listaItensVenda = [];
+        valorTotalVenda = 0;
+        vendaEmAndamento = {};
+        atualizarTabelaItensVenda();
+        $('#formulario-venda-produto')[0].reset();
+        $('#codigo-produto-display').val('');
+        $('#descricao-produto-display').val('');
+        $('#cpf-cliente-conclusao').val('');
+    }
+
+    // Um único POST com código e quantidade de cada item. Preço, total, troco, data e baixa de
+    // estoque ficam com o servidor, numa transação: ou a venda inteira é registrada, ou nada.
     $('#btn-concluir-venda').on('click', function () {
-        const metodoPagamento = $('input[name="forma-pagamento"]:checked').val();
-        if (!metodoPagamento) {
-            $('.opcoes-cartao').siblings('.erro-campo').remove();
-            $('<div class="invalid-feedback erro-campo mb-3" role="alert">Selecione uma forma de pagamento.</div>').insertAfter('.opcoes-cartao');
-            return;
+        const $botao = $(this);
+        const $recebido = $('#valor-recebido');
+        limparErroCampo($recebido);
+        $('#erro-venda').prop('hidden', true);
+
+        const pedido = {
+            idVendedor: vendaEmAndamento.idVendedor,
+            idMetodoPagamento: parseInt($('input[name="forma-pagamento"]:checked').val()),
+            cpfNota: vendaEmAndamento.cpfNota || null,
+            itens: listaItensVenda.map(item => ({ codProduto: item.produto.codProduto, quantidade: item.quantidade }))
+        };
+        if (ehDinheiro()) {
+            const recebido = lerValorEmReais($recebido.val());
+            if (recebido === null) {
+                mostrarErroCampo($recebido, 'Informe o valor recebido.');
+                return;
+            }
+            if (recebido < valorTotalVenda) {
+                mostrarErroCampo($recebido, 'O valor recebido é menor que o total.');
+                return;
+            }
+            pedido.valorRecebido = recebido;
         }
-        vendaEmAndamento.idMetodoPagamento = parseInt(metodoPagamento);
 
-        const promises = [];
-        let estoqueAtualizadoComSucesso = true;
-
-        for (const item of listaItensVenda) {
-            const promiseAtualizarEstoque = $.ajax({
-                url: `/api/produtos/${item.produto.codProduto}/removerQuantidade?quantidade=${item.quantidade}`,
-                method: 'PATCH',
-                contentType: 'application/json'
-            }).fail(function(xhr) {
-                estoqueAtualizadoComSucesso = false;
-                console.error(`Falha ao dar baixa no estoque do produto ${item.produto.titulo}:`, xhr.responseText);
-                avisar(`Erro ao dar baixa no estoque do produto ${item.produto.titulo}. Venda não concluída.`, "erro");
-            });
-            promises.push(promiseAtualizarEstoque);
-
-            const vendaItem = {
-                codProduto: item.produto.codProduto,
-                tituloProduto: item.produto.titulo,
-                valorUnitario: item.produto.valor,
-                quantidade: item.quantidade,
-                valorTotal: item.produto.valor * item.quantidade,
-                dataVenda: vendaEmAndamento.dataVenda,
-                idVendedor: vendaEmAndamento.idVendedor,
-                cpfNota: vendaEmAndamento.cpfNota,
-                idMetodoPagamento: vendaEmAndamento.idMetodoPagamento
-            };
-            const promiseRegistrarVenda = $.ajax({
-                url: '/api/vendas',
-                method: 'POST',
-                contentType: 'application/json',
-                data: JSON.stringify(vendaItem)
-            }).fail(function(xhr) {
-                console.error(`Falha ao registrar venda do produto ${item.produto.titulo}:`, xhr.responseText);
-            });
-            promises.push(promiseRegistrarVenda);
-        }
-        Promise.all(promises)
-            .then(() => {
-                if (estoqueAtualizadoComSucesso) {
-
-                    listaItensVenda = [];
-                    valorTotalVenda = 0;
-                    vendaEmAndamento = {};
-                    atualizarTabelaItensVenda();
-                    $('#formulario-venda-produto')[0].reset();
-                    $('#codigo-produto-display').val('');
-                    $('#descricao-produto-display').val('');
-                } else {
-                    avisar("Algumas operações falharam. Verifique o console para detalhes.", "erro");
-                }
+        $botao.prop('disabled', true).find('span').text('Registrando...');
+        $.ajax({
+            url: '/api/vendas',
+            method: 'POST',
+            contentType: 'application/json',
+            data: JSON.stringify(pedido)
+        })
+            .done(function (venda) {
+                $('#venda-finalizada-numero').text(venda.id);
+                $('#venda-finalizada-total').text(formatarMoeda(Number(venda.valorTotal)));
+                $('#venda-finalizada-troco')
+                    .text(venda.troco != null ? 'Troco: ' + formatarMoeda(Number(venda.troco)) : '')
+                    .prop('hidden', venda.troco == null);
+                limparVenda();
+                // o modal de sucesso só abre depois que o de pagamento terminou de fechar
+                $('#modal-pagamento-venda').one('hidden.bs.modal', function () {
+                    bootstrap.Modal.getOrCreateInstance('#modal-pagamento-finalizado').show();
+                });
+                bootstrap.Modal.getOrCreateInstance('#modal-pagamento-venda').hide();
             })
-            .catch((error) => {
-                console.error("Erro geral durante a conclusão da venda:", error);
-                avisar("Ocorreu um erro inesperado ao concluir a venda.", "erro");
+            .fail(function (xhr) {
+                $('#erro-venda').text(mensagemDoServidor(xhr, 'Não foi possível registrar a venda.')).prop('hidden', false);
+            })
+            .always(function () {
+                $botao.prop('disabled', false).find('span').text('Concluir venda');
             });
     });
     atualizarTabelaItensVenda();
