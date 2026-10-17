@@ -3,139 +3,138 @@ package com.sigl.sigl.model;
 import jakarta.persistence.*;
 
 import java.math.BigDecimal;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
+/**
+ * Cabeçalho da venda: quem vendeu, quando, como foi pago e o total.
+ * O total é sempre a soma dos itens, calculada aqui; não há setter para ele.
+ */
 @Entity
-@Table(name = "cadastrovendas")
-
+@Table(name = "venda")
 public class Venda {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @Column(name = "codProduto", nullable = false, length = 6)
-    private String codProduto;
-
-    @Column(name = "tituloProduto", nullable = false, length = 70)
-    private String tituloProduto;
-
-    @Column(name = "valorUnitario", nullable = false, precision = 9, scale = 2)
-    private BigDecimal valorUnitario;
-
     @Column(nullable = false)
-    private Integer quantidade;
+    private LocalDateTime dataHora;
 
-    @Column(name = "valorTotal", nullable = false, precision = 9, scale = 2)
-    private BigDecimal valorTotal;
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "idVendedor")
+    private Funcionario vendedor;
 
-    @Column(nullable = false)
-    private LocalDate dataVenda;
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "idMetodoPagamento")
+    private MetodoPagamento metodoPagamento;
 
-    @Column(name = "idVendedor", nullable = false)
-    private Integer idVendedor;
-
-    @Column(name = "cpfNota", length = 14)
+    @Column(length = 11)
     private String cpfNota;
 
-    @Column(name = "idMetodoPagamento", nullable = false)
-    private Integer idMetodoPagamento;
-    //Construtores:
+    @Column(nullable = false, precision = 10, scale = 2)
+    private BigDecimal valorTotal = BigDecimal.ZERO;
 
-    public Venda() {
+    @Column(precision = 10, scale = 2)
+    private BigDecimal valorRecebido;
+
+    @Column(precision = 10, scale = 2)
+    private BigDecimal troco;
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false, length = 20)
+    private StatusVenda status = StatusVenda.CONCLUIDA;
+
+    private LocalDateTime canceladaEm;
+
+    @OneToMany(mappedBy = "venda", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OrderBy("id")
+    private List<ItemVenda> itens = new ArrayList<>();
+
+    protected Venda() {
     }
 
-    public Venda(Integer id, String codProduto, String tituloProduto, BigDecimal valorUnitario, Integer quantidade, BigDecimal valorTotal, LocalDate dataVenda, Integer idVendedor, String cpfNota, Integer idMetodoPagamento) {
-        this.id = id;
-        this.codProduto = codProduto;
-        this.tituloProduto = tituloProduto;
-        this.valorUnitario = valorUnitario;
-        this.quantidade = quantidade;
-        this.valorTotal = valorTotal;
-        this.dataVenda = dataVenda;
-        this.idVendedor = idVendedor;
+    public Venda(Funcionario vendedor, MetodoPagamento metodoPagamento, String cpfNota, LocalDateTime dataHora) {
+        this.vendedor = vendedor;
+        this.metodoPagamento = metodoPagamento;
         this.cpfNota = cpfNota;
-        this.idMetodoPagamento = idMetodoPagamento;
+        this.dataHora = dataHora;
     }
-    //Getters e setters:
+
+    /** Registra o item com o preço atual do produto e soma o subtotal ao total da venda. */
+    public void adicionarItem(Produto produto, int quantidade) {
+        ItemVenda item = new ItemVenda(this, produto, quantidade);
+        itens.add(item);
+        valorTotal = valorTotal.add(item.getSubtotal());
+    }
+
+    /** Pagamento em dinheiro: guarda o valor recebido e calcula o troco. */
+    public void registrarPagamentoEmDinheiro(BigDecimal recebido) {
+        if (recebido == null) {
+            throw new IllegalArgumentException("Informe o valor recebido em dinheiro.");
+        }
+        if (recebido.compareTo(valorTotal) < 0) {
+            throw new IllegalArgumentException("O valor recebido é menor que o total da venda.");
+        }
+        this.valorRecebido = recebido;
+        this.troco = recebido.subtract(valorTotal);
+    }
+
+    public void cancelar(LocalDateTime quando) {
+        if (status == StatusVenda.CANCELADA) {
+            throw new IllegalStateException("A venda nº " + id + " já está cancelada.");
+        }
+        this.status = StatusVenda.CANCELADA;
+        this.canceladaEm = quando;
+    }
+
+    public int getQuantidadeDeUnidades() {
+        return itens.stream().mapToInt(ItemVenda::getQuantidade).sum();
+    }
 
     public Integer getId() {
         return id;
     }
 
-    public void setId(Integer id) {
-        this.id = id;
+    public LocalDateTime getDataHora() {
+        return dataHora;
     }
 
-    public String getCodProduto() {
-        return codProduto;
+    public Funcionario getVendedor() {
+        return vendedor;
     }
 
-    public void setCodProduto(String codProduto) {
-        this.codProduto = codProduto;
-    }
-
-    public String getTituloProduto() {
-        return tituloProduto;
-    }
-
-    public void setTituloProduto(String tituloProduto) {
-        this.tituloProduto = tituloProduto;
-    }
-
-    public BigDecimal getValorUnitario() {
-        return valorUnitario;
-    }
-
-    public void setValorUnitario(BigDecimal valorUnitario) {
-        this.valorUnitario = valorUnitario;
-    }
-
-    public Integer getQuantidade() {
-        return quantidade;
-    }
-
-    public void setQuantidade(Integer quantidade) {
-        this.quantidade = quantidade;
-    }
-
-    public BigDecimal getValorTotal() {
-        return valorTotal;
-    }
-
-    public void setValorTotal(BigDecimal valorTotal) {
-        this.valorTotal = valorTotal;
-    }
-
-    public LocalDate getDataVenda() {
-        return dataVenda;
-    }
-
-    public void setDataVenda(LocalDate dataVenda) {
-        this.dataVenda = dataVenda;
-    }
-
-    public Integer getIdVendedor() {
-        return idVendedor;
-    }
-
-    public void setIdVendedor(Integer idVendedor) {
-        this.idVendedor = idVendedor;
+    public MetodoPagamento getMetodoPagamento() {
+        return metodoPagamento;
     }
 
     public String getCpfNota() {
         return cpfNota;
     }
 
-    public void setCpfNota(String cpfNota) {
-        this.cpfNota = cpfNota;
+    public BigDecimal getValorTotal() {
+        return valorTotal;
     }
 
-    public Integer getIdMetodoPagamento() {
-        return idMetodoPagamento;
+    public BigDecimal getValorRecebido() {
+        return valorRecebido;
     }
 
-    public void setIdMetodoPagamento(Integer idMetodoPagamento) {
-        this.idMetodoPagamento = idMetodoPagamento;
+    public BigDecimal getTroco() {
+        return troco;
+    }
+
+    public StatusVenda getStatus() {
+        return status;
+    }
+
+    public LocalDateTime getCanceladaEm() {
+        return canceladaEm;
+    }
+
+    public List<ItemVenda> getItens() {
+        return Collections.unmodifiableList(itens);
     }
 }
