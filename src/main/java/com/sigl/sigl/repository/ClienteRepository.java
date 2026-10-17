@@ -10,4 +10,6 @@ import java.util.Optional;
 @Repository
 public interface ClienteRepository extends JpaRepository<Cliente, Integer> {
     boolean existsByCpf(String cpf);
+
+    List<Cliente> findByCpfContaining(String cpf);
 }

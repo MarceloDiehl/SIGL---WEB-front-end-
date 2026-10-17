@@ -26,13 +26,14 @@ public class VendaController {
 
     /** Vendas da mais recente para a mais antiga; com ?codigo=, só as que têm aquele produto. */
     @GetMapping
-    public List<VendaResposta> listar(@RequestParam(value = "codigo", required = false) String codigo) {
-        return vendaService.listar(codigo).stream().map(VendaResposta::de).toList();
+    public List<VendaResposta> listar(@RequestParam(value = "codigo", required = false) String codigo,
+                                     @AuthenticationPrincipal UsuarioLogado usuario) {
+        return vendaService.listar(codigo).stream().map(v -> VendaResposta.de(v, usuario.isPodeGerir())).toList();
     }
 
     @GetMapping("/{id}")
-    public VendaResposta buscar(@PathVariable Integer id) {
-        return VendaResposta.de(vendaService.buscar(id));
+    public VendaResposta buscar(@PathVariable Integer id, @AuthenticationPrincipal UsuarioLogado usuario) {
+        return VendaResposta.de(vendaService.buscar(id), usuario.isPodeGerir());
     }
 
     @PostMapping
@@ -42,11 +43,11 @@ public class VendaController {
         Venda venda = vendaService.registrar(pedido, usuario.getId());
         URI endereco = ServletUriComponentsBuilder.fromCurrentRequest()
                 .path("/{id}").buildAndExpand(venda.getId()).toUri();
-        return ResponseEntity.created(endereco).body(VendaResposta.de(venda));
+        return ResponseEntity.created(endereco).body(VendaResposta.de(venda, usuario.isPodeGerir()));
     }
 
     @PostMapping("/{id}/cancelar")
-    public VendaResposta cancelar(@PathVariable Integer id) {
-        return VendaResposta.de(vendaService.cancelar(id));
+    public VendaResposta cancelar(@PathVariable Integer id, @AuthenticationPrincipal UsuarioLogado usuario) {
+        return VendaResposta.de(vendaService.cancelar(id), usuario.isPodeGerir());
     }
 }

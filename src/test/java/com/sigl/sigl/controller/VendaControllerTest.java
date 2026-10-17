@@ -29,6 +29,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -87,5 +88,22 @@ class VendaControllerTest {
         mockMvc.perform(post("/api/vendas").with(user(VENDEDOR)).with(csrf()).contentType(MediaType.APPLICATION_JSON).content(PEDIDO))
                 .andExpect(status().isConflict())
                 .andExpect(jsonPath("$.detail").value("Só há 1 unidade de Abbey Road."));
+    }
+
+    @Test
+    @DisplayName("CPF da nota: completo para o gerente, mascarado para o vendedor")
+    void listar_CpfDaNotaConformeOCargo() throws Exception {
+        Funcionario vendedor = new Funcionario();
+        vendedor.setId(3);
+        vendedor.setNome("Marcelo");
+        vendedor.setSobrenome("Diehl");
+        Venda venda = new Venda(vendedor, new MetodoPagamento(4, "PIX"), "52998224725", LocalDateTime.now());
+        when(vendaService.listar(null)).thenReturn(java.util.List.of(venda));
+        UsuarioLogado gerente = new UsuarioLogado(7, "g@orion", "x", "Diego", "Almeida", 2, "Gerente");
+
+        mockMvc.perform(get("/api/vendas").with(user(VENDEDOR)))
+                .andExpect(jsonPath("$[0].cpfNota").value("***.982.247-**"));
+        mockMvc.perform(get("/api/vendas").with(user(gerente)))
+                .andExpect(jsonPath("$[0].cpfNota").value("52998224725"));
     }
 }

@@ -17,6 +17,13 @@ function inicializarConsultaMembros(containerSelector) {
     let membros = [];
     let membroSelecionado = null;
 
+    // Quem não é gerente recebe a ficha resumida do cliente (sem RG, nascimento e endereço):
+    // os campos que não vieram somem, em vez de aparecerem como "—"
+    function camposVisiveis(campos) {
+        if (usuarioPodeGerir()) return campos;
+        return campos.filter(([, valor]) => valor !== null && valor !== undefined && valor !== '');
+    }
+
     function mostrarDetalhes(m) {
         if (!m) { $detalhes.html(detalhesVazios); return; }
 
@@ -42,7 +49,7 @@ function inicializarConsultaMembros(containerSelector) {
                 ${seloTipo(m.tipo)}
             </div>
             <div class="painel-corpo">
-                <dl>${campos.map(([rotulo, valor]) => `<div><dt>${rotulo}</dt><dd>${ou(valor)}</dd></div>`).join('')}</dl>
+                <dl>${camposVisiveis(campos).map(([rotulo, valor]) => `<div><dt>${rotulo}</dt><dd>${ou(valor)}</dd></div>`).join('')}</dl>
             </div>
         `);
     }

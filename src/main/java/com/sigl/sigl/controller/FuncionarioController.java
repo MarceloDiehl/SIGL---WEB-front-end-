@@ -36,12 +36,9 @@ public class FuncionarioController {
 
     @GetMapping
     public List<FuncionarioResposta> listarFuncionarios(@RequestParam(value = "cpf", required = false) String cpf) {
-        List<Funcionario> funcionarios = funcionarioRepository.findAll();
-        if (cpf != null && !cpf.isEmpty()) {
-            funcionarios = funcionarios.stream()
-                    .filter(f -> f.getCpf().contains(cpf))
-                    .toList();
-        }
+        List<Funcionario> funcionarios = (cpf == null || cpf.isBlank())
+                ? funcionarioRepository.findAll()
+                : funcionarioRepository.findByCpfContaining(cpf.trim());   // consulta no banco, não em memória
         return funcionarios.stream().map(FuncionarioResposta::de).toList();
     }
 
