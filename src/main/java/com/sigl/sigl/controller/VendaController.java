@@ -3,9 +3,11 @@ package com.sigl.sigl.controller;
 import com.sigl.sigl.dto.NovaVendaPedido;
 import com.sigl.sigl.dto.VendaResposta;
 import com.sigl.sigl.model.Venda;
+import com.sigl.sigl.seguranca.UsuarioLogado;
 import com.sigl.sigl.service.VendaService;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
@@ -34,8 +36,10 @@ public class VendaController {
     }
 
     @PostMapping
-    public ResponseEntity<VendaResposta> registrar(@Valid @RequestBody NovaVendaPedido pedido) {
-        Venda venda = vendaService.registrar(pedido);
+    public ResponseEntity<VendaResposta> registrar(@Valid @RequestBody NovaVendaPedido pedido,
+                                                   @AuthenticationPrincipal UsuarioLogado usuario) {
+        // a venda é sempre registrada em nome de quem está logado
+        Venda venda = vendaService.registrar(pedido, usuario.getId());
         URI endereco = ServletUriComponentsBuilder.fromCurrentRequest()
                 .path("/{id}").buildAndExpand(venda.getId()).toUri();
         return ResponseEntity.created(endereco).body(VendaResposta.de(venda));

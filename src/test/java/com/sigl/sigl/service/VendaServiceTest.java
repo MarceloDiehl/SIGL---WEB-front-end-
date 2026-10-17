@@ -49,6 +49,7 @@ class VendaServiceTest {
     private Produto camiseta;
 
     private static final int PIX = 4;
+    private static final int VENDEDOR = 3;
 
     @BeforeEach
     void preparar() {
@@ -72,7 +73,7 @@ class VendaServiceTest {
     }
 
     private static NovaVendaPedido pedido(int metodo, String cpf, BigDecimal recebido, NovaVendaPedido.Item... itens) {
-        return new NovaVendaPedido(3, metodo, cpf, recebido, List.of(itens));
+        return new NovaVendaPedido(metodo, cpf, recebido, List.of(itens));
     }
 
     private static NovaVendaPedido.Item item(String codigo, int quantidade) {
@@ -80,7 +81,7 @@ class VendaServiceTest {
     }
 
     private void assertRecusada(NovaVendaPedido pedido, HttpStatus status, String mensagem) {
-        RegraDeNegocioException erro = assertThrows(RegraDeNegocioException.class, () -> vendaService.registrar(pedido));
+        RegraDeNegocioException erro = assertThrows(RegraDeNegocioException.class, () -> vendaService.registrar(pedido, VENDEDOR));
         assertEquals(status, erro.getStatus());
         assertEquals(mensagem, erro.getMessage());
         verify(vendaRepository, never()).save(any());
@@ -89,7 +90,7 @@ class VendaServiceTest {
     @Test
     @DisplayName("Calcula o total com os preços do banco e baixa o estoque")
     void registrar_CalculaTotalEBaixaEstoque() {
-        Venda venda = vendaService.registrar(pedido(PIX, null, null, item("132437", 2), item("400150", 1)));
+        Venda venda = vendaService.registrar(pedido(PIX, null, null, item("132437", 2), item("400150", 1)), VENDEDOR);
 
         assertEquals(new BigDecimal("379.90"), venda.getValorTotal());
         assertEquals(8, abbeyRoad.getQuantidade());
@@ -103,7 +104,7 @@ class VendaServiceTest {
     @Test
     @DisplayName("Guarda título e preço do produto no item (fotografia da venda)")
     void registrar_GuardaFotografiaDoProduto() {
-        Venda venda = vendaService.registrar(pedido(PIX, null, null, item("132437", 2)));
+        Venda venda = vendaService.registrar(pedido(PIX, null, null, item("132437", 2)), VENDEDOR);
         abbeyRoad.setValor(new BigDecimal("999.00"));
 
         var itemVendido = venda.getItens().get(0);
@@ -115,7 +116,7 @@ class VendaServiceTest {
     @Test
     @DisplayName("O mesmo código em duas linhas vira um item só")
     void registrar_SomaCodigosRepetidos() {
-        Venda venda = vendaService.registrar(pedido(PIX, null, null, item("132437", 1), item("132437", 2)));
+        Venda venda = vendaService.registrar(pedido(PIX, null, null, item("132437", 1), item("132437", 2)), VENDEDOR);
 
         assertEquals(1, venda.getItens().size());
         assertEquals(3, venda.getItens().get(0).getQuantidade());
@@ -140,15 +141,18 @@ class VendaServiceTest {
     @Test
     @DisplayName("Recusa vendedor inexistente antes de tocar no estoque")
     void registrar_VendedorInexistente_Recusa() {
-        NovaVendaPedido pedido = new NovaVendaPedido(77, PIX, null, null, List.of(item("132437", 1)));
-        assertRecusada(pedido, HttpStatus.BAD_REQUEST, "Vendedor nº 77 não encontrado.");
+        RegraDeNegocioException erro = assertThrows(RegraDeNegocioException.class,
+                () -> vendaService.registrar(pedido(PIX, null, null, item("132437", 1)), 77));
+        assertEquals(HttpStatus.BAD_REQUEST, erro.getStatus());
+        assertEquals("Vendedor nº 77 não encontrado.", erro.getMessage());
+        verify(vendaRepository, never()).save(any());
         verify(produtoRepository, never()).buscarParaAtualizarEstoque(any());
     }
 
     @Test
     @DisplayName("Dinheiro: guarda o valor recebido e calcula o troco")
     void registrar_Dinheiro_CalculaTroco() {
-        Venda venda = vendaService.registrar(pedido(MetodoPagamento.DINHEIRO, null, new BigDecimal("200.00"), item("132437", 1)));
+        Venda venda = vendaService.registrar(pedido(MetodoPagamento.DINHEIRO, null, new BigDecimal("200.00"), item("132437", 1)), VENDEDOR);
 
         assertEquals(new BigDecimal("200.00"), venda.getValorRecebido());
         assertEquals(new BigDecimal("50.00"), venda.getTroco());
@@ -164,7 +168,7 @@ class VendaServiceTest {
     @Test
     @DisplayName("CPF da nota é guardado só com dígitos")
     void registrar_CpfDaNota_GuardaSoDigitos() {
-        Venda venda = vendaService.registrar(pedido(PIX, "529.982.247-25", null, item("132437", 1)));
+        Venda venda = vendaService.registrar(pedido(PIX, "529.982.247-25", null, item("132437", 1)), VENDEDOR);
         assertEquals("52998224725", venda.getCpfNota());
     }
 
@@ -178,7 +182,7 @@ class VendaServiceTest {
     @Test
     @DisplayName("Cancelar devolve o estoque; cancelar de novo é recusado")
     void cancelar_DevolveEstoque() {
-        Venda venda = vendaService.registrar(pedido(PIX, null, null, item("132437", 2)));
+        Venda venda = vendaService.registrar(pedido(PIX, null, null, item("132437", 2)), VENDEDOR);
         when(vendaRepository.findComItensById(1)).thenReturn(Optional.of(venda));
 
         vendaService.cancelar(1);

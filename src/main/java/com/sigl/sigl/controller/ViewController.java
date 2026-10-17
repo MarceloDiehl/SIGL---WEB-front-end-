@@ -26,7 +26,8 @@ public class ViewController {
     }
 
     @GetMapping("/venda")
-    public String showVendaPage() {
+    public String showVendaPage(Model model, @AuthenticationPrincipal UsuarioLogado usuario) {
+        model.addAttribute("usuario", usuario);   // a venda é registrada em nome de quem está logado
         return "pages/venda";
     }
 
