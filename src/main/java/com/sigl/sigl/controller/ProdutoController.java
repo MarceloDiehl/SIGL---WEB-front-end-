@@ -1,6 +1,7 @@
 package com.sigl.sigl.controller;
 
 import com.sigl.sigl.model.Produto;
+import com.sigl.sigl.repository.ItemVendaRepository;
 import com.sigl.sigl.repository.ProdutoRepository;
 import com.sigl.sigl.service.ProdutoService;
 import jakarta.validation.Valid;
@@ -24,6 +25,9 @@ public class ProdutoController {
 
     @Autowired
     private ProdutoService produtoService;
+
+    @Autowired
+    private ItemVendaRepository itemVendaRepository;
 
     @GetMapping
     public List<Produto> listarProdutos() {
@@ -61,6 +65,12 @@ public class ProdutoController {
     public ResponseEntity<String> excluirProduto(@PathVariable String codigo) {
         return produtoRepository.findByCodProduto(codigo)
                 .map(produto -> {
+                    // o histórico de vendas aponta para o produto (itemvenda.idProduto)
+                    if (itemVendaRepository.existsByIdProduto(produto.getId())) {
+                        return ResponseEntity.status(HttpStatus.CONFLICT)
+                                .body("O produto " + codigo + " já foi vendido e não pode ser excluído: "
+                                        + "o histórico de vendas depende dele.");
+                    }
                     produtoRepository.delete(produto);
                     return ResponseEntity.ok("Produto código " + codigo + " excluído!");
                 })
