@@ -3,6 +3,8 @@ package com.sigl.sigl.model;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.sigl.sigl.model.apoio.Cargo;
 import jakarta.persistence.*;
+import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.type.SqlTypes;
 import java.time.LocalDate;
 
 @Entity
@@ -59,6 +61,7 @@ public class Funcionario {
     private String cidade;
 
     @Column(name = "estado", nullable = false, length = 2)
+    @JdbcTypeCode(SqlTypes.CHAR)   // UF: CHAR(2) no banco
     private String estado;
 
     @Column(name = "CEP", length = 9)
