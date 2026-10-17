@@ -13,11 +13,6 @@ $(function () {
     const $senha = $('#totem-senha');
     const $campoSenha = $('#totem-senha-campo');
 
-    const tipos = {
-        1: 'Disco de vinil', 2: 'CD', 3: 'Papelaria', 4: 'Livros', 5: 'Moda e vestuário',
-        6: 'Equipamentos eletrônicos', 7: 'Instrumentos musicais', 8: 'Raridades'
-    };
-    const condicoes = { 1: 'Novo', 2: 'Usado (ótimo)', 3: 'Usado (bom)', 4: 'Usado (com marcas)' };
     const moeda = (v) => Number(v || 0).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
 
     const VOLTA_AO_INICIO_MS = 25000;   // depois de 25 s parado, a tela volta ao "Aguardando um produto"
@@ -77,8 +72,11 @@ $(function () {
         $('#totem-titulo').text(p.titulo || '');
         $('#totem-descricao').text(p.descricao || '').prop('hidden', !p.descricao);
         $('#totem-preco').text(moeda(p.valor));
-        $('#totem-tipo').text(tipos[p.idTipo] || '').prop('hidden', !tipos[p.idTipo]);
-        $('#totem-estado').text(condicoes[p.idCondicao] || '').prop('hidden', !condicoes[p.idCondicao]);
+        // nomes do tipo e da condição vêm do banco (apoio())
+        apoio().then(function (listas) {
+            $('#totem-tipo').text(descricaoDe(listas.tipos, p.idTipo)).prop('hidden', p.idTipo == null);
+            $('#totem-estado').text(descricaoDe(listas.condicoes, p.idCondicao)).prop('hidden', p.idCondicao == null);
+        });
         $('#totem-disponivel').text(disponibilidade[0]).attr('class', 'totem-selo totem-' + disponibilidade[1]);
         $mensagem.text('').removeClass('erro');
         $espera.prop('hidden', true);

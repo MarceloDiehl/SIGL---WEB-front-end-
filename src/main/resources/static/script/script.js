@@ -97,6 +97,40 @@ function mensagemDoServidor(xhr, padrao) {
     return texto && !texto.startsWith('<') && texto.length < 300 ? texto : padrao;
 }
 
+// Tabelas de apoio (tipos, condições, cargos, escolaridades, gêneros, formas de pagamento) vêm do banco
+// por GET /api/apoio, uma vez por página: apoio() devolve sempre a mesma promessa.
+let promessaApoio = null;
+function apoio() {
+    if (!promessaApoio) {
+        promessaApoio = $.getJSON('/api/apoio');
+        promessaApoio.fail(function () { promessaApoio = null; });   // falhou: tenta de novo na próxima chamada
+    }
+    return promessaApoio;
+}
+
+// Texto de um id numa lista de apoio; se o id não estiver na lista, mostra o próprio id
+function descricaoDe(lista, id) {
+    const opcao = (lista || []).find(o => o.id === Number(id));
+    return opcao ? opcao.descricao : (id ?? '');
+}
+
+// Ícone de cada tipo de produto (apresentação, por isso fica no front; o nome do tipo vem do banco)
+function iconeDoTipo(idTipo) {
+    const icones = {
+        1: 'bi-vinyl', 2: 'bi-disc', 3: 'bi-pencil', 4: 'bi-book',
+        5: 'bi-bag', 6: 'bi-speaker', 7: 'bi-music-note-beamed', 8: 'bi-gem'
+    };
+    return icones[idTipo] || 'bi-box';
+}
+
+// Troca as opções do select pelas da lista, mantendo o "Selecione..." (value="") e o valor já escolhido
+function preencherSelect($select, lista) {
+    const valorAtual = $select.val();
+    $select.find('option:not([value=""])').remove();
+    lista.forEach(o => $('<option>').val(o.id).text(o.descricao).appendTo($select));
+    if (valorAtual) $select.val(valorAtual);
+}
+
 $(document).ready(function () {
     const conteudoDinamico = $('#conteudo-dinamico');
 

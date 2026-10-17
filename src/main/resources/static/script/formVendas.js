@@ -91,6 +91,24 @@ function formularioVenda() {
     $('#cpf-cliente-conclusao').mask('000.000.000-00');
     $('#cod-vendedor-conclusao').mask('00000');
 
+    // Formas de pagamento vêm do banco (apoio()); o ícone de cada uma é apresentação e fica aqui.
+    // A primeira forma da lista já vem marcada.
+    const iconesPagamento = { 1: 'bi-cash-coin', 2: 'bi-credit-card', 3: 'bi-credit-card-2-front', 4: 'bi-qr-code' };
+    apoio().then(function (listas) {
+        const $opcoes = $('.opcoes-cartao').empty();
+        listas.metodosPagamento.forEach(function (metodo, i) {
+            const id = 'pagamento-' + metodo.id;
+            const $opcao = $('<div>');
+            $('<input type="radio" name="forma-pagamento">').attr('id', id).val(metodo.id).prop('checked', i === 0).appendTo($opcao);
+            $('<label>').attr('for', id)
+                .append($('<i>').addClass('bi ' + (iconesPagamento[metodo.id] || 'bi-wallet2')))
+                .append(document.createTextNode(metodo.descricao))
+                .appendTo($opcao);
+            $opcoes.append($opcao);
+        });
+        mostrarCamposDoPagamento();
+    });
+
 
     $('#formulario-venda-produto').validate({
         rules: {
@@ -267,6 +285,7 @@ function formularioVenda() {
         return limpo === '' || isNaN(valor) ? null : Math.round(valor * 100) / 100;
     }
 
+    // id 1 = Dinheiro, o mesmo de MetodoPagamento.DINHEIRO no servidor
     const ehDinheiro = () => $('input[name="forma-pagamento"]:checked').val() === '1';
 
     // o troco mostrado aqui é só uma prévia: o valor oficial é calculado pelo servidor
@@ -289,7 +308,8 @@ function formularioVenda() {
         atualizarTroco();
         mostrarCamposDoPagamento();
     });
-    $('input[name="forma-pagamento"]').on('change', mostrarCamposDoPagamento);
+    // delegado no contêiner: os cartões de pagamento são criados depois, quando apoio() responde
+    $('.opcoes-cartao').on('change', 'input[name="forma-pagamento"]', mostrarCamposDoPagamento);
     $('#valor-recebido').on('input', function () {
         limparErroCampo($(this));
         atualizarTroco();

@@ -6,14 +6,8 @@ function inicializarConsultaMembros(containerSelector) {
     const $resumo = $container.find('#resumo-membros');
     const $detalhes = $container.find('#detalhes-membro');
 
-    const cargos = { 1: 'Vendedor', 2: 'Gerente', 3: 'Estoquista' };
-    const escolaridades = {
-        1: 'Ensino Fundamental Incompleto', 2: 'Ensino Fundamental Completo',
-        3: 'Ensino Médio Incompleto', 4: 'Ensino Médio Completo', 5: 'Ensino Técnico',
-        6: 'Ensino Superior Incompleto', 7: 'Ensino Superior Completo',
-        8: 'Pós-graduação', 9: 'Mestrado', 10: 'Doutorado'
-    };
-    const generos = { 1: 'Feminino', 2: 'Masculino', 3: 'Não informado', 4: 'Outro', 5: 'Prefiro não informar' };
+    // Cargos, escolaridades e gêneros vêm do banco (apoio()), carregados antes da primeira lista
+    let listas = { cargos: [], escolaridades: [], generos: [] };
 
     const dataBR = (iso) => iso ? String(iso).split('-').reverse().join('/') : '';
     const vazio = '<span class="texto-suave">—</span>';
@@ -35,9 +29,9 @@ function inicializarConsultaMembros(containerSelector) {
             campos.push(['Cliente desde', dataBR(m.clienteDesde)]);
         } else {
             campos.push(
-                ['E-mail', m.email], ['Cargo', cargos[m.idCargo] ?? m.idCargo],
-                ['Escolaridade', escolaridades[m.idEscolaridade] ?? m.idEscolaridade],
-                ['Especialidade', m.especialidade], ['Gênero', generos[m.idGenero] ?? m.idGenero],
+                ['E-mail', m.email], ['Cargo', descricaoDe(listas.cargos, m.idCargo)],
+                ['Escolaridade', descricaoDe(listas.escolaridades, m.idEscolaridade)],
+                ['Especialidade', m.especialidade], ['Gênero', descricaoDe(listas.generos, m.idGenero)],
                 ['Contato de emergência', m.contatoEmergencia], ['Admissão', dataBR(m.dataEntrada)], ['CTPS', m.ctpas]
             );
         }
@@ -84,7 +78,7 @@ function inicializarConsultaMembros(containerSelector) {
 
                         membros.forEach((m, i) => {
                             const desde = m.tipo === 'cliente' ? m.clienteDesde : m.dataEntrada;
-                            const subtitulo = m.tipo === 'cliente' ? '' : (cargos[m.idCargo] ?? '');
+                            const subtitulo = m.tipo === 'cliente' ? '' : descricaoDe(listas.cargos, m.idCargo);
                             $tbody.append(`
                                 <tr data-tipo="${m.tipo}" data-id="${escaparHtml(m.id)}" data-indice="${i}">
                                     <td>
@@ -131,7 +125,9 @@ function inicializarConsultaMembros(containerSelector) {
         debounceTimer = setTimeout(() => carregarMembros(cpf), 300);
     });
 
-    carregarMembros();
+    apoio()
+        .then(function (resposta) { listas = resposta; })
+        .always(function () { carregarMembros(); });   // sem as listas, mostra os ids no lugar dos nomes
 
     $btnExcluir.off('click').on('click', function () {
         if (!membroSelecionado) {

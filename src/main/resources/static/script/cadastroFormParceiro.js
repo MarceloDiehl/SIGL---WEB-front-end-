@@ -1,4 +1,11 @@
 function formularioParceiros() {
+    // Gênero, cargo e escolaridade vêm do banco (GET /api/apoio); o valor de cada opção é o id
+    apoio().then(function (listas) {
+        preencherSelect($('#genero_parceiro'), listas.generos);
+        preencherSelect($('#cargo_parceiro'), listas.cargos);
+        preencherSelect($('#escolaridade_parceiro'), listas.escolaridades);
+    });
+
     function alternarCamposParceiro(animar = true) {
         const duracao = animar ? 150 : 0;
         const tipoSelecionado = $('input[name="parceiro"]:checked').val();

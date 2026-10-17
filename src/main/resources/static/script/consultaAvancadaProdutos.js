@@ -6,15 +6,6 @@ function inicializarConsultaAvancadaProdutos() {
 
     const $resumo = $('#resumo-produtos');
 
-    const tiposProduto = {
-        1: 'Disco de vinil', 2: 'CD', 3: 'Papelaria', 4: 'Livros',
-        5: 'Moda e vestuário', 6: 'Equipamentos eletrônicos', 7: 'Instrumentos musicais', 8: 'Raridades'
-    };
-    const iconesTipo = {
-        1: 'bi-vinyl', 2: 'bi-disc', 3: 'bi-pencil', 4: 'bi-book',
-        5: 'bi-bag', 6: 'bi-speaker', 7: 'bi-music-note-beamed', 8: 'bi-gem'
-    };
-    const condicoesProduto = { 1: 'Novo', 2: 'Usado (ótimo)', 3: 'Usado (bom)', 4: 'Usado (com marcas)' };
     const moeda = (v) => Number(v ?? 0).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
     const dataBR = (iso) => iso ? iso.split('-').reverse().join('/') : '';
 
@@ -26,8 +17,12 @@ function inicializarConsultaAvancadaProdutos() {
         const url = codigo ? '/api/produtos/busca' : '/api/produtos';
         const params = codigo ? { codigo: codigo } : {};
 
-        $.getJSON(url, params)
-            .done(function (data) {
+        // produtos e tabelas de apoio (nomes de tipo e condição) chegam juntos; $.when entrega
+        // a resposta de cada requisição como [dados, status, xhr]
+        $.when(apoio(), $.getJSON(url, params))
+            .done(function (respostaApoio, respostaProdutos) {
+                const listas = respostaApoio[0];
+                const data = respostaProdutos[0];
                 $tbody.empty();
 
                 if (!data || data.length === 0) {
@@ -45,8 +40,8 @@ function inicializarConsultaAvancadaProdutos() {
                                 <span class="titulo-celula">${escaparHtml(p.titulo)}</span>
                                 <span class="sub-celula text-truncate" style="max-width: 42ch;">${escaparHtml(p.descricao)}</span>
                             </td>
-                            <td><span class="tipo-produto"><i class="bi ${iconesTipo[p.idTipo] ?? 'bi-box'}"></i>${escaparHtml(tiposProduto[p.idTipo] ?? p.idTipo)}</span></td>
-                            <td><span class="selo">${escaparHtml(condicoesProduto[p.idCondicao] ?? p.idCondicao)}</span></td>
+                            <td><span class="tipo-produto"><i class="bi ${iconeDoTipo(p.idTipo)}"></i>${escaparHtml(descricaoDe(listas.tipos, p.idTipo))}</span></td>
+                            <td><span class="selo">${escaparHtml(descricaoDe(listas.condicoes, p.idCondicao))}</span></td>
                             <td class="text-end"><span class="selo ${seloQtd}">${escaparHtml(qtd)}</span></td>
                             <td class="text-end fw-semibold">${moeda(p.valor)}</td>
                             <td>${dataBR(p.entrada)}</td>
