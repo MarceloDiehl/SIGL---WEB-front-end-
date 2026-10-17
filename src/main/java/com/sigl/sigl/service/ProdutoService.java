@@ -23,18 +23,4 @@ public class ProdutoService {
         }
         return produtoRepository.save(produto);
     }
-
-    @Transactional
-    public Produto removerQuantidade(String codProduto, int quantidade) {
-        if (quantidade <= 0) {
-            throw new IllegalArgumentException("A quantidade a ser removida deve ser positiva.");
-        }
-
-        Produto produto = produtoRepository.findByCodProduto(codProduto)
-                .orElseThrow(() -> new IllegalArgumentException("Produto não encontrado: " + codProduto));
-
-        produto.removerQuantidade(quantidade);
-
-        return produtoRepository.save(produto);
-    }
 }

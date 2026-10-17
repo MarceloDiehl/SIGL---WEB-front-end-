@@ -78,19 +78,6 @@ public class ProdutoController {
                         .body("Produto não encontrado para o código: " + codigo));
     }
 
-    @PatchMapping("/{codProduto}/removerQuantidade")
-    public ResponseEntity<Object> removerQuantidadeProduto(@PathVariable String codProduto, @RequestParam Integer quantidade) {
-        try {
-            Produto produtoAtualizado = produtoService.removerQuantidade(codProduto, quantidade);
-            return ResponseEntity.ok(produtoAtualizado);
-        } catch (IllegalArgumentException e) {
-            // Captura tanto o erro de "produto não encontrado" quanto "estoque insuficiente"
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Erro ao atualizar quantidade.");
-        }
-    }
-
     @PutMapping("/{codProduto}")
     public ResponseEntity<?> atualizarProduto(
             @PathVariable String codProduto,
